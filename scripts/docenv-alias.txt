@@ -1,0 +1,71 @@
+# CAUTION: This file is updated each time the user updates from SVN. If you
+#          want custom local alias commands, use the file located in your
+#          $HOME directory: $HOME/.bash_alias. This file is sourced "Last",
+#          as such, any commands with the same name, listed or exported
+#          elsewhere, will be superseded.
+
+#-------------------------------------------------------------------------------
+# GENERAL COMMANDS
+#-------------------------------------------------------------------------------
+alias help-jtsdk="man /scripts/cyg32/man1/docenv-help.1"
+alias help-build="/scripts/docenv-help-build.sh"
+alias help-co="/scripts/docenv-help-co.sh"
+alias checkout-doc="cd $HOME && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
+alias lista='/scripts/docenv-alias-list.sh'
+
+#-------------------------------------------------------------------------------
+# SVN COMMANDS
+#-------------------------------------------------------------------------------
+alias svnu="cd $HOME/doc && svn update"
+alias ss='svn status'						# Normal SVN status
+alias sv='svn status |grep -v "?"'			# List files not under SVN control
+alias sa='svn status |grep -v "A"'			# List Added files only
+alias sm='svn status |grep -v "M"'			# List Modified files only
+alias sd='svn status |grep -v "D"'			# List Deleted files only
+
+#-------------------------------------------------------------------------------
+# ALIAS BUILD COMMANDS ( requires doc checkout in $HOME/doc directory )
+#-------------------------------------------------------------------------------
+
+# ALL DOCS
+alias build-dall="cd $HOME/doc && ./build-doc.sh dall"
+alias build-all="cd $HOME/doc && ./build-doc.sh all"
+
+# WSJT-X
+alias build-dwsjtx="cd $HOME/doc && ./build-doc.sh dwsjtx"
+alias build-wsjtx="cd $HOME/doc && ./build-doc.sh wsjtx"
+
+# WSJT
+alias build-dwsjt="cd $HOME/doc && ./build-doc.sh dwsjt"
+alias build-wsjt="cd $HOME/doc && ./build-doc.sh wsjt"
+
+# WSPR
+alias build-dwspr="cd $HOME/doc && ./build-doc.sh dwspr"
+alias build-wspr="cd $HOME/doc && ./build-doc.sh wspr"
+
+# BUILD WFMT
+alias build-dwfmt="cd $HOME/doc && ./build-doc.sh dwfmt"
+alias build-wfmt="cd $HOME/doc && ./build-doc.sh wfmt"
+
+# WSPR-X
+alias build-dwsprx="cd $HOME/doc && ./build-doc.sh dwsprx"
+alias build-wsprx="cd $HOME/doc && ./build-doc.sh wsprx"
+
+# MAP65
+alias build-dmap65="cd $HOME/doc && ./build-doc.sh dmap65"
+alias build-map65="cd $HOME/doc && ./build-doc.sh map65"
+
+# BUILD SIMJT
+alias build-dsimjt="cd $HOME/doc && ./build-doc.sh dsimjt"
+alias build-simjt="cd $HOME/doc && ./build-doc.sh simjt"
+
+# BUILD DEV-GUIDE
+alias build-ddevg="cd $HOME/doc && ./build-doc.sh ddevg"
+alias build-devg="cd $HOME/doc && ./build-doc.sh devg"
+
+# BUILD QUICK REF GUIDE
+alias build-dqref="cd $HOME/doc && ./build-doc.sh dqref"
+alias build-qref="cd $HOME/doc && ./build-doc.sh qref"
+
+# BUILD CLEAN
+alias build-clean="cd $HOME/doc && ./build-doc.sh clean"
