@@ -215,7 +215,7 @@ mkpasswd )
   echo ''
   echo -en ${C_G}'JTSDK-DOC - Setup Complete:' && echo -en ${C_R}" -->> RESTART REQUIRED <<--\n"${C_NC}
   echo ''
-  echo 'At the prompt, type: exit, then re-launch C:\JTSDK\docenv'
+  echo 'At the prompt, type: exit, then re-launch JTSDK-DOC'
   echo ''
  ;;
 passwd/group_GID_clash* )
