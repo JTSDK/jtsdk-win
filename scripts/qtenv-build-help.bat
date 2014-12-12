@@ -51,7 +51,7 @@ ECHO  package ........ Build Win32 Installer
 ECHO.
 ECHO NOTE: MAP65 ^& WSPR-X Package Builds are ^( Experimental ^)
 ECHO.
-ECHO EXAMPLE ^( WSJT-X Release ^):
+ECHO EXAMPLE ^( WSJTX 1.5-devel Release ^):
 ECHO -----------------------------------------------------------------
 ECHO Configure Build Tree:
 ECHO  Type:  build wsjtx rconfig
@@ -62,14 +62,13 @@ ECHO.
 ECHO Build Win32 Installer
 ECHO  Type:  build wsjtx package
 ECHO.
-ECHO NOTE: Building the ^( package ^) target will automatically
-ECHO       build everthing needed to produce the Win32 Installer.
-ECHO       Likewise, building ^( rinstall or dinstall ^) will build
-ECHO       everything needed to produce a fully functional app to
-ECHO       run from a local directory.
+ECHO ^** BUILD WSJT-X RELEASE CANDIDATE ^**
+ECHO -----------------------------------------------------------------
+ECHO  Checkout, type: checkout wsjtx-1.4
+ECHO. Build, type:    wsjtxrc rinstall
+ECHO.
 ECHO.
 GOTO EOF
-
 
 :: END OF QTENV-BUILD-HELP.BAT
 :EOF

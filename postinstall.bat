@@ -27,7 +27,7 @@
 COLOR 0E
 SETLOCAL
 SET VERSION=2.0.0
-SET SVN_URL="https://svn.code.sf.net/p/wsjt/wsjt/branches/jtsdk/win32"
+SET SVN_URL="https://svn.code.sf.net/p/jtsdk/jtsdk/trunk/win32"
 SET BASED=C:\JTSDK
 SET SCR=%BASED%\scripts
 SET SVND=%BASED%\subversion\bin
@@ -55,7 +55,8 @@ GOTO START_UPDATE
 ) 
 
 :SVN_UPDATE
-ECHO     ..Updating ^( JTSDK-%VERSION% ^ )
+ECHO UPDATE SCRIPTS
+ECHO ..Updating ^( JTSDK-%VERSION% ^ )
 ECHO.
 CD /D %BASED%
 start /wait svn update
@@ -69,8 +70,8 @@ REM ----------------------------------------------------------------------------
 REM  CMAKE UPDTAE
 REM ----------------------------------------------------------------------------
 :UPDATE_CMAKE
-ECHO ^** CMAKE ^**
-ECHO   ..No updates needed
+ECHO CMAKE
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_CYG32
 
@@ -79,35 +80,35 @@ REM  INSTALL or UPDATE CYGWIN
 REM ----------------------------------------------------------------------------
 :UPDATE_CYG32
 CD /D %SCR%\cyg32
-ECHO ^** CYG32 ^**
-ECHO    ..Please Be Patient, This Can Take Several Minutes
-ECHO    ..Running Cygwin Setup To Check Installation
+ECHO CYG32
+ECHO ..Please Be Patient, This Can Take Several Minutes
+ECHO ..Running Cygwin Setup To Check Installation
 
 :: Look for the JTSDK installer script
 IF NOT EXIST "%SCR%\cyg32\jtsdk-cyg32-install.bat" (
-ECHO    ..Could not find %SCR%\cyg32\jtsdk-cyg32-install.bat
+ECHO ..Could not find %SCR%\cyg32\jtsdk-cyg32-install.bat
 SET ERRORLEVEL=Could Not Find JTSDK CYG32 Installer Script
 GOTO CYG32_ERROR1
 )
-ECHO    ..Found Installer Script ..: jtsdk-cyg32-install.bat
+ECHO ..Found Installer Script ..: jtsdk-cyg32-install.bat
 
 :: Look for Cygwin Installer .EXE
 IF NOT EXIST "%SCR%\cyg32\cyg32-setup-x86.exe" (
-ECHO    ..Could not find %SCR%\cyg32\cyg32-setup-x86.exe
+ECHO ..Could not find %SCR%\cyg32\cyg32-setup-x86.exe
 SET ERRORLEVEL=Could Not Find Cygwin Installer
 GOTO CYG32_ERROR1
 )
-ECHO    ..Found Cyg32 Setup .......: cyg32-setup-x86.exe
+ECHO ..Found Cyg32 Setup .......: cyg32-setup-x86.exe
 :: Look for Cygwin Installer .EXE
 IF EXIST "%BASED%\cyg32\Cygwin.bat" (
-ECHO    ..Found previous CYG32 installation, checking for updates
+ECHO ..Found previous CYG32 installation, checking for updates
 CD /D %SCR%\cyg32
 CALL jtsdk-cyg32-install.bat >nul
 GOTO UPDATE_CYG_RC
 )
 
 :: Perform Full Install as Cygwin.bat was not found
-ECHO    ..Installing JTSDK-DOC ( Cyg32 )
+ECHO ..Installing JTSDK-DOC ( Cyg32 )
 CD /D %SCR%\cyg32
 CALL jtsdk-cyg32-install.bat >nul
 GOTO UPDATE_CYG_RC
@@ -118,14 +119,14 @@ REM    By removing them after install, it forces a re-generation and thus,
 REM    installing rc files located in /etc/skel which are configured
 REM    for JTSDK use. They could be added to /etc/defaults which is a
 REM    TO-DO item for JTSDK v2.1.0
-ECHO    ..Updating Group Files
+ECHO ..Updating Group Files
 IF EXIST "%BASED%\cyg32\etc\group" ( DEL /F /Q %BASED%\cyg32\etc\group >nul )
 IF EXIST "%BASED%\cyg32\etc\passwd" ( DEL /F /Q %BASED%\cyg32\etc\passwd >nul )
 
-ECHO    ..Updating ETC and RC Files
+ECHO ..Updating ETC and RC Files
 :: SKEL DIRECTORY CHECK
 IF NOT EXIST %BASED%\cyg32\etc\skel\NUL (
-ECHO   ..Added Directory: %BASED%\cyg32\etc\skel
+ECHO ..Added Directory: %BASED%\cyg32\etc\skel
 MKDIR %BASED%\cyg32\etc\skel 2> NUL
 )
 
@@ -146,8 +147,8 @@ REM ----------------------------------------------------------------------------
 REM  FFTW UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_FFTW3F
-ECHO ^** FFTW ^**
-ECHO    ..No updates needed
+ECHO FFTW
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_HAMLIB2
 
@@ -155,8 +156,8 @@ REM ----------------------------------------------------------------------------
 REM  HAMLIB-2 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_HAMLIB2
-ECHO ^** HAMLIB2 ^**
-ECHO    ..No updates needed
+ECHO HAMLIB2
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_HAMLIB3
 
@@ -164,8 +165,8 @@ REM ----------------------------------------------------------------------------
 REM  HAMLIB-3 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_HAMLIB3
-ECHO ^** HAMLIB3 ^**
-ECHO    ..No updates needed
+ECHO HAMLIB3
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_INNO5
 
@@ -173,8 +174,8 @@ REM ----------------------------------------------------------------------------
 REM  INNO5 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_INNO5
-ECHO ^** INNO5 ^**
-ECHO    ..No updates needed
+ECHO INNO5
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_MINGW32
 
@@ -182,8 +183,8 @@ REM ----------------------------------------------------------------------------
 REM  MINGW32 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_MINGW32
-ECHO ^** MINGW32 ^**
-ECHO    ..No updates needed
+ECHO MINGW32
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_MSYS
 
@@ -191,14 +192,14 @@ REM ----------------------------------------------------------------------------
 REM  MSYS UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_MSYS
-ECHO ^** MSYS ^**
+ECHO MSYS
 
 :: SKEL DIRECTORY CHECK
 IF NOT EXIST %BASED%\msys\etc\skel\NUL (
-ECHO    ..Added Directory: %BASED%\msys\etc\skel
+ECHO ..Added Directory: %BASED%\msys\etc\skel
 MKDIR %BASED%\msys\etc\skel 2> NUL
 )
-ECHO    ..Updating ETC and RC Files
+ECHO ..Updating ETC and RC Files
 IF EXIST "%BASED%\msys\etc\fstab" ( DEL /F /Q %BASED%\msys\etc\fstab >nul )
 IF EXIST "%BASED%\msys\etc\profile" ( DEL /F /Q %BASED%\msys\etc\profile >nul )
 
@@ -219,8 +220,8 @@ REM ----------------------------------------------------------------------------
 REM  NSIS UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_NSIS
-ECHO ^** NSIS ^**
-ECHO    ..No updates needed
+ECHO NSIS
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_PYTHON33
 
@@ -228,8 +229,8 @@ REM ----------------------------------------------------------------------------
 REM  PYTHON33 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_PYTHON33
-ECHO ^** PYTHON33 ^**
-ECHO    ..No updates needed
+ECHO PYTHON33
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_QT5
 
@@ -237,8 +238,8 @@ REM ----------------------------------------------------------------------------
 REM  QT5 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_QT5
-ECHO ^** QT5 ^**
-ECHO    ..No updates needed
+ECHO QT5
+ECHO ..No updates needed
 ECHO.
 GOTO UPDATE_SVN
 
@@ -246,15 +247,15 @@ REM ----------------------------------------------------------------------------
 REM  PYTHON33 UPDATE
 REM ----------------------------------------------------------------------------
 :UPDATE_SVN
-ECHO ^** SUBVERSION ^**
-ECHO    ..No updates needed
+ECHO SUBVERSION
+ECHO ..No updates needed
 ECHO.
-GOTO INSTALL_FINISH
+GOTO FINISH_INSTALL
 
+REM ----------------------------------------------------------------------------
+REM  JTSDK UPDATE SECTION
+REM ----------------------------------------------------------------------------
 :UPDATE_JTSDK
-REM ----------------------------------------------------------------------------
-REM  UPDATE JTSDK
-REM ----------------------------------------------------------------------------
 CD /D %BASED%
 CLS
 ECHO ^*************************************
@@ -269,9 +270,10 @@ ECHO ..Finished
 GOTO UPDATE_2
 )
 
+REM -- Patch for downgrading Pillow 2.6.1 to 2.3.0
+REM -- 2.6.1 caused WSJT FSK441 to fail
+REM -- This is fixed in v2.0.0-B2
 :UPDATE_2
-:: Patch for downgrading Pillow 2.6.1 to 2.3.0
-:: 2.6.1 caused FSK441 Imaging to fail
 CD /D %BASED%\Python33
 IF NOT EXIST "%BASED%\Python33\Scripts\pillow-230.mkr" (
 SET OLDPATH=%PATH%
@@ -288,21 +290,20 @@ touch %PYS%\pillow-230.mkr
 PATH=%OLDPATH%
 ECHO ..Finished
 )
-GOTO UPDATE_FINISH
+GOTO FINISH_UPDATE
 
-:UPDATE_FINISH
+:FINISH_UPDATE
 ECHO ..Nothing else to be done
 ECHO.
 ECHO Finished JTSDK-v%VERSION% Update
 ECHO.
 GOTO EOF
 
-:INSTALL_FINISH
+:FINISH_INSTALL
 ECHO.
 ECHO Finished JTSDK-v%VERSION% Installation
 ECHO.
 GOTO EOF
-
 
 :EOF
 ENDLOCAL
