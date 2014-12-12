@@ -33,7 +33,7 @@ SET LANG=en_US
 SET BASED=C:\JTSDK
 SET SVND=%BASED%\subversion\bin
 SET TOOLS=%BASED%\tools\bin
-SET URL1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/win32/postinstall.bat"
+SET URL1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/win32/postinstall.bat"
 SET PATH=%BASED%;%SVND%;%TOOLS%;%WINDIR%\System32
 
 :: Power-User Commands, add as many as you like
