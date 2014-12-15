@@ -1,5 +1,5 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: pyenv-wspr.bat
+:: Name .........: pyenv-build-wspr.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Build both WSJT and WSPR from source
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
@@ -9,12 +9,12 @@
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: pyenv-wspr.bat is free software: you can redistribute it and/or modify it
+:: pyenv-build-wspr.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: pyenv-build.bat is distributed in the hope that it will be useful, but WITHOUT
+:: pyenv-build-wpsr.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -50,6 +50,7 @@ SET PATH=%BASED%;%MGW%;%PYP%;%PYS%;%PYD%;%TOOLS%;%SRCD%;%INNO%;%SCR%;%SVND%;%WIN
 
 :: VARS USED IN PROCESS
 SET JJ=%NUMBER_OF_PROCESSORS%
+SET make=C:\JTSDK\mingw32\bin\mingw32-make %*
 SET CP=%TOOLS%\cp.exe
 SET MV=%TOOLS%\mv.exe
 SET APP_NAME=wspr
@@ -58,10 +59,10 @@ SET INSTALLDIR=%BASED%\wspr\install
 SET PACKAGEDIR=%BASED%\wspr\package
 GOTO WSPR_OPTIONS
 
+:: WSPR TARGETS
 :WSPR_OPTIONS
 IF /I [%1]==[] (
-SET TARGET=install
-GOTO START
+GOTO UNSUPPORTED_TARGET
 ) ELSE IF /I [%1]==[install] (
 SET TARGET=install
 GOTO START
@@ -134,7 +135,7 @@ ECHO Please Answer With: ^( Y or N ^)
 GOTO ASK_SVN
 )
 
-:: UPDATE WSJT FROM SVN
+:: UPDATE FROM SVN
 :SVN_UPDATE
 ECHO.
 ECHO UPDATING ^( %APP_SRC% ^ )
@@ -147,19 +148,24 @@ GOTO START_BUILD
 ECHO.
 IF NOT EXIST %BASED%\%APP_NAME%\NUL ( mkdir %BASED%\%APP_NAME% )
 CD /D %APP_SRC%
+IF EXIST "libwspr.a" (
 ECHO ..Performing make clean first
-mingw32-make -f Makefile.jtsdk2 clean >nul 2>&1
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
+)
 ECHO ..Running mingw32-make To Build ^( %TARGET% ^) Target
 ECHO.
+IF [%TARGET%] ==[install] (
+mingw32-make -f Makefile.jtsdk2
+) ELSE (
 mingw32-make -f Makefile.jtsdk2 %TARGET%
+)
+
 ECHO.
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-
 ECHO -----------------------------------------------------------------
 ECHO   MAKEFILE EXIT STATUS: ^( %ERRORLEVEL% ^) is OK
 ECHO -----------------------------------------------------------------
 ECHO.
-
 IF /I [%TARGET%]==[install] (
 GOTO REV_NUM
 ) ELSE IF /I [%TARGET%]==[package] ( 
@@ -173,6 +179,7 @@ ECHO.
 ECHO..Running InnoSetup for: ^( %APP_NAME% ^)
 mingw32-make -s -f Makefile.jtsdk2 package
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+ECHO.
 GOTO REV_NUM
 
 :: GET SVN r NUMBER, STILL in %APP_SRC%
@@ -226,19 +233,21 @@ GOTO FINISHED
 :FINISHED
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   ^( %APP_NAME%-r%VER% ^) BUILD COMPLETE
+ECHO   BUILD COMPLETE ^( %APP_NAME%-r%VER% ^) 
 ECHO -----------------------------------------------------------------
 ECHO.
+IF /I [%TARGET%]==[install] (
 ECHO  Source Dir ...: %APP_SRC%
-ECHO  Install Dir ..: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
+ECHO  Install Dir ..: %INSTALLDIR%
 ECHO  Batch File ...: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%\%APP_NAME%.bat
-
-IF EXIST "%BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe" ( 
-ECHO  Package ......: %BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe
-)
-CD /D %BASED%
-ECHO.
 GOTO ASKRUN
+)
+IF /I [%TARGET%]==[package] (
+ECHO  Source Dir ...: %APP_SRC%
+ECHO  Install Dir ..: %INSTALLDIR%
+ECHO  Package Dir ..: %PACKAGEDIR%
+GOTO EOF
+)
 
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASKRUN
@@ -307,35 +316,16 @@ ECHO ----------------------------------------
 ECHO  %APP_SRC% Was Not Found
 ECHO ----------------------------------------
 ECHO.
-ECHO In order to build ^( %APP_NAME% ^) you
-ECHO must first perform a checkout from 
-ECHO SourceForge, then type: build %APP_NAME%
+ECHO  In order to build ^( %APP_NAME% ^) you
+ECHO  must first perform a checkout from 
+ECHO  SourceForge
 ECHO.
-ECHO ANONYMOUS CHECKOUT ^( %APP_NAME% ^):
-ECHO  Type: checkout %APP_NAME%
-ECHO  After Checkout, Type: build %APP_NAME%
-IF /I [%APP_NAME%]==[wsjt] (
+ECHO  After the pause, the checkout help menu
+ECHO  will be displayed.
 ECHO.
-ECHO FOR DEV CHECKOUT:
-ECHO  ^cd src
-ECHO  svn co https://%USERNAME%@svn.code.sf.net/p/wsjt/wsjt/trunk
-ECHO  ^cd ..
-ECHO  build %APP_NAME%
-ECHO.
-ECHO DEV NOTE: Change ^( %USERNAME% ^) to your Sourforge User Name
+PAUSE
+CALL %based%\scripts\help\pyenv-help-checkout.cmd
 GOTO EOF
-)
-IF /I [%APP_NAME%]==[wspr] (
-ECHO.
-ECHO FOR DEV CHECKOUT:
-ECHO  ^cd src
-ECHO  svn co https://%USERNAME%@svn.code.sf.net/p/wsjt/wsjt/branches/wspr
-ECHO  ^cd ..
-ECHO  build %APP_NAME%
-ECHO.
-ECHO DEV NOTE: Change ^( %USERNAME% ^) to your Sourforge User Name.
-GOTO EOF
-)
 
 :: DISPLAY COMPILER BUILD WARNING MESSAGE
 :BUILD_ERROR
