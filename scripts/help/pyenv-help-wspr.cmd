@@ -1,22 +1,29 @@
 ﻿@ECHO off
 CLS
 ECHO. -----------------------------------------------------------------
-ECHO.  JTSDK-PY Help
+ECHO.  Help Build WSPR
 ECHO. -----------------------------------------------------------------
-ECHO. 
-ECHO.  The following help screens are available:
-ECHO. 
-ECHO.  COMMAND           Description
-ECHO. -----------------------------------------------------------------
-ECHO.  help-pyenv ..... Shows this screen
-ECHO.  help-checkout .. Help with package checkout
-ECHO.  help-wsjt ...... Help with vuilding WSPT
-ECHO.  help-wspr ...... Help with building WSPR
-ECHO.  main-menu ...... Returns user to main menu
-ECHO. 
-ECHO.  ^* At the prompt, type .. ^( command ^)
-ECHO   ^* Return to Main-Menu, type .. main-menu 
 ECHO.
+ECHO   Usage: build-wspr ^( target ^)
+ECHO.
+ECHO   There are several targets available for WSPR, the main being
+ECHO   [ install ] or [ package]. After checkout-wspr, use one of the
+ECHO   following:
+ECHO.
+ECHO   libwspr.a  ..... WPSR Library
+ECHO   fmtest.exe ..... FMTest App
+ECHO   fmtave.exe ..... Ave app for FMTest
+ECHO   fcal.exe ....... Cal app for FMTest
+ECHO   fmeasure.exe ... Measure app for FMTest
+ECHO   gmtime2.o ...... Compile gmtime2.c
+ECHO   sound.o ........ Compile sound.c
+ECHO   WSPRcode.exe ... WSPR code testing App
+ECHO   wspr0.exe  ..... Command Line WSPR
+ECHO   WsprMod/w.pyd .. Audio Library for WSPR
+ECHO   install ........ Build and Install WSPR
+ECHO   package ........ Build Win32 Installer
+ECHO. 
+ECHO   ^* Return to Main-Menu, type .. main-menu 
 GOTO EOF
 
 :EOF
