@@ -1,7 +1,7 @@
 ﻿::-----------------------------------------------------------------------------::
 :: Name .........: pyenv-info.bat
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Batch file to check version informaiton
+:: Description ..: Batch file to check version information
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
 :: Usage ........: This file is run from within pyenv.bat
 ::
@@ -25,12 +25,13 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+SETLOCAL
 SET LANG=en_US
 
 :: SET PATH TO F2PY
 SET F2PY=C:\JTSDK\Python33\Scripts\f2py.py
 
-:: START GATHERING VERSION INFO
+:: PRINT HEADER
 CLS
 ECHO      _ _____ ____  ____  _  __     ______   __
 ECHO     ^| ^|_   _/ ___^|^|  _ \^| ^|/ /    ^|  _ \ \ / /
@@ -41,10 +42,12 @@ ECHO.
 ECHO.
 ECHO BUILD APPLICATIONS: ^( WSJT WSPR ^)
 ECHO ---------------------------------------------------------
-ECHO  Build Install .. Type: build wsjt or build wspr
-ECHO  Build Help ..... Type: build help
+ECHO  JTSDK-PY Help, Type ......: help-pyenv
+ECHO  Checkout Help, Type ......: help-checkout
+ECHO  Build Help, Type .........: help-(wsjt or wspr)
+ECHO  Build and Install, Type ..: build-(wsjt or wspr)
 ECHO.
-ECHO COMPILER ENV (mingw32)
+ECHO COMPILER ENV ( mingw32 )
 ECHO ---------------------------------------------------------
 
 :: GET and DISPLAY CRITICAL TOOL INFORMATION
@@ -58,13 +61,13 @@ ECHO  GCC ........ %CVER%
 ECHO  GFortran ... %GFOR%
 ECHO  GNU Make ... %GNMK%
 ECHO.
-ECHO InnopSetp Information
+ECHO INNO SETUP
 ECHO ---------------------------------------------------------
 ECHO  Inno ....... %INNOV%
 ECHO  GUI ........ compil32.exe
 ECHO  CLI ........ ISSC.exe
 ECHO.
-ECHO PYTHON BASE ENV
+ECHO PYTHON ENVIRONMENT
 ECHO ---------------------------------------------------------
 
 python --version >> py.ver 2>&1 
@@ -88,5 +91,5 @@ GOTO EOF
 
 :: END PYENV-INFO.BAT
 :EOF
+ENDLOCAL
 EXIT /B 0
-
