@@ -48,10 +48,10 @@ SET PATH=%based%;%MGW%;%pythonpath%;%tools%;%innno%;%scr%;%svnd%;%WINDIR%\System
 CD /D %based%
 
 :: CHECKOUT AND BUILD COMMANDS ( users *should not* edit these )
-DOSKEY checkout-wspr="%scr%\pyenv-checkout.cmd" $* wspr
-DOSKEY build-wspr="%scr%\pyenv-build-wspr.cmd" $* wspr
-DOSKEY checkout-wsjt="%scr%\pyenv-checkout.cmd" $* wsjt
-DOSKEY build-wsjt="%scr%\pyenv-build-wsjt.cmd" $* wsjt
+DOSKEY checkout-wspr="%scr%\pyenv-checkout.cmd"
+DOSKEY checkout-wsjt="%scr%\pyenv-checkout.cmd"
+DOSKEY build-wspr="%scr%\pyenv-build-wspr.cmd" $*
+DOSKEY build-wsjt="%scr%\pyenv-build-wsjt.cmd" $*
 DOSKEY make=C:\JTSDK\mingw32\bin\mingw32-make $*
 
 :: HELP PAGES ( users *should not* edit these )
