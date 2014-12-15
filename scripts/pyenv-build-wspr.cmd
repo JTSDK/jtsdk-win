@@ -1,5 +1,5 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: pyenv-build.bat
+:: Name .........: pyenv-wspr.bat
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Build both WSJT and WSPR from source
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
@@ -9,7 +9,7 @@
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: pyenv-build.bat is free software: you can redistribute it and/or modify it
+:: pyenv-wspr.bat is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
@@ -52,90 +52,50 @@ SET PATH=%BASED%;%MGW%;%PYP%;%PYS%;%PYD%;%TOOLS%;%SRCD%;%INNO%;%SCR%;%SVND%;%WIN
 SET JJ=%NUMBER_OF_PROCESSORS%
 SET CP=%TOOLS%\cp.exe
 SET MV=%TOOLS%\mv.exe
-GOTO SELECT
-
-:: SET WSJT or WSPR
-:SELECT
-IF /I [%1]==[wsjt] (
-SET APP_NAME=wsjt
-SET APP_SRC=%SRCD%\trunk
-SET INSTALLDIR=%BASED%\wsjt\install
-SET PACKAGEDIR=%BASED%\wsjt\package
-GOTO WSJT_OPT2
-) ELSE IF /I [%1]==[wspr] (
 SET APP_NAME=wspr
 SET APP_SRC=%SRCD%\wspr
 SET INSTALLDIR=%BASED%\wspr\install
 SET PACKAGEDIR=%BASED%\wspr\package
-GOTO WSPR_OPT2
-) ELSE IF /I [%1]==[help] (
-GOTO BUILD_HELP
-) ELSE ( GOTO UNSUPPORTED_APP )
+GOTO WSPR_OPTIONS
 
-:: WSJT USER INPUT FIELD $2 == %2 ^( %TARGET% ^)
-:WSJT_OPT2
-IF /I [%2]==[] (
+:WSPR_OPTIONS
+IF /I [%1]==[] (
 SET TARGET=install
 GOTO START
-) ELSE IF /I [%2]==[install] (
+) ELSE IF /I [%1]==[install] (
 SET TARGET=install
 GOTO START
-) ELSE IF /I [%2]==[package] (
+) ELSE IF /I [%1]==[package] (
 SET TARGET=package
 GOTO START
-) ELSE IF /I [%2]==[libjt.a] (
-SET TARGET=libjt.a
-GOTO START
-) ELSE IF /I [%2]==[jt65code.exe] (
-SET TARGET=jt65code.exe
-GOTO START
-) ELSE IF /I [%2]==[jt4code.exe] (
-SET TARGET=jt4code.exe
-GOTO START
-) ELSE IF /I [%2]==[WsjtMod/Audio.pyd] (
-SET TARGET=WsjtMod/Audio.pyd
-GOTO START
-) ELSE ( GOTO UNSUPPORTED_TARGET )
-
-:: WSPR USER INPUT FIELD $2 == %2 ^( %TARGET% ^)
-:WSPR_OPT2
-IF /I [%2]==[] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[install] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[package] (
-SET TARGET=package
-GOTO START
-) ELSE IF /I [%2]==[wspr0.exe] (
+) ELSE IF /I [%1]==[wspr0] (
 SET TARGET=wspr0.exe
 GOTO START
-) ELSE IF /I [%2]==[WSPRcode.exe] (
+) ELSE IF /I [%1]==[WSPRcode] (
 SET TARGET=WSPRcode.exe
 GOTO START
-) ELSE IF /I [%2]==[libwspr.a] (
+) ELSE IF /I [%1]==[libwspr] (
 SET TARGET=libwspr.a
 GOTO START
-) ELSE IF /I [%2]==[fmtest] (
+) ELSE IF /I [%1]==[fmtest] (
 SET TARGET=fmtest.exe
 GOTO START
-) ELSE IF /I [%2]==[fmtave] (
+) ELSE IF /I [%1]==[fmtave] (
 SET TARGET=fmtave.exe
 GOTO START
-)  ELSE IF /I [%2]==[fcal] (
+)  ELSE IF /I [%1]==[fcal] (
 SET TARGET=fcal.exe
 GOTO START
-) ELSE IF /I [%2]==[fmeasure] (
+) ELSE IF /I [%1]==[fmeasure] (
 SET TARGET=fmeasure.exe
 GOTO START
-) ELSE IF /I [%2]==[sound] (
+) ELSE IF /I [%1]==[sound] (
 SET TARGET=sound.o
 GOTO START
-) ELSE IF /I [%2]==[gmtime2] (
+) ELSE IF /I [%1]==[gmtime2] (
 SET TARGET=sound.o
 GOTO START
-) ELSE IF /I [%2]==[w.pyd] (
+) ELSE IF /I [%1]==[w.pyd] (
 SET TARGET=WsprMod/w.pyd
 GOTO START
 ) ELSE ( GOTO UNSUPPORTED_TARGET )
@@ -191,13 +151,15 @@ ECHO ..Performing make clean first
 mingw32-make -f Makefile.jtsdk2 clean >nul 2>&1
 ECHO ..Running mingw32-make To Build ^( %TARGET% ^) Target
 ECHO.
-mingw32-make -f Makefile.jtsdk2
+mingw32-make -f Makefile.jtsdk2 %TARGET%
 ECHO.
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+
 ECHO -----------------------------------------------------------------
 ECHO   MAKEFILE EXIT STATUS: ^( %ERRORLEVEL% ^) is OK
 ECHO -----------------------------------------------------------------
 ECHO.
+
 IF /I [%TARGET%]==[install] (
 GOTO REV_NUM
 ) ELSE IF /I [%TARGET%]==[package] ( 
@@ -245,7 +207,7 @@ GOTO FINISHED
 :: SINGLE TARGET BUILD MESSAGE
 :SINGLE_FINISHED
 ECHO.
-ECHO ..Finished building ^( %APP_NAME% %TARGET% ^)
+ECHO ..Finished Building Target ^( %TARGET% ^)
 ECHO.
 GOTO EOF
 
@@ -273,10 +235,6 @@ ECHO  Batch File ...: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%\%APP_NAME%.bat
 
 IF EXIST "%BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe" ( 
 ECHO  Package ......: %BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe
-)
-
-IF EXIST "%BASED%\%APP_NAME%\package\WSJT-10.0-Win32.exe" ( 
-ECHO  Package ......: %BASED%\%APP_NAME%\package\WSJT-10.0-Win32.exe
 )
 CD /D %BASED%
 ECHO.
@@ -306,105 +264,26 @@ ECHO ..Starting: ^( %APP_NAME% ^)
 CD %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
 START %APP_NAME%.bat & GOTO EOF
 
-
 REM ----------------------------------------------------------------------------
 REM  MESSAGE SECTION
 REM ----------------------------------------------------------------------------
-
-:: TOOL CHAIN ERROR MESSAGE
-:UNSUPPORTED
-COLOR 1E
-CLS
-ECHO.
-ECHO ----------------------------------------
-ECHO        UNSUPPORTED APPLICATION
-ECHO ----------------------------------------
-ECHO       ^( %1 ^) Is Unsupported
-ECHO.
-ECHO            WSJT and WSPR
-ECHO.
-ECHO       Are the Only Python Builds
-ECHO.
-ECHO        Please Check Your Entry
-ECHO.
-PAUSE
-GOTO EOF
-
-:: HELP MENU FOR BUILD OPTIONS
-:BUILD_HELP
-CLS
-ECHO.                               
-ECHO -----------------------------------------------------------------
-ECHO   BUILD TARGET HELP: ^( WSJT and WSPR ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO USAGE:  build ^(app_name^) ^(target^)
-ECHO.
-ECHO  App Names ...... WSJT WSPR
-ECHO.
-ECHO  WSJT Targets ... libjt.a jt65code.exe jt4code.exe
-ECHO                   WsjtMod/Audio.pyd install package
-ECHO.
-ECHO  WSPR Targets ... wspr0.exe WSPRcode.exe libwspr.a fmtest
-ECHO                   fmtave fcal fmeasure sound gmtime2
-ECHO                   WsprMod/w.pyd install package
-ECHO.
-ECHO DEFINITIONS:
-ECHO -----------------------------------------------------------------
-ECHO  install ........ Build Full Test Version
-ECHO  package ........ Build Inno5 Win32 Installer package
-ECHO.
-ECHO EXAMPLE ^( WSJT ^):
-ECHO -----------------------------------------------------------------
-ECHO Build Install Target:
-ECHO  Script Usage .. build wsjt install
-ECHO  Command Line .. make -f Makefile.jtsdk2 install
-ECHO.
-ECHO Build Installer Package:
-ECHO  Script Usage .. build wsjt package
-ECHO  Command Line .. make -f Makefile.jtsdk2 package
-ECHO.
-ECHO Build Multiple Targets ^( Command Line Only ^)
-ECHO  CLI ........... make -f Makefile.jtsdk2 libjt.a jt65code.exe
-ECHO.
-GOTO EOF
-) ELSE IF /I [%2]==[sound] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[gmtime2] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[w.pyd] (
-SET TARGET=WsprMod/w.pyd
-
-:: USER REQUESTED UNSUPPORTED APPLICATION
-:UNSUPPORTED_APP
-CLS
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   ^( %1 ^) Is An Unsupported Application Name
-ECHO -----------------------------------------------------------------
-GOTO UMSG
 
 :: USER INPUT INCORRECT BUILD TARGET
 :UNSUPPORTED_TARGET
 CLS
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   ^( %2 ^) IS AN INVALID TARGET FOR ^( %1% ^)
+ECHO   ^( %1 ^) IS AN INVALID TARGET
 ECHO -----------------------------------------------------------------
-GOTO UMSG
-
-:: DISPLAY UNSUPPORTED TARGET MESSAGE 
-:UMSG
 ECHO. 
 ECHO  After the pause, the build help menu
 ECHO  will be displayed. Please use the syntax
-ECHO  as outlined on on help and choose the correct
-ECHO  application to build.
+ECHO  as outlined and choose the correct
+ECHO  target to build.
 ECHO.
 PAUSE
-GOTO BUILD_HELP
+CALL %scr%\help\pyenv-help-%APP_NAME%.cmd
+GOTO EOF
 
 :: DISPLAY DOUBLE CLICK WARNING MESSAGE
 :DCLICK
