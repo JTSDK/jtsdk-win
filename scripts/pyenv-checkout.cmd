@@ -94,7 +94,9 @@ GOTO FINISHED
 :: FINISHED CHECKOUT MESSAGE
 :FINISHED
 ECHO.
-ECHO To Build, Type: build %APP_NAME%
+ECHO To Build, Type: build-%APP_NAME%
+ECHO.
+ECHO For additional build options, type: help-%APP_NAME%
 ECHO.
 GOTO EOF
 
