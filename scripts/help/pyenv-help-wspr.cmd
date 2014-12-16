@@ -13,7 +13,7 @@ ECHO.
 ECHO   libwspr ... WPSR Library
 ECHO   fmtest .... FMTest App
 ECHO   fmtave .... Ave app for FMTest
-ECHO   fcal.exe .. Cal app for FMTest
+ECHO   fcal ...... Cal app for FMTest
 ECHO   fmeasure .. Measure app for FMTest
 ECHO   gmtime2 ... Compile gmtime2.c
 ECHO   sound ..... Compile sound.c

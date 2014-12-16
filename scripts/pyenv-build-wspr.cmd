@@ -36,223 +36,194 @@ IF DEFINED GUI CALL GOTO DCLICK
 :: PATH VARIABLES
 SET LANG=en_US
 SET LIBRARY_PATH=""
-SET BASED=C:\JTSDK
-SET SRCD=%BASED%\src
-SET TOOLS=%BASED%\tools\bin
-SET MGW=%BASED%\mingw32\bin
-SET INNO=%BASED%\inno5
-SET SCR=%BASED%\scripts
-SET PYP=%BASED%\Python33
-SET PYS=%BASED%\Python33\Scripts
-SET PYD=%BASED%\Python33\DLLs
-SET SVND=%BASED%\subversion\bin
-SET PATH=%BASED%;%MGW%;%PYP%;%PYS%;%PYD%;%TOOLS%;%SRCD%;%INNO%;%SCR%;%SVND%;%WINDIR%\System32
+SET based=C:\JTSDK
+SET srcd=%based%\src
+SET tools=%based%\tools\bin
+SET mgw=%based%\mingw32\bin
+SET inno=%based%\inno5
+SET scr=%based%\scripts
+SET python_home=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
+SET SVND=%based%\subversion\bin
+SET PATH=%based%;%mgw%;%python_home%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
 
 :: VARS USED IN PROCESS
 SET JJ=%NUMBER_OF_PROCESSORS%
 SET make=C:\JTSDK\mingw32\bin\mingw32-make %*
-SET CP=%TOOLS%\cp.exe
-SET MV=%TOOLS%\mv.exe
-SET APP_NAME=wspr
-SET APP_SRC=%SRCD%\wspr
-SET INSTALLDIR=%BASED%\wspr\install
-SET PACKAGEDIR=%BASED%\wspr\package
+SET CP=%tools%\cp.exe
+SET MV=%tools%\mv.exe
+SET app_name=wspr
+SET app_src=%srcd%\wspr
+SET installdir=%based%\wspr\install
+SET packagedir=%based%\wspr\package
 GOTO WSPR_OPTIONS
 
 :: WSPR TARGETS
 :WSPR_OPTIONS
 IF /I [%1]==[] (
-GOTO UNSUPPORTED_TARGET
+SET all-target=1
+GOTO BUILD_INSTALL
 ) ELSE IF /I [%1]==[install] (
-SET TARGET=install
-GOTO START
+SET all-target=1
+GOTO BUILD_INSTALL
 ) ELSE IF /I [%1]==[package] (
-SET TARGET=package
-GOTO START
+SET pgk-target=1
+GOTO BUILD_PACKAGE
 ) ELSE IF /I [%1]==[wspr0] (
-SET TARGET=wspr0.exe
-GOTO START
+SET target=wspr0.exe
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[WSPRcode] (
-SET TARGET=WSPRcode.exe
-GOTO START
+SET target=WSPRcode.exe
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[libwspr] (
-SET TARGET=libwspr.a
-GOTO START
+SET target=libwspr.a
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[fmtest] (
-SET TARGET=fmtest.exe
-GOTO START
+SET target=fmtest.exe
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[fmtave] (
-SET TARGET=fmtave.exe
-GOTO START
+SET target=fmtave.exe
+GOTO BUILD_TARGET
 )  ELSE IF /I [%1]==[fcal] (
-SET TARGET=fcal.exe
-GOTO START
+SET target=fcal.exe
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[fmeasure] (
-SET TARGET=fmeasure.exe
-GOTO START
+SET target=fmeasure.exe
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[sound] (
-SET TARGET=sound.o
-GOTO START
+SET target=sound.o
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[gmtime2] (
-SET TARGET=sound.o
-GOTO START
+SET target=sound.o
+GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[w.pyd] (
-SET TARGET=WsprMod/w.pyd
-GOTO START
+SET target=WsprMod/w.pyd
+GOTO BUILD_TARGET
 ) ELSE ( GOTO UNSUPPORTED_TARGET )
 
 :: ------------------------------------------------------------------------------
 :: -- START MAIN SCRIPT --
 :: ------------------------------------------------------------------------------
 
-:: START MAIN BUILD
-:START
-CD %BASED%
+:: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
+IF NOT EXIST %app_src%\.svn\NUL ( mkdir %based%\src
+GOTO COMSG
+) ELSE ( GOTO START_BUILD )
+IF DEFINED all-target  GOTO BUILD_INSTALL )
+IF DEFINED pkg-target ( GOTO BUILD_PACKAGE ) ELSE ( GOTO BUILD_TARGET )
+
+:BUILD_INSTALL
+CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Build for ^( %APP_NAME% %TARGET% Target ^)
+ECHO   Starting Build for ^( Install ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-
-:: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
-IF NOT EXIST %APP_SRC%\.svn\NUL (
-mkdir %BASED%\src
-GOTO COMSG
-) ELSE (GOTO ASK_SVN)
-
-:: START WSPR BUILD
-:ASK_SVN
-ECHO Update from SVN Before Building? ^( y/n ^)
-SET ANSWER=
-ECHO.
-SET /P ANSWER=Type Response: %=%
-If /I "%ANSWER%"=="N" GOTO START_BUILD
-If /I "%ANSWER%"=="Y" (
-GOTO SVN_UPDATE
-) ELSE (
-ECHO.
-ECHO Please Answer With: ^( Y or N ^)
-GOTO ASK_SVN
-)
-
-:: UPDATE FROM SVN
-:SVN_UPDATE
-ECHO.
-ECHO UPDATING ^( %APP_SRC% ^ )
-cd %APP_SRC%
-start /wait svn update
-GOTO START_BUILD
-
-:: START MAIN BUILD PROCESS
-:START_BUILD
-ECHO.
-IF NOT EXIST %BASED%\%APP_NAME%\NUL ( mkdir %BASED%\%APP_NAME% )
-CD /D %APP_SRC%
-IF EXIST "libwspr.a" (
-ECHO ..Performing make clean first
+ECHO ..Running make clean first ...
 mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
-)
-ECHO ..Running mingw32-make To Build ^( %TARGET% ^) Target
+ECHO ..Running mingw32-make To Build ^( install ^) Target
 ECHO.
-IF [%TARGET%] ==[install] (
 mingw32-make -f Makefile.jtsdk2
-) ELSE (
-mingw32-make -f Makefile.jtsdk2 %TARGET%
-)
-
-ECHO.
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+ECHO.
+GOTO REV_NUM
+
+:BUILD_PACKAGE
+CD /D %app_src%
+CLS
 ECHO -----------------------------------------------------------------
-ECHO   MAKEFILE EXIT STATUS: ^( %ERRORLEVEL% ^) is OK
+ECHO   Starting Build for ^( Package ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF /I [%TARGET%]==[install] (
+ECHO ..Running make clean first .. 
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
+ECHO ..Running mingw32-make To Build ^( package ^) Target
+ECHO.
+mingw32-make -f Makefile.jtsdk2 %TARGET%
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 GOTO REV_NUM
-) ELSE IF /I [%TARGET%]==[package] ( 
-GOTO MAKE_PACKAGE
-) ELSE ( GOTO SINGLE_FINISHED )
 
 :: BEGIN WSJT MAIN BUILD
-:MAKE_PACKAGE
-CD /D %APP_SRC%
+:BUILD_TARGET
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Starting Build for ^( %TARGET% ^)
+ECHO -----------------------------------------------------------------
 ECHO.
-ECHO..Running InnoSetup for: ^( %APP_NAME% ^)
-mingw32-make -s -f Makefile.jtsdk2 package
+ECHO ..Running mingw32-make To Build ^( %TARGET% ^)
+ECHO.
+mingw32-make -f Makefile.jtsdk2 %TARGET%
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-ECHO.
-GOTO REV_NUM
+GOTO SINGLE_FINISH
 
-:: GET SVN r NUMBER, STILL in %APP_SRC%
+:: GET SVN r NUMBER, STILL in %app_src%
 :REV_NUM
 ECHO ..Getting SVN version number
-svn -qv status %APP_NAME%.py |gawk "{print $2}" > r.txt
+svn -qv status %app_name%.py |gawk "{print $2}" > r.txt
 SET /P VER=<r.txt & rm r.txt
-
-:: PACKAGE JUST NEEDS THE SVN NUMBER FOR FOLDER NAME
-IF /I [%TARGET%]==[package] ( GOTO PKG_FINISH )
 ECHO ..Copying files to install directory
-IF EXIST %BASED%\%APP_NAME%\%APP_NAME%-r%VER% ( 
-rm -r %BASED%\%APP_NAME%\%APP_NAME%-r%VER% )
-XCOPY %INSTALLDIR% %BASED%\%APP_NAME%\%APP_NAME%-r%VER% /I /E /Y /q >/nul
+IF EXIST %based%\%app_name%\%app_name%-r%ver% ( 
+rm -r %based%\%app_name%\%app_name%-r%ver% )
+XCOPY %installdir% %based%\%app_name%\%app_name%-r%ver% /I /E /Y /q >/nul
 IF ERRORLEVEL 0 ( GOTO MAKEBAT ) ELSE ( GOTO COPY_ERROR )
 
 :: GENERATE RUNTIME BATCH FILE
 :MAKEBAT
-CD /D %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
+CD /D %based%\%app_name%\%app_name%-r%ver%
 ECHO ..Generating Batch File
-IF EXIST %APP_NAME%.bat (DEL /Q %APP_NAME%.bat)
->%APP_NAME%.bat (
+IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
+>%app_name%.bat (
 ECHO @ECHO OFF
 ECHO REM -- WSJT-WSPR batch File
 ECHO REM -- Part of the JTSDK Project
 ECHO COLOR 0A
-ECHO bin\%APP_NAME%.exe
+ECHO bin\%app_name%.exe
 ECHO EXIT /B 0
 )
 GOTO FINISHED
 
-:: SINGLE TARGET BUILD MESSAGE
-:SINGLE_FINISHED
-ECHO.
-ECHO ..Finished Building Target ^( %TARGET% ^)
-ECHO.
-GOTO EOF
-
 :: FINISHED INSTALL OR PACKAGE TARGET BUILD
-:PKG_FINISH
+:FINISH_PACKAGE
 ECHO ..Copying build files
-IF EXIST %BASED%\%APP_NAME%\%APP_NAME%-r%VER% ( 
-rm -r %BASED%\%APP_NAME%\%APP_NAME%-r%VER% )
-XCOPY %INSTALLDIR% %BASED%\%APP_NAME%\%APP_NAME%-r%VER% /I /E /Y /q >nul
+IF EXIST %based%\%app_name%\%app_name%-r%ver% ( 
+rm -r %based%\%app_name%\%app_name%-r%ver% )
+XCOPY %installdir% %based%\%app_name%\%app_name%-r%ver% /I /E /Y /q >nul
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 ECHO ..Finisned InnoSetup
 ECHO ..Exit Status: ^( %ERRORLEVEL% ^) is OK
 GOTO FINISHED
 
 :: FINISHED INSTALL OR PACKAGE TARGET BUILDS
+:SINGLE_FINISH
+ECHO.
+ECHO ..Finished building Target ^( %target% ^) 
+ECHO.
+GOTO EOF
+
+:: FINISHED INSTALL OR PACKAGE TARGET BUILDS
 :FINISHED
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   BUILD COMPLETE ^( %APP_NAME%-r%VER% ^) 
+ECHO   BUILD COMPLETE ^( %app_name%-r%ver% ^) 
 ECHO -----------------------------------------------------------------
 ECHO.
-IF /I [%TARGET%]==[install] (
-ECHO  Source Dir ...: %APP_SRC%
-ECHO  Install Dir ..: %INSTALLDIR%
-ECHO  Batch File ...: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%\%APP_NAME%.bat
+IF DEFINED all-targert (
+ECHO  Source Dir ...: %app_src%
+ECHO  Install Dir ..: %installdir%
+ECHO  Batch File ...: %based%\%app_name%\%app_name%-r%ver%\%app_name%.bat
 GOTO ASKRUN
 )
-IF /I [%TARGET%]==[package] (
-ECHO  Source Dir ...: %APP_SRC%
-ECHO  Install Dir ..: %INSTALLDIR%
-ECHO  Package Dir ..: %PACKAGEDIR%
+IF DEFINED pkg-target (
+ECHO  Source Dir ...: %app_src%
+ECHO  Install Dir ..: %installdir%
+ECHO  Package Dir ..: %packagedir%
 GOTO EOF
 )
 
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASKRUN
 ECHO.
-ECHO  Would You Like To Run %APP_NAME% Now? ^( y/n ^)
+ECHO  Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
 SET ANSWER=
 SET /P ANSWER=Type Response: %=%
@@ -269,9 +240,9 @@ GOTO EOF
 :: RUN THE APP IFF USER ANSWERED YES ABOVE
 :RUN_APP
 ECHO.
-ECHO ..Starting: ^( %APP_NAME% ^)
-CD %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
-START %APP_NAME%.bat & GOTO EOF
+ECHO ..Starting: ^( %app_name% ^)
+CD %based%\%app_name%\%app_name%-r%ver%
+START %app_name%.bat & GOTO EOF
 
 REM ----------------------------------------------------------------------------
 REM  MESSAGE SECTION
@@ -291,7 +262,7 @@ ECHO  as outlined and choose the correct
 ECHO  target to build.
 ECHO.
 PAUSE
-CALL %scr%\help\pyenv-help-%APP_NAME%.cmd
+CALL %scr%\help\pyenv-help-%app_name%.cmd
 GOTO EOF
 
 :: DISPLAY DOUBLE CLICK WARNING MESSAGE
@@ -304,7 +275,7 @@ ECHO -------------------------------
 ECHO.
 ECHO  Please Use JTSDK-PY Enviroment
 ECHO.
-ECHO    %BASED%\jtsdk-pyenv.bat
+ECHO    %based%\jtsdk-pyenv.bat
 ECHO.
 PAUSE
 GOTO EOF
@@ -313,10 +284,10 @@ GOTO EOF
 :COMSG
 CLS
 ECHO ----------------------------------------
-ECHO  %APP_SRC% Was Not Found
+ECHO  %app_src% Was Not Found
 ECHO ----------------------------------------
 ECHO.
-ECHO  In order to build ^( %APP_NAME% ^) you
+ECHO  In order to build ^( %app_name% ^) you
 ECHO  must first perform a checkout from 
 ECHO  SourceForge
 ECHO.
@@ -337,11 +308,6 @@ ECHO.
 ECHO  mingw32-make exited with a non-(0) build status. Check and or 
 ECHO  correct the error, perform a clean, then re-make the target.
 ECHO.
-ECHO  Possible Solution:
-ECHO  cd %APP_SRC%
-ECHO  make -f Makefile.jtsdk2 distclean
-ECHO.
-ECHO  Then rebuild your target.
 ECHO.
 EXIT /B %ERRORLEVEL%
 
@@ -349,11 +315,11 @@ EXIT /B %ERRORLEVEL%
 :COPY_ERROR
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   Error Creating ^( %APP_NAME%-r%VER% ^)
+ECHO   Error Creating ^( %app_name%-r%ver% ^)
 ECHO -----------------------------------------------------------------
 ECHO. 
 ECHO  An error occured when trying to copy the build to it's final
-ECHO  location: C:\JTSDK-PY\%APP_NAME%\%APP_NAME%-r%VER%
+ECHO  location: C:\JTSDK\%app_name%\%app_name%-r%ver%
 ECHO.
 ECHO  If the probblems continues, please contact the wsjt-dev group.
 ECHO.
@@ -365,7 +331,7 @@ REM ----------------------------------------------------------------------------
 REM  END OF PYENV-BUILD>BAT
 REM ----------------------------------------------------------------------------
 :EOF
-CD /D %BASED%
+CD /D %based%
 ENDLOCAL
 
 EXIT /B 0
