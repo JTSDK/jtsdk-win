@@ -16,6 +16,8 @@ ECHO   jt4code .... JT4 code test app
 ECHO   Audio.pyd .. Audio Library for WSJT
 ECHO   install .... Build and Install WSJT
 ECHO   package .... Build Win32 Installer
+ECHO   clean ...... Clean SRC directory
+ECHO   distclean .. Clean SRC, Install & Package Directories
 ECHO. 
 ECHO   ^* Return to Main-Menu, type .. main-menu 
 GOTO EOF

@@ -1,7 +1,7 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: pyenv-build.bat
+:: Name .........: pyenv-build-wsjt.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build both WSJT and WSPR from source
+:: Description ..: Build WSJT from source
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
 :: Usage ........: This file is run from within pyenv.bat
 ::
@@ -9,12 +9,12 @@
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: pyenv-build.bat is free software: you can redistribute it and/or modify it
+:: pyenv-build-wsjt.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: pyenv-build.bat is distributed in the hope that it will be useful, but WITHOUT
+:: pyenv-build-wsjt.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -35,138 +35,42 @@ IF DEFINED GUI CALL GOTO DCLICK
 
 :: PATH VARIABLES
 SET LANG=en_US
-SET LIBRARY_PATH=""
-SET BASED=C:\JTSDK
-SET SRCD=%BASED%\src
-SET TOOLS=%BASED%\tools\bin
-SET MGW=%BASED%\mingw32\bin
-SET INNO=%BASED%\inno5
-SET SCR=%BASED%\scripts
-SET PYP=%BASED%\Python33
-SET PYS=%BASED%\Python33\Scripts
-SET PYD=%BASED%\Python33\DLLs
-SET SVND=%BASED%\subversion\bin
-SET PATH=%BASED%;%MGW%;%PYP%;%PYS%;%PYD%;%TOOLS%;%SRCD%;%INNO%;%SCR%;%SVND%;%WINDIR%\System32
+SET LIBRARY_PATH=
+SET based=C:\JTSDK
+SET srcd=%based%\src
+SET tools=%based%\tools\bin
+SET mgw=%based%\mingw32\bin
+SET inno=%based%\inno5
+SET scr=%based%\scripts
+SET python_home=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
+SET svnd=%based%\subversion\bin
+SET PATH=%based%;%mgw%;%python_home%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
 
 :: VARS USED IN PROCESS
 SET JJ=%NUMBER_OF_PROCESSORS%
-SET CP=%TOOLS%\cp.exe
-SET MV=%TOOLS%\mv.exe
-GOTO SELECT
-
-:: SET WSJT or WSPR
-:SELECT
-IF /I [%1]==[wsjt] (
-SET APP_NAME=wsjt
-SET APP_SRC=%SRCD%\trunk
-SET INSTALLDIR=%BASED%\wsjt\install
-SET PACKAGEDIR=%BASED%\wsjt\package
-GOTO WSJT_OPT2
-) ELSE IF /I [%1]==[wspr] (
-SET APP_NAME=wspr
-SET APP_SRC=%SRCD%\wspr
-SET INSTALLDIR=%BASED%\wspr\install
-SET PACKAGEDIR=%BASED%\wspr\package
-GOTO WSPR_OPT2
-) ELSE IF /I [%1]==[help] (
-GOTO BUILD_HELP
-) ELSE ( GOTO UNSUPPORTED_APP )
-
-:: WSJT USER INPUT FIELD $2 == %2 ^( %TARGET% ^)
-:WSJT_OPT2
-IF /I [%2]==[] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[install] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[package] (
-SET TARGET=package
-GOTO START
-) ELSE IF /I [%2]==[libjt.a] (
-SET TARGET=libjt.a
-GOTO START
-) ELSE IF /I [%2]==[jt65code.exe] (
-SET TARGET=jt65code.exe
-GOTO START
-) ELSE IF /I [%2]==[jt4code.exe] (
-SET TARGET=jt4code.exe
-GOTO START
-) ELSE IF /I [%2]==[WsjtMod/Audio.pyd] (
-SET TARGET=WsjtMod/Audio.pyd
-GOTO START
-) ELSE ( GOTO UNSUPPORTED_TARGET )
-
-:: WSPR USER INPUT FIELD $2 == %2 ^( %TARGET% ^)
-:WSPR_OPT2
-IF /I [%2]==[] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[install] (
-SET TARGET=install
-GOTO START
-) ELSE IF /I [%2]==[package] (
-SET TARGET=package
-GOTO START
-) ELSE IF /I [%2]==[wspr0.exe] (
-SET TARGET=wspr0.exe
-GOTO START
-) ELSE IF /I [%2]==[WSPRcode.exe] (
-SET TARGET=WSPRcode.exe
-GOTO START
-) ELSE IF /I [%2]==[libwspr.a] (
-SET TARGET=libwspr.a
-GOTO START
-) ELSE IF /I [%2]==[fmtest] (
-SET TARGET=fmtest.exe
-GOTO START
-) ELSE IF /I [%2]==[fmtave] (
-SET TARGET=fmtave.exe
-GOTO START
-)  ELSE IF /I [%2]==[fcal] (
-SET TARGET=fcal.exe
-GOTO START
-) ELSE IF /I [%2]==[fmeasure] (
-SET TARGET=fmeasure.exe
-GOTO START
-) ELSE IF /I [%2]==[sound] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[gmtime2] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[w.pyd] (
-SET TARGET=WsprMod/w.pyd
-GOTO START
-) ELSE ( GOTO UNSUPPORTED_TARGET )
-
-:: ------------------------------------------------------------------------------
-:: -- START MAIN SCRIPT --
-:: ------------------------------------------------------------------------------
-
-:: START MAIN BUILD
-:START
-CD %BASED%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Starting Build for ^( %APP_NAME% %TARGET% Target ^)
-ECHO -----------------------------------------------------------------
-ECHO.
+SET CP=%tools%\cp.exe
+SET MV=%tools%\mv.exe
+SET app_name=wsjt
+SET app_src=%srcd%\trunk
+SET installdir=%based%\wsjt\install
+SET packagedir=%based%\wsjt\package
 
 :: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
-IF NOT EXIST %APP_SRC%\.svn\NUL (
-mkdir %BASED%\src
+CLS
+IF NOT EXIST %app_src%\.svn\NUL (
+mkdir %based%\src
 GOTO COMSG
 ) ELSE (GOTO ASK_SVN)
 
-:: START WSPR BUILD
+:: START WSJT BUILD
 :ASK_SVN
+CLS
 ECHO Update from SVN Before Building? ^( y/n ^)
 SET ANSWER=
 ECHO.
-SET /P ANSWER=Type Response: %=%
-If /I "%ANSWER%"=="N" GOTO START_BUILD
-If /I "%ANSWER%"=="Y" (
+SET /P answer=Type Response: %=%
+If /I "%answer%"=="N" GOTO WSJT_OPTIONS
+If /I "%answer%"=="Y" (
 GOTO SVN_UPDATE
 ) ELSE (
 ECHO.
@@ -177,120 +81,163 @@ GOTO ASK_SVN
 :: UPDATE WSJT FROM SVN
 :SVN_UPDATE
 ECHO.
-ECHO UPDATING ^( %APP_SRC% ^ )
-cd %APP_SRC%
+ECHO UPDATING ^( %app_src% ^ )
+CD /D %app_src%
 start /wait svn update
-GOTO START_BUILD
+GOTO WSJT_OPTIONS
 
-:: START MAIN BUILD PROCESS
-:START_BUILD
+:: WSJT TARGETS
+:WSJT_OPTIONS
+IF /I [%1]==[] (
+SET all-target=1
+SET target=install
+GOTO BUILD_INSTALL
+) ELSE IF /I [%1]==[install] (
+SET all-target=1
+SET target=install
+GOTO BUILD_INSTALL
+) ELSE IF /I [%1]==[package] (
+SET pkg-target=1
+SET target=package
+GOTO BUILD_PACKAGE
+) ELSE IF /I [%1]==[clean] (
+GOTO BUILD_CLEAN
+) ELSE IF /I [%1]==[distclean] (
+GOTO BUILD_DISTCLEAN
+) ELSE IF /I [%1]==[libjt] (
+SET target=libjta
+GOTO BUILD_TARGET
+) ELSE IF /I [%1]==[jt65code] (
+SET target=jt65code.exe
+GOTO BUILD_TARGET
+) ELSE IF /I [%1]==[jt4code] (
+SET target=jt4code.exe
+GOTO BUILD_TARGET
+) ELSE IF /I [%1]==[audio.pyd] (
+SET target=WsjtMod/Audio.pyd
+GOTO BUILD_TARGET
+) ELSE ( GOTO UNSUPPORTED_TARGET )
+
+:: ------------------------------------------------------------------------------
+:: -- START MAIN SCRIPT --
+:: ------------------------------------------------------------------------------
+
+::BUILD_CLEAN
+:BUILD_CLEAN
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Clean Targets for ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
 ECHO.
-IF NOT EXIST %BASED%\%APP_NAME%\NUL ( mkdir %BASED%\%APP_NAME% )
-CD /D %APP_SRC%
-ECHO ..Performing make clean first
-mingw32-make -f Makefile.jtsdk2 clean >nul 2>&1
-ECHO ..Running mingw32-make To Build ^( %TARGET% ^) Target
+ECHO ..Running mingw32-make clean
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
+ECHO ..Finished
+GOTO EOF
+
+::BUILD_DISTCLEAN
+:BUILD_DISTCLEAN
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Distclean Targets for ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO ..Running mingw32-make distclean
+mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Finished
+GOTO EOF
+
+:BUILD_INSTALL
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Starting Install Build for ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO ..Running mingw32-make clean
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
+ECHO ..Running mingw32-make all
 ECHO.
 mingw32-make -f Makefile.jtsdk2
-ECHO.
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+mingw32-make -f Makefile.jtsdk2 install
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+GOTO MAKEBAT
+
+:BUILD_PACKAGE
+CD /D %app_src%
+CLS
 ECHO -----------------------------------------------------------------
-ECHO   MAKEFILE EXIT STATUS: ^( %ERRORLEVEL% ^) is OK
+ECHO   Starting Package Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF /I [%TARGET%]==[install] (
-GOTO REV_NUM
-) ELSE IF /I [%TARGET%]==[package] ( 
-GOTO MAKE_PACKAGE
-) ELSE ( GOTO SINGLE_FINISHED )
+ECHO ..Running mingw32-make distclean
+mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Running mingw32-make all
+ECHO.
+mingw32-make -f Makefile.jtsdk2
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+mingw32-make -f Makefile.jtsdk2 install
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+GOTO MAKEBAT
 
 :: BEGIN WSJT MAIN BUILD
-:MAKE_PACKAGE
-CD /D %APP_SRC%
+:BUILD_TARGET
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Starting Build for Target^( %target% ^)
+ECHO -----------------------------------------------------------------
 ECHO.
-ECHO..Running InnoSetup for: ^( %APP_NAME% ^)
-mingw32-make -s -f Makefile.jtsdk2 package
+ECHO ..Running mingw32-make To Build ^( %target% ^)
+ECHO.
+mingw32-make -f Makefile.jtsdk2 %target%
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO REV_NUM
-
-:: GET SVN r NUMBER, STILL in %APP_SRC%
-:REV_NUM
-ECHO ..Getting SVN version number
-svn -qv status %APP_NAME%.py |gawk "{print $2}" > r.txt
-SET /P VER=<r.txt & rm r.txt
-
-:: PACKAGE JUST NEEDS THE SVN NUMBER FOR FOLDER NAME
-IF /I [%TARGET%]==[package] ( GOTO PKG_FINISH )
-ECHO ..Copying files to install directory
-IF EXIST %BASED%\%APP_NAME%\%APP_NAME%-r%VER% ( 
-rm -r %BASED%\%APP_NAME%\%APP_NAME%-r%VER% )
-XCOPY %INSTALLDIR% %BASED%\%APP_NAME%\%APP_NAME%-r%VER% /I /E /Y /q >/nul
-IF ERRORLEVEL 0 ( GOTO MAKEBAT ) ELSE ( GOTO COPY_ERROR )
+GOTO SINGLE_FINISH
 
 :: GENERATE RUNTIME BATCH FILE
 :MAKEBAT
-CD /D %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
-ECHO ..Generating Batch File
-IF EXIST %APP_NAME%.bat (DEL /Q %APP_NAME%.bat)
->%APP_NAME%.bat (
+CD /D %installdir%
+IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
+>%app_name%.bat (
 ECHO @ECHO OFF
-ECHO REM -- WSJT-WSPR batch File
-ECHO REM -- Part of the JTSDK Project
+ECHO REM -- WSJT batch File
+ECHO REM -- Part of the JTSDK v2.0 Project
 ECHO COLOR 0A
-ECHO bin\%APP_NAME%.exe
+ECHO bin\%app_name%.exe
 ECHO EXIT /B 0
 )
-GOTO FINISHED
-
-:: SINGLE TARGET BUILD MESSAGE
-:SINGLE_FINISHED
+IF DEFINED pkg-target (
+CD /D %app_src%
+mingw32-make -f Makefile.jtsdk2 package
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 ECHO.
-ECHO ..Finished building ^( %APP_NAME% %TARGET% ^)
+GOTO FINISH
+)
+GOTO FINISH
+
+:: FINISHED INSTALL OR PACKAGE TARGET BUILDS
+:SINGLE_FINISH
+ECHO.
+ECHO ..Finished building Target ^( %target% ^) 
 ECHO.
 GOTO EOF
 
-:: FINISHED INSTALL OR PACKAGE TARGET BUILD
-:PKG_FINISH
-ECHO ..Copying build files
-IF EXIST %BASED%\%APP_NAME%\%APP_NAME%-r%VER% ( 
-rm -r %BASED%\%APP_NAME%\%APP_NAME%-r%VER% )
-XCOPY %INSTALLDIR% %BASED%\%APP_NAME%\%APP_NAME%-r%VER% /I /E /Y /q >nul
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-ECHO ..Finisned InnoSetup
-ECHO ..Exit Status: ^( %ERRORLEVEL% ^) is OK
-GOTO FINISHED
-
 :: FINISHED INSTALL OR PACKAGE TARGET BUILDS
-:FINISHED
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   ^( %APP_NAME%-r%VER% ^) BUILD COMPLETE
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO  Source Dir ...: %APP_SRC%
-ECHO  Install Dir ..: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
-ECHO  Batch File ...: %BASED%\%APP_NAME%\%APP_NAME%-r%VER%\%APP_NAME%.bat
-
-IF EXIST "%BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe" ( 
-ECHO  Package ......: %BASED%\%APP_NAME%\package\WSPR-4.0-Win32.exe
-)
-
-IF EXIST "%BASED%\%APP_NAME%\package\WSJT-10.0-Win32.exe" ( 
-ECHO  Package ......: %BASED%\%APP_NAME%\package\WSJT-10.0-Win32.exe
-)
-CD /D %BASED%
-ECHO.
-GOTO ASKRUN
+:FINISH
+IF DEFINED all-target ( GOTO ASKRUN )
+GOTO EOF
 
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASKRUN
 ECHO.
-ECHO  Would You Like To Run %APP_NAME% Now? ^( y/n ^)
+ECHO  Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
-SET ANSWER=
-SET /P ANSWER=Type Response: %=%
+SET answer=
+SET /P answer=Type Response: %=%
 ECHO.
-If /I "%ANSWER%"=="Y" GOTO RUN_APP
+If /I "%answer%"=="Y" GOTO RUN_APP
 If /I "%ANSWER%"=="N" (
 GOTO EOF
 ) ELSE (
@@ -302,109 +249,30 @@ GOTO EOF
 :: RUN THE APP IFF USER ANSWERED YES ABOVE
 :RUN_APP
 ECHO.
-ECHO ..Starting: ^( %APP_NAME% ^)
-CD %BASED%\%APP_NAME%\%APP_NAME%-r%VER%
-START %APP_NAME%.bat & GOTO EOF
-
+ECHO ..Starting: ^( %app_name% ^)
+CD /D %installdir%
+START %app_name%.bat & GOTO EOF
 
 REM ----------------------------------------------------------------------------
 REM  MESSAGE SECTION
 REM ----------------------------------------------------------------------------
-
-:: TOOL CHAIN ERROR MESSAGE
-:UNSUPPORTED
-COLOR 1E
-CLS
-ECHO.
-ECHO ----------------------------------------
-ECHO        UNSUPPORTED APPLICATION
-ECHO ----------------------------------------
-ECHO       ^( %1 ^) Is Unsupported
-ECHO.
-ECHO            WSJT and WSPR
-ECHO.
-ECHO       Are the Only Python Builds
-ECHO.
-ECHO        Please Check Your Entry
-ECHO.
-PAUSE
-GOTO EOF
-
-:: HELP MENU FOR BUILD OPTIONS
-:BUILD_HELP
-CLS
-ECHO.                               
-ECHO -----------------------------------------------------------------
-ECHO   BUILD TARGET HELP: ^( WSJT and WSPR ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO USAGE:  build ^(app_name^) ^(target^)
-ECHO.
-ECHO  App Names ...... WSJT WSPR
-ECHO.
-ECHO  WSJT Targets ... libjt.a jt65code.exe jt4code.exe
-ECHO                   WsjtMod/Audio.pyd install package
-ECHO.
-ECHO  WSPR Targets ... wspr0.exe WSPRcode.exe libwspr.a fmtest
-ECHO                   fmtave fcal fmeasure sound gmtime2
-ECHO                   WsprMod/w.pyd install package
-ECHO.
-ECHO DEFINITIONS:
-ECHO -----------------------------------------------------------------
-ECHO  install ........ Build Full Test Version
-ECHO  package ........ Build Inno5 Win32 Installer package
-ECHO.
-ECHO EXAMPLE ^( WSJT ^):
-ECHO -----------------------------------------------------------------
-ECHO Build Install Target:
-ECHO  Script Usage .. build wsjt install
-ECHO  Command Line .. make -f Makefile.jtsdk2 install
-ECHO.
-ECHO Build Installer Package:
-ECHO  Script Usage .. build wsjt package
-ECHO  Command Line .. make -f Makefile.jtsdk2 package
-ECHO.
-ECHO Build Multiple Targets ^( Command Line Only ^)
-ECHO  CLI ........... make -f Makefile.jtsdk2 libjt.a jt65code.exe
-ECHO.
-GOTO EOF
-) ELSE IF /I [%2]==[sound] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[gmtime2] (
-SET TARGET=sound.o
-GOTO START
-) ELSE IF /I [%2]==[w.pyd] (
-SET TARGET=WsprMod/w.pyd
-
-:: USER REQUESTED UNSUPPORTED APPLICATION
-:UNSUPPORTED_APP
-CLS
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   ^( %1 ^) Is An Unsupported Application Name
-ECHO -----------------------------------------------------------------
-GOTO UMSG
 
 :: USER INPUT INCORRECT BUILD TARGET
 :UNSUPPORTED_TARGET
 CLS
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   ^( %2 ^) IS AN INVALID TARGET FOR ^( %1% ^)
+ECHO   ^( %1 ^) IS AN INVALID TARGET
 ECHO -----------------------------------------------------------------
-GOTO UMSG
-
-:: DISPLAY UNSUPPORTED TARGET MESSAGE 
-:UMSG
 ECHO. 
 ECHO  After the pause, the build help menu
 ECHO  will be displayed. Please use the syntax
-ECHO  as outlined on on help and choose the correct
-ECHO  application to build.
+ECHO  as outlined and choose the correct
+ECHO  target to build.
 ECHO.
 PAUSE
-GOTO BUILD_HELP
+CALL %scr%\help\pyenv-help-%app_name%.cmd
+GOTO EOF
 
 :: DISPLAY DOUBLE CLICK WARNING MESSAGE
 :DCLICK
@@ -414,9 +282,9 @@ ECHO -------------------------------
 ECHO     DOUBLE CLICK WARNING
 ECHO -------------------------------
 ECHO.
-ECHO  Please Use JTSDK-PY Enviroment
+ECHO  Please Use JTSDK Enviroment
 ECHO.
-ECHO    %BASED%\jtsdk-pyenv.bat
+ECHO         pyenv.cmd
 ECHO.
 PAUSE
 GOTO EOF
@@ -425,38 +293,19 @@ GOTO EOF
 :COMSG
 CLS
 ECHO ----------------------------------------
-ECHO  %APP_SRC% Was Not Found
+ECHO  %app_src% Was Not Found
 ECHO ----------------------------------------
 ECHO.
-ECHO In order to build ^( %APP_NAME% ^) you
-ECHO must first perform a checkout from 
-ECHO SourceForge, then type: build %APP_NAME%
+ECHO  In order to build ^( %app_name% ^) you
+ECHO  must first perform a checkout from 
+ECHO  SourceForge
 ECHO.
-ECHO ANONYMOUS CHECKOUT ^( %APP_NAME% ^):
-ECHO  Type: checkout %APP_NAME%
-ECHO  After Checkout, Type: build %APP_NAME%
-IF /I [%APP_NAME%]==[wsjt] (
+ECHO  After the pause, the checkout help menu
+ECHO  will be displayed.
 ECHO.
-ECHO FOR DEV CHECKOUT:
-ECHO  ^cd src
-ECHO  svn co https://%USERNAME%@svn.code.sf.net/p/wsjt/wsjt/trunk
-ECHO  ^cd ..
-ECHO  build %APP_NAME%
-ECHO.
-ECHO DEV NOTE: Change ^( %USERNAME% ^) to your Sourforge User Name
+PAUSE
+CALL %based%\scripts\help\pyenv-help-checkout.cmd
 GOTO EOF
-)
-IF /I [%APP_NAME%]==[wspr] (
-ECHO.
-ECHO FOR DEV CHECKOUT:
-ECHO  ^cd src
-ECHO  svn co https://%USERNAME%@svn.code.sf.net/p/wsjt/wsjt/branches/wspr
-ECHO  ^cd ..
-ECHO  build %APP_NAME%
-ECHO.
-ECHO DEV NOTE: Change ^( %USERNAME% ^) to your Sourforge User Name.
-GOTO EOF
-)
 
 :: DISPLAY COMPILER BUILD WARNING MESSAGE
 :BUILD_ERROR
@@ -468,35 +317,14 @@ ECHO.
 ECHO  mingw32-make exited with a non-(0) build status. Check and or 
 ECHO  correct the error, perform a clean, then re-make the target.
 ECHO.
-ECHO  Possible Solution:
-ECHO  cd %APP_SRC%
-ECHO  make -f Makefile.jtsdk2 distclean
 ECHO.
-ECHO  Then rebuild your target.
-ECHO.
-EXIT /B %ERRORLEVEL%
-
-:: FINAL FOLDER CREATION ERROR MESSAGE
-:COPY_ERROR
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   Error Creating ^( %APP_NAME%-r%VER% ^)
-ECHO -----------------------------------------------------------------
-ECHO. 
-ECHO  An error occured when trying to copy the build to it's final
-ECHO  location: C:\JTSDK-PY\%APP_NAME%\%APP_NAME%-r%VER%
-ECHO.
-ECHO  If the probblems continues, please contact the wsjt-dev group.
-ECHO.
-COLOR 0A
-ENDLOCAL
 EXIT /B %ERRORLEVEL%
 
 REM ----------------------------------------------------------------------------
 REM  END OF PYENV-BUILD>BAT
 REM ----------------------------------------------------------------------------
 :EOF
-CD /D %BASED%
+CD /D %based%
 ENDLOCAL
 
 EXIT /B 0

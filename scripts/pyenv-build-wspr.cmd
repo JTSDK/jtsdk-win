@@ -1,7 +1,7 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: pyenv-build-wspr.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build both WSJT and WSPR from source
+:: Description ..: Build WSPR from source
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
 :: Usage ........: This file is run from within pyenv.bat
 ::
@@ -14,7 +14,7 @@
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: pyenv-build-wpsr.cmd is distributed in the hope that it will be useful, but WITHOUT
+:: pyenv-build-wspr.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -55,11 +55,10 @@ SET app_src=%srcd%\wspr
 SET installdir=%based%\wspr\install
 SET packagedir=%based%\wspr\package
 
-
 :: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
 CLS
-IF NOT EXIST %APP_SRC%\.svn\NUL (
-mkdir %BASED%\src
+IF NOT EXIST %app_src%\.svn\NUL (
+mkdir %based%\src
 GOTO COMSG
 ) ELSE (GOTO ASK_SVN)
 
@@ -69,9 +68,9 @@ CLS
 ECHO Update from SVN Before Building? ^( y/n ^)
 SET ANSWER=
 ECHO.
-SET /P ANSWER=Type Response: %=%
-If /I "%ANSWER%"=="N" GOTO WSPR_OPTIONS
-If /I "%ANSWER%"=="Y" (
+SET /P answer=Type Response: %=%
+If /I "%answer%"=="N" GOTO WSPR_OPTIONS
+If /I "%answer%"=="Y" (
 GOTO SVN_UPDATE
 ) ELSE (
 ECHO.
@@ -79,11 +78,11 @@ ECHO Please Answer With: ^( Y or N ^)
 GOTO ASK_SVN
 )
 
-:: UPDATE WSJT FROM SVN
+:: UPDATE WSPR FROM SVN
 :SVN_UPDATE
 ECHO.
 ECHO UPDATING ^( %APP_SRC% ^ )
-cd %APP_SRC%
+CD /D %app_src%
 start /wait svn update
 GOTO WSPR_OPTIONS
 
@@ -174,8 +173,8 @@ ECHO -----------------------------------------------------------------
 ECHO   Starting Install Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO ..Running mingw32-make distclean
-mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Running mingw32-make clean
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
 ECHO ..Running mingw32-make all
 ECHO.
 mingw32-make -f Makefile.jtsdk2
@@ -253,8 +252,8 @@ GOTO EOF
 ECHO.
 ECHO  Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
-SET ANSWER=
-SET /P ANSWER=Type Response: %=%
+SET answer=
+SET /P answer=Type Response: %=%
 ECHO.
 If /I "%ANSWER%"=="Y" GOTO RUN_APP
 If /I "%ANSWER%"=="N" (
@@ -269,7 +268,7 @@ GOTO EOF
 :RUN_APP
 ECHO.
 ECHO ..Starting: ^( %app_name% ^)
-CD %based%\%app_name%\%app_name%-r%ver%
+CD /D %installdir%
 START %app_name%.bat & GOTO EOF
 
 REM ----------------------------------------------------------------------------
@@ -337,22 +336,6 @@ ECHO  mingw32-make exited with a non-(0) build status. Check and or
 ECHO  correct the error, perform a clean, then re-make the target.
 ECHO.
 ECHO.
-EXIT /B %ERRORLEVEL%
-
-:: FINAL FOLDER CREATION ERROR MESSAGE
-:COPY_ERROR
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   Error Creating ^( %app_name%-r%ver% ^)
-ECHO -----------------------------------------------------------------
-ECHO. 
-ECHO  An error occured when trying to copy the build to it's final
-ECHO  location: %based%\%app_name%\%app_name%-r%ver%
-ECHO.
-ECHO  If the probblems continues, please contact the wsjt-dev group.
-ECHO.
-COLOR 0A
-ENDLOCAL
 EXIT /B %ERRORLEVEL%
 
 REM ----------------------------------------------------------------------------
