@@ -25,49 +25,70 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+ECHO Setting Up JTSDK-QT v2 Environment variables ...
 TITLE JTSDK QT5 Development Environment
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+SET PROMPT=$CJTSDK-QT$F $P$F
 SET LANG=en_US
 COLOR 0B
 
 :: PATH VARIABLES
+SET based=C:\JTSDK
+SET cmk=%based%\cmake\bin
+SET tools=%based%\tools\bin
+SET hl3=%based%\hamlib3\bin
+SET fft=%based%\fftw3f
+SET nsi=%based%\nsis
+SET ino=%based%\inno5
+SET gccd=%based%\qt5\Tools\mingw48_32\bin
+SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
+SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
+SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
+SET scr=%based%\scripts
+SET srcd=%based%\src
+SET svnd=%based%\subversion\bin
 SET LIBRARY_PATH=
-SET BASED=C:\JTSDK
-SET CMK=%BASED%\cmake\bin
-SET TOOLS=%BASED%\tools\bin
-SET HL3=%BASED%\hamlib3\bin
-SET FFT=%BASED%\fftw3f
-SET NSI=%BASED%\nsis
-SET INO=%BASED%\inno5
-SET GCCD=%BASED%\qt5\Tools\mingw48_32\bin
-SET QT5D=%BASED%\qt5\5.2.1\mingw48_32\bin
-SET QT5A=%BASED%\qt5\5.2.1\mingw48_32\plugins\accessible
-SET QT5P=%BASED%\qt5\5.2.1\mingw48_32\plugins\platforms
-SET SCR=%BASED%\scripts
-SET SRCD=%BASED%\src
-SET SVND=%BASED%\subversion\bin
-SET PATH=%BASED%;%CMK%;%TOOLS%;%HL3%;%FFT%;%GCCD%;%QT5D%;%QT5A%;%QT5P%;%NSI%;%INO%;%SRCD%;%SCR%;%SVND%;%WINDIR%;%WINDIR%\System32
-CD /D %BASED%
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
+CD /D %based%
 
-:: DOSKEY COMMANDS
-DOSKEY checkout="%SCR%\qtenv-co.bat" $1
-DOSKEY build="%SCR%\qtenv-build.bat" $1 $2
-DOSKEY wsjtxrc="%SCR%\qtenv-wsjtxrc.bat" $1
-DOSKEY env-info=CALL %SCR%\qtenv-info.bat
-DOSKEY build-help=CALL %SCR%\qtenv-build-help.bat
-DOSKEY vinfo=CALL %SCR%\qtenv-version.bat
+:: CHECKOUT AND BUILD COMMANDS ( users *should not* edit these )
+DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
+DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
+DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
+DOSKEY checkout-map65="%scr%\qtenv-checkout.cmd" $* map65
+DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
+DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $*
 
-:: SVN POWER-USER COMMANDS
+:: HELP PAGES ( users *should not* edit these )
+DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
+DOSKEY help-qtenv=CALL %based%\scripts\help\qtenv-help-main.cmd
+DOSKEY help-checkout=CALL %based%\scripts\help\qtenv-help-checkout.cmd
+DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
+DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
+DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
+DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
+
+
+
+
+
+
+:: USER DEFINABLE ALIAS COMMANDS ( use edit-alias to edit list )
+:: Note, this file gets overwritten with SVN update changes
+DOSKEY clear=CLS
 DOSKEY ss="svn.exe" $* status
 DOSKEY sv="svn.exe" $* status ^|grep "?"
 DOSKEY sa="svn.exe" $* status ^|grep "A"
 DOSKEY sm="svn.exe" $* status ^|grep "M"
 DOSKEY sd="svn.exe" $* status ^|grep "D"
 DOSKEY log="svn.exe" log -l $*
+DOSKEY logr="svn.exe" log -r $*
 DOSKEY logv="svn.exe" log -v -l $*
+DOSKEY logvr="svn.exe" log -v -r $*
+DOSKEY edit="%tools%\Sc351.exe" $1
 
-CALL %SCR%\qtenv-info.bat
-IF NOT EXIST %BASED%\src\NUL mkdir %BASED%\src
+CALL %scr%\qtenv-info.cmd
+IF NOT EXIST %based%\src\NUL mkdir %based%\src
 GOTO EOF
 
 :: LAUNCH CMD WINDOW
