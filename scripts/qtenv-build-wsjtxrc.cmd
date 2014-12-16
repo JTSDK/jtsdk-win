@@ -1,20 +1,20 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: qtenv-wsjtxrc.bat
+:: Name .........: qtenv-build-wsjtxrc.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build Current WSJTX-RC version
+:: Description ..: Build script for WSJTX-RC
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
-:: Usage ........: This file is run from within qtenv.bat
+:: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: qtenv-wsjtxrc.bat is free software: you can redistribute it and/or modify it
+:: qtenv-build-wsjtxrc.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: qtenv-wsjtxrc.bat is distributed in the hope that it will be useful, but WITHOUT
+:: qtenv-build-wsjtxrc.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -34,40 +34,38 @@ FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
 
 :: PATH VARIABLES
-SET BASED=C:\JTSDK
-SET CMK=%BASED%\cmake\bin
-SET BIN=%BASED%\tools\bin
-SET HL2=%BASED%\hamlib\bin
-SET HL3=%BASED%\hamlib3\bin
-SET FFT=%BASED%\fftw3f
-SET NSI=%BASED%\nsis
-SET INO=%BASED%\inno5
-SET GCCD=%BASED%\qt5\Tools\mingw48_32\bin
-SET QT5D=%BASED%\qt5\5.2.1\mingw48_32\bin
-SET QT5A=%BASED%\qt5\5.2.1\mingw48_32\plugins\accessible
-SET QT5P=%BASED%\qt5\5.2.1\mingw48_32\plugins\platforms
-SET SCR=%BASED%\scripts
-SET SRCD=%BASED%\src
-SET SVND=%BASED%\subversion\bin
+SET based=C:\JTSDK
+SET cmk=%based%\cmake\bin
+SET tools=%based%\tools\bin
+SET hl3=%based%\hamlib3\bin
+SET fft=%based%\fftw3f
+SET nsi=%based%\nsis
+SET gccd=%based%\qt5\Tools\mingw48_32\bin
+SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
+SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
+SET at5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
+SET scr=%based%\scripts
+SET srcd=%based%\src
+SET svnd=%based%\subversion\bin
 SET LIBRARY_PATH=""
-SET PATH=%BASED%;%CMK%;%BIN%;%HL3%;%HL2%;%FFT%;%GCCD%;%QT5D%;%QT5A%;%QT5P%;%NSI%;%INO%;%SRCD%;%SCR%;%SVND%;%WINDIR%;%WINDIR%\System32
-CD /D %BASED%
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%hl2%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
+CD /D %based%
 
 :: USER INPUT FILED 1 = %1
-IF /I [%1]==[rconfig] (SET OPTION=Release
-SET BTREE=true
-) ELSE IF /I [%1]==[rinstall] (SET OPTION=Release
-SET BINSTALL=true
-) ELSE IF /I [%1]==[package] (SET OPTION=Release
-SET BPKG=true
+IF /I [%1]==[rconfig] (SET option=Release
+SET btree=true
+) ELSE IF /I [%1]==[rinstall] (SET option=Release
+SET binstall=true
+) ELSE IF /I [%1]==[package] (SET option=Release
+SET bpkg=true
 ) ELSE ( GOTO BADTYPE )
 
 :: VARIABLES USED IN PROCESS
-SET APP_NAME=wsjtx-1.4
-SET TCHAIN=%SCR%\wsjtx-toolchain.cmake
-SET BUILDD=%BASED%\%APP_NAME%\build
-SET INSTALLD=%BASED%\%APP_NAME%\install
-SET PACKAGED=%BASED%\%APP_NAME%\package
+SET app_name=wsjtx-1.4
+SET tchain=%scr%\wsjtx-toolchain.cmake
+SET buildd=%based%\%app_name%\build
+SET installdir=%based%\%app_name%\install
+SET packagedir=%based%\%app_name%\package
 SET JJ=%NUMBER_OF_PROCESSORS%
 
 REM ----------------------------------------------------------------------------
@@ -75,16 +73,16 @@ REM  START MAIN SCRIPT
 REM ----------------------------------------------------------------------------
 
 CLS
-CD %BASED%
+CD %based%
 IF NOT EXIST %SRCD%\NUL mkdir %SRCD%
-IF NOT EXIST %BUILDD%\%OPTION%\NUL mkdir %BUILDD%\%OPTION%
-IF NOT EXIST %INSTALLD%\%OPTION%\NUL mkdir %INSTALLD%\%OPTION%
-IF NOT EXIST %PACKAGED%\NUL mkdir %PACKAGED%
+IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
+IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
+IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
 ECHO -----------------------------------------------------------------
-ECHO  ^( %APP_NAME% ^) CMake Build Script
+ECHO  ^( %app_name% ^) CMake Build Script
 ECHO -----------------------------------------------------------------
 ECHO.
-IF NOT EXIST %SRCD%\%APP_NAME%\.svn\NUL (
+IF NOT EXIST %srcd%\%app_name%\.svn\NUL (
 GOTO COMSG
 ) ELSE (
 GOTO SVNASK
@@ -93,11 +91,11 @@ GOTO SVNASK
 :: ASK USER UPDATE FROM SVN
 :SVNASK
 ECHO Update from SVN Before Building? ^( y/n ^)
-SET ANSWER=
+SET answer=
 ECHO.
-SET /P ANSWER=Type Response: %=%
-If /I "%ANSWER%"=="N" GOTO BUILD
-If /I "%ANSWER%"=="Y" (
+SET /P answer=Type Response: %=%
+If /I "%answer%"=="N" GOTO BUILD
+If /I "%answer%"=="Y" (
 GOTO SVNUP
 ) ELSE (
 CLS
@@ -108,72 +106,71 @@ ECHO Please Answer With: ^( Y or N ^) & ECHO. & GOTO SVNASK
 :: UPDATE IF USER SAID YES TO UPDATE
 :SVNUP
 ECHO.
-ECHO UPDATING %SRCD%\%APP_NAME%
+ECHO Updating %srcd%\%app_name%
 ECHO.
-CD /D %SRCD%\%APP_NAME%
+CD /D %srcd%\%app_name%
 start /wait svn update
-CD /D %BASED%
 ECHO.
 
 REM ----------------------------------------------------------------------------
-REM  CONFIGURE BUILD TREE ( BTREE )
+REM  CONFIGURE BUILD TREE ( btree )
 REM ----------------------------------------------------------------------------
 
 :BUILD
-IF [%BTREE%]==[true] (
+IF [%btree%]==[true] (
 CLS
-CD %BUILDD%\%OPTION%
+CD /D %buildd%\%option%
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Configuring RC Build Tree For: ^( %APP_NAME% ^)
+ECHO Configuring RC Build Tree For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%TCHAIN% ^
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
--D CMAKE_BUILD_TYPE=%OPTION% ^
--D CMAKE_INSTALL_PREFIX=%INSTALLD%/%OPTION% %SRCD%/%APP_NAME%
+-D CMAKE_BUILD_TYPE=%option% ^
+-D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished RC Build Tree For: ^( %APP_NAME% ^)
+ECHO Finished RC Build Tree For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO   Package ............ %APP_NAME%
-ECHO   Type ............... %OPTION%
-ECHO   Build Directory .... %BUILDD%\%OPTION%
-ECHO   Build Option List .. %BUILDD%\%OPTION%\CmakeCache.txt
-ECHO   Target Directory ... %INSTALLD%\%OPTION%
+ECHO   Package ............ %app_name%
+ECHO   Type ............... %option%
+ECHO   Build Directory .... %buildd%\%option%
+ECHO   Build option List .. %buildd%\%option%\CmakeCache.txt
+ECHO   Target Directory ... %installdir%\%option%
 ECHO.
 ECHO TO BUILD INSTALL TARGET
-ECHO   cd %BUILDD%\%OPTION%
+ECHO   cd %buildd%\%option%
 ECHO   cmake --build . --target install -- -j%JJ%
 ECHO.
-ECHO TO BUILD WINDOWS NSIS INSTALLER
-ECHO   cd %BUILDD%\%OPTION%
+ECHO TO BUILD WIN32 INSTALLER
+ECHO   cd %buildd%\%option%
 ECHO   cmake --build . --target package -- -j%JJ%
 ECHO.
 GOTO EOF
 
 REM ----------------------------------------------------------------------------
-REM  BUILD INSTALL TARGET ( BINSTALL )
+REM  BUILD INSTALL TARGET ( binstall )
 REM ----------------------------------------------------------------------------
-) ELSE IF [%BINSTALL%]==[true] (
+) ELSE IF [%binstall%]==[true] (
 CLS
-CD %BUILDD%\%OPTION%
+CD /D %buildd%\%option%
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Building RC Install Target For: ^( %APP_NAME% ^)
+ECHO Building RC Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO .. Configuring Release Candidate Build Tree
 ECHO.
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%TCHAIN% ^
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
--D CMAKE_BUILD_TYPE=%OPTION% ^
--D CMAKE_INSTALL_PREFIX=%INSTALLD%/%OPTION% %SRCD%/%APP_NAME%
+-D CMAKE_BUILD_TYPE=%option% ^
+-D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 ECHO .. Starting Release Candidate Install
@@ -183,20 +180,20 @@ IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 GOTO FINISH
 
 REM ----------------------------------------------------------------------------
-REM  BUILD INSTALLER ( BPKG )
+REM  BUILD INSTALLER ( bpkg )
 REM ----------------------------------------------------------------------------
-) ELSE IF [%BPKG%]==[true] (
+) ELSE IF [%bpkg%]==[true] (
 CLS
-CD %BUILDD%\%OPTION%
+CD /D %buildd%\%option%
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Building RC Win32 Installer For: ^( %APP_NAME% ^)
+ECHO Building RC Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%TCHAIN% ^
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
--D CMAKE_BUILD_TYPE=%OPTION% ^
--D CMAKE_INSTALL_PREFIX=%INSTALLD%/%OPTION% %SRCD%/%APP_NAME%
+-D CMAKE_BUILD_TYPE=%option% ^
+-D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 GOTO NSIS_PKG
 
@@ -204,21 +201,21 @@ GOTO NSIS_PKG
 :NSIS_PKG
 cmake --build . --target package --clean-first -- -j%JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
-ls -al %BUILDD%\%OPTION%\*-win32.exe |gawk "{print $8}" >p.k & SET /P WSJTXPKG=<p.k & rm p.k
-CD %BUILDD%\%OPTION%
-MOVE /Y %WSJTXPKG% %PACKAGED% > nul
-CD %BASED%
+ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxrcpkg=<p.k & rm p.k
+CD %buildd%\%option%
+MOVE /Y %wsjtxrxpkg% %packagedir% > nul
+CD /D %based%
 GOTO FINISH_PKG
 
 :: FINISHED PACKAGE MESSAGE
 :FINISH_PKG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished Installer Build For: ^( %APP_NAME% ^)
+ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO Installer Name ...... %WSJTXPKG%
-ECHO Installer Location .. %PACKAGED%
+ECHO Installer Location .. %packagedir%
 ECHO.
 ECHO To Install the package, browse to Installer Location, and
 ECHO run as you normally do to install Windows applications.
@@ -229,20 +226,20 @@ GOTO EOF
 :FINISH
 ECHO.
 ECHO BUILD SUMMARY
-ECHO   Build Tree Location .. %BUILDD%\%OPTION%
-ECHO   Install Location ..... %INSTALLD%\%OPTION%\bin\wsjtx.exe
+ECHO   Build Tree Location .. %buildd%\%option%
+ECHO   Install Location ..... %installdir%\%option%\bin\wsjtx.exe
 GOTO ASK_FINISH_RUN
 
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO   Would You Like To Run %APP_NAME% Now? ^( y/n ^)
+ECHO   Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
-SET ANSWER=
-SET /P ANSWER=Type Response: %=%
+SET answer=
+SET /P answer=Type Response: %=%
 ECHO.
-If /I "%ANSWER%"=="Y" GOTO RUN_INSTALL
-If /I "%ANSWER%"=="N" (
+If /I "%answer%"=="Y" GOTO RUN_INSTALL
+If /I "%answer%"=="N" (
 GOTO EOF
 ) ELSE (
 CLS
@@ -253,8 +250,8 @@ ECHO   Please Answer With: ^( y or n ^) & ECHO. & GOTO ASK_FINISH_RUN
 :: RUN APP
 :RUN_INSTALL
 ECHO.
-CD /D %INSTALLD%\%OPTION%\bin
-ECHO .. Starting: ^( %APP_NAME% ^) in Release Mode
+CD /D %installdir%\%option%\bin
+ECHO .. Starting: ^( %app_name% ^) in Release Mode
 CALL wsjtx.exe
 )
 GOTO EOF
@@ -262,7 +259,6 @@ GOTO EOF
 REM ----------------------------------------------------------------------------
 REM  POST BUILD
 REM ----------------------------------------------------------------------------
-
 
 :: DOUBLE-CLICK ERROR MESSAGE
 :DOUBLE_CLICK_ERROR
@@ -274,70 +270,45 @@ ECHO -------------------------------
 ECHO.
 ECHO Please Run from JTSDK Enviroment
 ECHO.
-ECHO          qtenv.bat
+ECHO          qtenv.cmd
 ECHO.
 PAUSE
 GOTO EOF
 
-
-:: SVN CHECKOUT MESSAGE
+:: DISPLAY SRC DIRECTORY WAS NOT FOUND, e.g. NO CHECKOUT FOUND
 :COMSG
 CLS
-ECHO -----------------------------------------------------------------
-ECHO  %SRCD%\%APP_NAME% Was Not Found
-ECHO -----------------------------------------------------------------
+ECHO ----------------------------------------
+ECHO  %app_src% Was Not Found
+ECHO ----------------------------------------
 ECHO.
-ECHO In order to build ^( %APP_NAME% ^) you
-ECHO must first perform an SVN checkout from SourceForge.
+ECHO  In order to build ^( %app_name% ^) you
+ECHO  must first perform a checkout from 
+ECHO  SourceForge
 ECHO.
-ECHO ANONYMOUS CHECKOUT ^( %APP_NAME% ^):
-ECHO  Type: .. checkout %APP_NAME%
+ECHO  After the pause, the checkout help menu
+ECHO  will be displayed.
 ECHO.
-ECHO DEVELOPER CHECKOUT:
-ECHO  ^cd src
-ECHO  svn co https://%USERNAME%@svn.code.sf.net/p/wsjt/wsjt/branches/%APP_NAME%
-ECHO  ^cd ..
-ECHO  NOTE: Change ^( %USERNAME% ^) to your Sourforge Username
-ECHO.
-ECHO ACTIONS AFTER CHECKOUT:
-ECHO  Configure Build Tree: .... wsjtxrc rconfig
-ECHO  Build Install Target: .... wsjtxrc rinstall
-ECHO.
-ECHO OPTIONAL
-ECHO  Build Installer Package: .. wsjtxrc package
-ECHO.
+PAUSE
+CALL %based%\scripts\help\qtenv-help-checkout.cmd
 GOTO EOF
-
 
 :: UNSUPPORTED BUILD TYPE
 :BADTYPE
 CLS
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO                UNSUPPORTED BUILD TYPE
+ECHO   ^( %1 ^) IS AN INVALID TARGET
 ECHO -----------------------------------------------------------------
-ECHO ^( %1% ^) Check Spelling or Syntax
+ECHO. 
+ECHO  After the pause, the build help menu
+ECHO  will be displayed. Please use the syntax
+ECHO  as outlined and choose the correct
+ECHO  target to build.
 ECHO.
-ECHO USAGE:  wsjtxrc ^(type^)
-ECHO.
-ECHO  Release Types .. rconfig rinstall package
-ECHO    rconfig ...... Configure Release Build Tree
-ECHO    rinstall ..... Build Release Install Target
-ECHO    package ...... Build Win32 Installer
-ECHO.
-ECHO EXAMPLES
-ECHO ----------------------------------------------------------
-ECHO Configure Build Tree:
-ECHO   Type: wsjtxrc rconfig
-ECHO.
-ECHO Build Install Target:
-ECHO   Type:  wsjtxrc rinstall
-ECHO.
-ECHO Build NSIS Installer
-ECHO   Type:  wsjtxrc package
-ECHO.
+PAUSE
+CALL %scr%\help\qtenv-help-%app_name%.cmd
 GOTO EOF
-
 
 :: GENERAL CMAKE ERROR MESSAGE
 :CMAKE_ERROR
@@ -346,14 +317,13 @@ ECHO -----------------------------------------------------------------
 ECHO                    CMAKE BUILD ERROR
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  There was a problem building ^( App: %1%  Target: %2 ^)
+ECHO  There was a problem building ^( %app_name% ^)
 ECHO.
 ECHO  Check the screen for error messages, correct, then try to
-ECHO  re-build ^( App: %1%  Target: %2 ^)
+ECHO  re-build ^( %app_name% ^)
 ECHO.
 ECHO.
 GOTO EOF
-
 
 :: UNSUPPORTED INSTALLER TYPE
 :NSIS_BUILD_ERROR
@@ -365,7 +335,7 @@ ECHO.
 ECHO  There was a problem building the package, or the script
 ECHO  could not find:
 ECHO.
-ECHO  %BUILDD%\%OPTION%\%WSJTXPKG%
+ECHO  %buildd%\%option%\%WSJTXPKG%
 ECHO.
 ECHO  Check the Cmake logs for any errors, or correct any build
 ECHO  script issues that were obverved and try to rebuild the package.
@@ -373,10 +343,9 @@ ECHO.
 ECHO.
 GOTO EOF
 
-
-:: END QTENV-WSJTXRC.BAT
+:: END QTENV-WSJTXRC.CMD
 :EOF
-CD /D %BASED%
+CD /D %based%
 ENDLOCAL
 
 EXIT /B 0
