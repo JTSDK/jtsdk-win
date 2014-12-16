@@ -27,7 +27,6 @@
 @ECHO OFF
 SET LANG=en_US
 
-
 :: START GATHERING VERSION INFO
 CLS
 ECHO      _ _____ ____  ____  _  __      ___ _____ 
@@ -37,15 +36,20 @@ ECHO ^| ^|_^| ^| ^| ^|  ___) ^| ^|_^| ^| . \_____^| ^|_^| ^|^| ^|
 ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\     \__\_\^|_^| v2.0.0
 ECHO.
 ECHO.
-ECHO BUILD APPLICATIONS: ^( WSJT-X WSPR-X MAP65 ^)
+ECHO BUILD APPLICATIONS: ^( WSJT-X WSJTX-RC WSPR-X MAP65 ^)
 ECHO ---------------------------------------------------------
 ECHO.
-ECHO USAGE:  build ^(app_name^) ^(type^)
+ECHO USAGE:  build-^(app_name^) ^(type^)
 ECHO.
-ECHO  App Names ...... wsjtx wsprx map65
+ECHO  App Names ...... wsjtx wsjtxrc wsprx map65
 ECHO  Release Types .. rconfig rinstall package
 ECHO  Debug Types .... dconfig dinstall
-ECHO  Build Help ..... build-help
+ECHO.
+ECHO HELP SCREENS
+ECHO ---------------------------------------------------------
+ECHO  JTSDK-QT Help, Type .. help-qtenv
+ECHO  Checkout Help, Type .. help-checkout
+ECHO  Build Help, Type ..... help-(app_name)
 ECHO.
 ECHO COMPILER INFO (mingw48_32)
 ECHO ---------------------------------------------------------
@@ -73,7 +77,6 @@ ECHO  InnoSetup .. 5.5.5a
 ECHO  Pkg-Cfg .... %PKG%
 ECHO.
 GOTO EOF
-
 
 :: END QTENV-INFO.BAT
 :EOF

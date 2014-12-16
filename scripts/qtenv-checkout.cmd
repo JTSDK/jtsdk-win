@@ -1,20 +1,20 @@
-::-----------------------------------------------------------------------------::
-:: Name .........: pyenv-co.bat
+﻿::-----------------------------------------------------------------------------::
+:: Name .........: qtenv-checkout.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Batch file to check out WSJT and WSPR from SVN
-:: Project URL ..: http://sourceforge.net/projects/wsjt/
-:: Usage ........: This file is run from within pyenv.bat
+:: Description ..: Batch file to check out WSJT-X/RC, WSPR-X and MAP65
+:: Project URL ..: http://sourceforge.net/projects/wsjt/ 
+:: Usage ........: This file is run from within qtenv.cmd
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: pyenv-co.bat is free software: you can redistribute it and/or modify it
+:: qtenv-checkout.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: pyenv-co.bat is distributed in the hope that it will be useful, but WITHOUT
+:: qtenv-checkout.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -28,7 +28,8 @@
 SETLOCAL ENABLEEXTENSIONS
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET LANG=en_US
-COLOR 0A
+COLOR 0B
+
 :: TEST DOUBLE CLICK, if YES, GOTO ERROR MESSAGE
 FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
@@ -44,11 +45,14 @@ GOTO CHK_APP
 
 :: CHECK IF APPLICATION NAME IF SUPPORTED
 :CHK_APP
-IF /I [%1]==[wspr] (SET app_name=wspr &GOTO WSPR_CO)
-IF /I [%1]==[wsjt] (SET app_name=wsjt &GOTO WSJT_CO)
+IF /I [%1]==[wsjtxrc] ( SET app_name=wsjtx-1.4 &GOTO SVN_CO )
+IF /I [%1]==[wsjtx] ( SET app_name=wsjtx & GOTO SVN_CO )
+IF /I [%1]==[wsprx] ( SET app_name=wsprx & GOTO SVN_CO )
+IF /I [%1]==[map65] ( SET app_name=map65 & GOTO SVN_CO )
+GOTO EOF
 
 :: PERFORM WSPR CHECKOUT
-:WSPR_CO
+:SVN_CO
 CD /D %srcd%
 CLS
 ECHO.
@@ -56,18 +60,7 @@ ECHO -----------------------------------------------------------------
 ECHO Checking Out ^( %app_name% ^) From SVN
 ECHO -----------------------------------------------------------------
 start /wait svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/%app_name%
-GOTO FINISH
-)
-
-:: PERFORM WSJT CHECKOUT
-:WSJT_CO
-CD /D %srcd%
-CLS
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Checking Out ^( %app_name% ^) From SVN
-ECHO -----------------------------------------------------------------
-start /wait svn co https://svn.code.sf.net/p/wsjt/wsjt/trunk
+CD %based%
 GOTO FINISH
 )
 
@@ -91,12 +84,12 @@ ECHO -------------------------------
 ECHO.
 ECHO  Please Use JTSDK Enviroment
 ECHO.
-ECHO         pyenv.bat
+ECHO         qtenv.bat
 ECHO.
 PAUSE
 GOTO EOF
 
-:: END OF PYENV-CO.BAT
+:: END OF QTENV-CO.BAT
 :EOF
 CD /D %based%
 ENDLOCAL

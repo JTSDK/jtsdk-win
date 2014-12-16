@@ -92,7 +92,7 @@ GOTO FINISHED
 :: FINISHED CHECKOUT MESSAGE
 :FINISHED
 ECHO.
-call %SCR%\qtenv-build-help.bat
+call %SCR%\qtenv-build-help.cmd
 ECHO.
 GOTO EOF
 
