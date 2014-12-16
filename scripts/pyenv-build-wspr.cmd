@@ -35,7 +35,7 @@ IF DEFINED GUI CALL GOTO DCLICK
 
 :: PATH VARIABLES
 SET LANG=en_US
-SET LIBRARY_PATH=""
+SET LIBRARY_PATH=
 SET based=C:\JTSDK
 SET srcd=%based%\src
 SET tools=%based%\tools\bin
@@ -43,31 +43,68 @@ SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET scr=%based%\scripts
 SET python_home=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
-SET SVND=%based%\subversion\bin
+SET svnd=%based%\subversion\bin
 SET PATH=%based%;%mgw%;%python_home%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
 
 :: VARS USED IN PROCESS
 SET JJ=%NUMBER_OF_PROCESSORS%
-SET make=C:\JTSDK\mingw32\bin\mingw32-make %*
 SET CP=%tools%\cp.exe
 SET MV=%tools%\mv.exe
 SET app_name=wspr
 SET app_src=%srcd%\wspr
 SET installdir=%based%\wspr\install
 SET packagedir=%based%\wspr\package
+
+
+:: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
+CLS
+IF NOT EXIST %APP_SRC%\.svn\NUL (
+mkdir %BASED%\src
+GOTO COMSG
+) ELSE (GOTO ASK_SVN)
+
+:: START WSPR BUILD
+:ASK_SVN
+CLS
+ECHO Update from SVN Before Building? ^( y/n ^)
+SET ANSWER=
+ECHO.
+SET /P ANSWER=Type Response: %=%
+If /I "%ANSWER%"=="N" GOTO WSPR_OPTIONS
+If /I "%ANSWER%"=="Y" (
+GOTO SVN_UPDATE
+) ELSE (
+ECHO.
+ECHO Please Answer With: ^( Y or N ^)
+GOTO ASK_SVN
+)
+
+:: UPDATE WSJT FROM SVN
+:SVN_UPDATE
+ECHO.
+ECHO UPDATING ^( %APP_SRC% ^ )
+cd %APP_SRC%
+start /wait svn update
 GOTO WSPR_OPTIONS
 
 :: WSPR TARGETS
 :WSPR_OPTIONS
 IF /I [%1]==[] (
 SET all-target=1
+SET target=install
 GOTO BUILD_INSTALL
 ) ELSE IF /I [%1]==[install] (
 SET all-target=1
+SET target=install
 GOTO BUILD_INSTALL
 ) ELSE IF /I [%1]==[package] (
-SET pgk-target=1
+SET pkg-target=1
+SET target=package
 GOTO BUILD_PACKAGE
+) ELSE IF /I [%1]==[clean] (
+GOTO BUILD_CLEAN
+) ELSE IF /I [%1]==[distclean] (
+GOTO BUILD_DISTCLEAN
 ) ELSE IF /I [%1]==[wspr0] (
 SET target=wspr0.exe
 GOTO BUILD_TARGET
@@ -104,94 +141,100 @@ GOTO BUILD_TARGET
 :: -- START MAIN SCRIPT --
 :: ------------------------------------------------------------------------------
 
-:: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
-IF NOT EXIST %app_src%\.svn\NUL ( mkdir %based%\src
-GOTO COMSG
-) ELSE ( GOTO START_BUILD )
-IF DEFINED all-target  GOTO BUILD_INSTALL )
-IF DEFINED pkg-target ( GOTO BUILD_PACKAGE ) ELSE ( GOTO BUILD_TARGET )
+::BUILD_CLEAN
+:BUILD_CLEAN
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Clean Targets for ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO ..Running mingw32-make clean
+mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
+ECHO ..Finished
+GOTO EOF
+
+::BUILD_DISTCLEAN
+:BUILD_DISTCLEAN
+CD /D %app_src%
+CLS
+ECHO -----------------------------------------------------------------
+ECHO   Distclean Targets for ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO ..Running mingw32-make distclean
+mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Finished
+GOTO EOF
 
 :BUILD_INSTALL
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Build for ^( Install ^)
+ECHO   Starting Install Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO ..Running make clean first ...
-mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
-ECHO ..Running mingw32-make To Build ^( install ^) Target
+ECHO ..Running mingw32-make distclean
+mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Running mingw32-make all
 ECHO.
 mingw32-make -f Makefile.jtsdk2
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-ECHO.
-GOTO REV_NUM
+mingw32-make -f Makefile.jtsdk2 install
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+GOTO MAKEBAT
 
 :BUILD_PACKAGE
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Build for ^( Package ^)
+ECHO   Starting Package Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO ..Running make clean first .. 
-mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
-ECHO ..Running mingw32-make To Build ^( package ^) Target
+ECHO ..Running mingw32-make distclean
+mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
+ECHO ..Running mingw32-make all
 ECHO.
-mingw32-make -f Makefile.jtsdk2 %TARGET%
+mingw32-make -f Makefile.jtsdk2
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO REV_NUM
+mingw32-make -f Makefile.jtsdk2 install
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+GOTO MAKEBAT
 
 :: BEGIN WSJT MAIN BUILD
 :BUILD_TARGET
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Build for ^( %TARGET% ^)
+ECHO   Starting Build for Target^( %target% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO ..Running mingw32-make To Build ^( %TARGET% ^)
+ECHO ..Running mingw32-make To Build ^( %target% ^)
 ECHO.
-mingw32-make -f Makefile.jtsdk2 %TARGET%
+mingw32-make -f Makefile.jtsdk2 %target%
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 GOTO SINGLE_FINISH
 
-:: GET SVN r NUMBER, STILL in %app_src%
-:REV_NUM
-ECHO ..Getting SVN version number
-svn -qv status %app_name%.py |gawk "{print $2}" > r.txt
-SET /P VER=<r.txt & rm r.txt
-ECHO ..Copying files to install directory
-IF EXIST %based%\%app_name%\%app_name%-r%ver% ( 
-rm -r %based%\%app_name%\%app_name%-r%ver% )
-XCOPY %installdir% %based%\%app_name%\%app_name%-r%ver% /I /E /Y /q >/nul
-IF ERRORLEVEL 0 ( GOTO MAKEBAT ) ELSE ( GOTO COPY_ERROR )
-
 :: GENERATE RUNTIME BATCH FILE
 :MAKEBAT
-CD /D %based%\%app_name%\%app_name%-r%ver%
-ECHO ..Generating Batch File
+CD /D %installdir%
 IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
 >%app_name%.bat (
 ECHO @ECHO OFF
-ECHO REM -- WSJT-WSPR batch File
-ECHO REM -- Part of the JTSDK Project
+ECHO REM -- WSPR batch File
+ECHO REM -- Part of the JTSDK v2.0 Project
 ECHO COLOR 0A
 ECHO bin\%app_name%.exe
 ECHO EXIT /B 0
 )
-GOTO FINISHED
-
-:: FINISHED INSTALL OR PACKAGE TARGET BUILD
-:FINISH_PACKAGE
-ECHO ..Copying build files
-IF EXIST %based%\%app_name%\%app_name%-r%ver% ( 
-rm -r %based%\%app_name%\%app_name%-r%ver% )
-XCOPY %installdir% %based%\%app_name%\%app_name%-r%ver% /I /E /Y /q >nul
+IF DEFINED pkg-target (
+CD /D %app_src%
+mingw32-make -f Makefile.jtsdk2 package
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-ECHO ..Finisned InnoSetup
-ECHO ..Exit Status: ^( %ERRORLEVEL% ^) is OK
-GOTO FINISHED
+ECHO.
+GOTO FINISH
+)
+GOTO FINISH
 
 :: FINISHED INSTALL OR PACKAGE TARGET BUILDS
 :SINGLE_FINISH
@@ -201,24 +244,9 @@ ECHO.
 GOTO EOF
 
 :: FINISHED INSTALL OR PACKAGE TARGET BUILDS
-:FINISHED
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   BUILD COMPLETE ^( %app_name%-r%ver% ^) 
-ECHO -----------------------------------------------------------------
-ECHO.
-IF DEFINED all-targert (
-ECHO  Source Dir ...: %app_src%
-ECHO  Install Dir ..: %installdir%
-ECHO  Batch File ...: %based%\%app_name%\%app_name%-r%ver%\%app_name%.bat
-GOTO ASKRUN
-)
-IF DEFINED pkg-target (
-ECHO  Source Dir ...: %app_src%
-ECHO  Install Dir ..: %installdir%
-ECHO  Package Dir ..: %packagedir%
+:FINISH
+IF DEFINED all-target ( GOTO ASKRUN )
 GOTO EOF
-)
 
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASKRUN
@@ -273,9 +301,9 @@ ECHO -------------------------------
 ECHO     DOUBLE CLICK WARNING
 ECHO -------------------------------
 ECHO.
-ECHO  Please Use JTSDK-PY Enviroment
+ECHO  Please Use JTSDK Enviroment
 ECHO.
-ECHO    %based%\jtsdk-pyenv.bat
+ECHO         pyenv.cmd
 ECHO.
 PAUSE
 GOTO EOF
@@ -319,7 +347,7 @@ ECHO   Error Creating ^( %app_name%-r%ver% ^)
 ECHO -----------------------------------------------------------------
 ECHO. 
 ECHO  An error occured when trying to copy the build to it's final
-ECHO  location: C:\JTSDK\%app_name%\%app_name%-r%ver%
+ECHO  location: %based%\%app_name%\%app_name%-r%ver%
 ECHO.
 ECHO  If the probblems continues, please contact the wsjt-dev group.
 ECHO.
