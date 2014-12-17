@@ -48,7 +48,7 @@ SET scr=%based%\scripts
 SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
 SET LIBRARY_PATH=""
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%hl2%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
 :: VARIABLES USED IN PROCESS
@@ -97,7 +97,7 @@ GOTO SVNASK
 :: ASK USER UPDATE FROM SVN
 :SVNASK
 CLS
-ECHO Update from SVN Before Building? ^( y/n ^)
+ECHO Update from SVN Before Building? ^( Y/N ^)
 SET answer=
 ECHO.
 SET /P answer=Type Response: %=%
@@ -168,7 +168,7 @@ REM ----------------------------------------------------------------------------
 CLS
 CD /D %buildd%\%option%
 ECHO -----------------------------------------------------------------
-ECHO Building Install Target For: ^( %app_name% ^)
+ECHO Building %option% Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -176,9 +176,12 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
+
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
+
 cmake --build . --target install
+
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 
 :: CHECK IF DEBUG 
@@ -192,14 +195,14 @@ REM ----------------------------------------------------------------------------
 CLS
 CD /D %buildd%\%option%
 ECHO -----------------------------------------------------------------
-ECHO Building RC Win32 Installer For: ^( %app_name% ^)
+ECHO Building Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+IF %ERRORLEVEL% 1 ( GOTO CMAKE_ERROR )
 GOTO NSIS_PKG
 
 :: NSIS PACKAGE ( WSJT-X / Win32 ONLY)
@@ -298,7 +301,7 @@ GOTO ASK_FINISH_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO   Would You Like To Run %app_name% Now? ^( y/n ^)
+ECHO   Would You Like To Run %app_name% Now? ^( Y/N ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -309,7 +312,7 @@ GOTO EOF
 ) ELSE (
 CLS
 ECHO.
-ECHO   Please Answer With: ^( y or n ^) & ECHO. & GOTO ASK_FINISH_RUN
+ECHO   Please Answer With: ^( Y or N ^) & ECHO. & GOTO ASK_FINISH_RUN
 )
 
 :: RUN APP
