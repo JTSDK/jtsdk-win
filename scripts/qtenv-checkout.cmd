@@ -62,20 +62,19 @@ ECHO -----------------------------------------------------------------
 start /wait svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/%app_name%
 CD %based%
 GOTO FINISH
-)
 
 :: FINISH CHECKOUT MESSAGE
 :FINISH
 ECHO.
 ECHO Checkout complete.
 ECHO.
-IF /I [%app_name%]==[wsjtxrc] (
+IF /I [%1%]==[wsjtxrc] (
 ECHO To Build, Type: build-wsjtxrc
 ) ELSE (
 ECHO To Build, Type: build-%APP_NAME%
 )
 ECHO.
-IF /I [%app_name%]==[wsjtxrc] (
+IF /I [%1%]==[wsjtxrc] (
 ECHO For additional build options, type: help-wsjtxrc
 ) ELSE (
 ECHO For additional build options, type: help-%app_name%
