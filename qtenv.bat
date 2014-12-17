@@ -51,13 +51,17 @@ SET LIBRARY_PATH=
 SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
-:: CHECKOUT AND BUILD COMMANDS ( users *should not* edit these )
+:: CHECKOUT COMMANDS ( users *should not* edit these )
 DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
 DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
 DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
 DOSKEY checkout-map65="%scr%\qtenv-checkout.cmd" $* map65
-DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
-DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $*
+
+:: BUILD COMMANDS ( users *should not* edit these )
+DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
+DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
+DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
+DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
 
 :: HELP PAGES ( users *should not* edit these )
 DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
@@ -67,11 +71,6 @@ DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
 DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
 DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
 DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
-
-
-
-
-
 
 :: USER DEFINABLE ALIAS COMMANDS ( use edit-alias to edit list )
 :: Note, this file gets overwritten with SVN update changes
