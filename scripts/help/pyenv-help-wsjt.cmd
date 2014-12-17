@@ -17,7 +17,7 @@ ECHO   Audio.pyd .. Audio Library for WSJT
 ECHO   install .... Build and Install WSJT
 ECHO   package .... Build Win32 Installer
 ECHO   clean ...... Clean SRC directory
-ECHO   distclean .. Clean SRC, Install & Package Directories
+ECHO   distclean .. Clean SRC, Install and Package Directories
 ECHO. 
 ECHO   ^* Relist Help-Menu, type ..... help-pyenv
 ECHO   ^* Return to Main-Menu, type .. main-menu

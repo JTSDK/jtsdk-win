@@ -239,7 +239,10 @@ GOTO EOF
 :: DISPLAY FINISH MESSAGE
 :FINISH
 ECHO.
-ECHO BUILD SUMMARY
+ECHO -----------------------------------------------------------------
+ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\wsjtx.exe
 GOTO ASK_FINISH_RUN
