@@ -92,17 +92,19 @@ IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
 :: ASK USER UPDATE FROM SVN
 :SVNASK
 CLS
-ECHO Update from SVN Before Building? ^( Y/N ^)
+ECHO Update from SVN Before Building? ^( y/n ^)
 SET answer=
 ECHO.
 SET /P answer=Type Response: %=%
-If /I "%answer%"=="N" GOTO BUILD
-If /I "%answer%"=="Y" (
+If /I [%answer%]==[n] GOTO BUILD
+If /I [%answer%]==[y] (
 GOTO SVNUP
 ) ELSE (
 CLS
 ECHO.
-ECHO Please Answer With: ^( Y or N ^) & ECHO. & GOTO SVNASK
+ECHO Please Answer With: ^( y or n ^)
+ECHO.
+GOTO SVNASK
 )
 
 :: UPDATE IF USER SAID YES TO UPDATE
@@ -121,10 +123,17 @@ REM ----------------------------------------------------------------------------
 :BUILD
 IF [%btree%]==[true] (
 CLS
-CD /D %buildd%\%option%
 ECHO -----------------------------------------------------------------
 ECHO Configuring %option% Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+CD /D %buildd%\%option%
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
@@ -138,21 +147,21 @@ ECHO Finished %option% Configuration for: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO   Package ............ %app_name%
-ECHO   Type ............... %option%
-ECHO   Build Directory .... %buildd%\%option%
-ECHO   Build Option List .. %buildd%\%option%\CmakeCache.txt
-ECHO   Target Directory ... %installdir%\%option%
+ECHO  Package ............ %app_name%
+ECHO  Type ............... %option%
+ECHO  Build Directory .... %buildd%\%option%
+ECHO  Build Option List .. %buildd%\%option%\CmakeCache.txt
+ECHO  Target Directory ... %installdir%\%option%
 ECHO.
 ECHO LIST ALL BUILD CONFIG OPTIONS
-ECHO   cat %buildd%\%option%\CmakeCache.txt ^| less
-ECHO   :: Arrow Up / Down to dcroll through the list
-ECHO   :: Type ^(H^) for help with search commands
-ECHO   :: Type ^(Ctrl+C then Q^) to exit
+ECHO  cat %buildd%\%option%\CmakeCache.txt ^| less
+ECHO  :: Arrow Up / Down to dcroll through the list
+ECHO  :: Type ^(H^) for help with search commands
+ECHO  :: Type ^(Ctrl+C then Q^) to exit
 ECHO.
 ECHO TO BUILD INSTALL TARGET
-ECHO   cd /d %buildd%\%option%
-ECHO   cmake --build . --target install
+ECHO  cd /d %buildd%\%option%
+ECHO  cmake --build . --target install -- -j %JJ%
 ECHO.
 GOTO EOF
 
@@ -161,22 +170,28 @@ REM  BUILD INSTALL TARGET ( binstall )
 REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
 CLS
-CD /D %buildd%\%option%
 ECHO -----------------------------------------------------------------
 ECHO Building %option% Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+CD /D %buildd%\%option%
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
-
-cmake --build . --target install
-
+ECHO -- Building %option% Install Target
+ECHO.
+cmake --build . --target install -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 
 :: CHECK IF DEBUG 
@@ -188,21 +203,31 @@ REM  BUILD INSTALLER ( bpkg )
 REM ----------------------------------------------------------------------------
 ) ELSE IF [%bpkg%]==[true] (
 CLS
-CD /D %buildd%\%option%
 ECHO -----------------------------------------------------------------
 ECHO Building Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+CD /D %buildd%\%option%
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF %ERRORLEVEL% 1 ( GOTO CMAKE_ERROR )
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 GOTO NSIS_PKG
 
 :: NSIS PACKAGE ( WSJT-X / Win32 ONLY)
 :NSIS_PKG
-cmake --build . --target package --clean-first
+ECHO.
+ECHO -- Building Win32 Installer
+ECHO.
+cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
 ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
@@ -213,11 +238,6 @@ GOTO FINISH_PKG
 :: DEBUG MAKE BATCH FILE 
 :DEBUG_MAKEBAT
 ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished Building %option% Install Target For: ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
 >%app_name%.bat (
@@ -235,38 +255,44 @@ GOTO DEBUG_FINISH
 
 :: DISPLAY DEBUG_FINISHED MESSAGE
 :DEBUG_FINISH
-ECHO BUILD SUMMARY
+ECHO.
+ECHO -----------------------------------------------------------------
+ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.bat
 ECHO.
-ECHO RUNTIME COMMENT:
-ECHO  When Running ^( %app_name% ^) Debug versions, please use
-ECHO  the provided  ^( %app_name%.bat ^) file as this sets up
-ECHO  environment variables and support file paths.
+ECHO   When Running ^( %app_name% ^) Debug versions, please use
+ECHO   the provided  ^( %app_name%.bat ^) file as this sets up
+ECHO   environment variables and support file paths.
 ECHO.
 GOTO ASK_DEBUG_RUN
 
 :: ASK USER IF THEY WANT TO RUN THE APP, DEBUG MODE
 :ASK_DEBUG_RUN
 ECHO.
-ECHO Would You Like To Run %app_name% Now? ^( Y/N ^)
+ECHO Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
 ECHO.
-If /I "%answer%"=="Y" ( GOTO RUN_DEBUG )
-If /I "%answer%"=="N" ( GOTO EOF
+If /I [%answer%]==[y] ( GOTO RUN_DEBUG )
+If /I [%answer%]==[n] (
+GOTO EOF
 ) ELSE (
 CLS
 ECHO.
-ECHO Please Answer With: ^( Y or N ^) & ECHO. & GOTO ASK_DEBUG_RUN
+ECHO Please Answer With: ^( y or n ^)
+ECHO.
+GOTO ASK_DEBUG_RUN
 )
 
 :: RUN APP, DEBUG MODE
 :RUN_DEBUG
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( %app_name% ^) in Debug Mode
+ECHO .. Starting: ^( %app_name% ^) in %option% Mode
 CALL %app_name%.bat
 GOTO EOF
 
@@ -277,18 +303,21 @@ ECHO -----------------------------------------------------------------
 ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO Installer Name ...... %WSJTXPKG%
-ECHO Installer Location .. %packagedir%
+ECHO  Installer Name ...... %wsjtxpkg%
+ECHO  Installer Location .. %packagedir%
 ECHO.
-ECHO To Install the package, browse to Installer Location, and
-ECHO run as you normally do to install Windows applications.
+ECHO  To Install the package, browse to Installer Location, and
+ECHO  run as you normally do to install Windows applications.
 ECHO.
 GOTO EOF
 
 :: DISPLAY FINISH MESSAGE
 :FINISH
 ECHO.
-ECHO BUILD SUMMARY
+ECHO -----------------------------------------------------------------
+ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\wsjtx.exe
 GOTO ASK_FINISH_RUN
@@ -296,25 +325,27 @@ GOTO ASK_FINISH_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO   Would You Like To Run %app_name% Now? ^( Y/N ^)
+ECHO Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
 ECHO.
-If /I "%answer%"=="Y" GOTO RUN_INSTALL
-If /I "%answer%"=="N" (
+If /I [%answer%]==[y] GOTO RUN_INSTALL
+If /I [%answer%]==[n] (
 GOTO EOF
 ) ELSE (
 CLS
 ECHO.
-ECHO   Please Answer With: ^( Y or N ^) & ECHO. & GOTO ASK_FINISH_RUN
+ECHO Please Answer With: ^( Y or N ^)
+ECHO.
+GOTO ASK_FINISH_RUN
 )
 
 :: RUN APP
 :RUN_INSTALL
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( %app_name% ^) in Release Mode
+ECHO Starting: ^( %app_name% ^) in %option% Mode
 CALL wsjtx.exe
 )
 GOTO EOF

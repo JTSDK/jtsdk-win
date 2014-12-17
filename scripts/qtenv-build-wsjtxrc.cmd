@@ -88,17 +88,19 @@ IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
 :: ASK USER UPDATE FROM SVN
 :SVNASK
 CLS
-ECHO Update from SVN Before Building? ^( Y/N ^)
+ECHO Update from SVN Before Building? ^( y/n ^)
 SET answer=
 ECHO.
 SET /P answer=Type Response: %=%
-If /I "%answer%"=="N" GOTO BUILD
-If /I "%answer%"=="Y" (
+If /I [%answer%]==[n] GOTO BUILD
+If /I [%answer%]==[y] (
 GOTO SVNUP
 ) ELSE (
 CLS
 ECHO.
-ECHO Please Answer With: ^( Y or N ^) & ECHO. & GOTO SVNASK
+ECHO Please Answer With: ^( y or n ^)
+ECHO.
+GOTO SVNASK
 )
 
 :: UPDATE IF USER SAID YES TO UPDATE
@@ -117,11 +119,17 @@ REM ----------------------------------------------------------------------------
 :BUILD
 IF [%btree%]==[true] (
 CLS
-CD /D %buildd%\%option%
-ECHO.
 ECHO -----------------------------------------------------------------
 ECHO Configuring RC Build Tree For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+CD /D %buildd%\%option%
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
@@ -135,19 +143,19 @@ ECHO Finished RC Build Tree For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO   Package ............ %app_name%
-ECHO   Type ............... %option%
-ECHO   Build Directory .... %buildd%\%option%
-ECHO   Build option List .. %buildd%\%option%\CmakeCache.txt
-ECHO   Target Directory ... %installdir%\%option%
+ECHO  Package ............ %app_name%
+ECHO  Type ............... %option%
+ECHO  Build Directory .... %buildd%\%option%
+ECHO  Build option List .. %buildd%\%option%\CmakeCache.txt
+ECHO  Target Directory ... %installdir%\%option%
 ECHO.
 ECHO TO BUILD INSTALL TARGET
-ECHO   cd %buildd%\%option%
-ECHO   cmake --build . --target install
+ECHO  cd %buildd%\%option%
+ECHO  cmake --build . --target install
 ECHO.
 ECHO TO BUILD WIN32 INSTALLER
-ECHO   cd %buildd%\%option%
-ECHO   cmake --build . --target package
+ECHO  cd %buildd%\%option%
+ECHO  cmake --build . --target package -- -j %JJ%
 ECHO.
 GOTO EOF
 
@@ -155,25 +163,27 @@ REM ----------------------------------------------------------------------------
 REM  BUILD INSTALL TARGET ( binstall )
 REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
-CLS
+ECHO -----------------------------------------------------------------
+ECHO Building RC %option% Install Target For: ^( %app_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
 CD /D %buildd%\%option%
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Building RC Install Target For: ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO .. Configuring Release Candidate Build Tree
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
-ECHO .. Starting Release Candidate Install
+ECHO -- Building Release Candidate Install Target
 ECHO.
-cmake --build . --target install
+cmake --build . --target install -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 GOTO FINISH
 
@@ -182,11 +192,17 @@ REM  BUILD INSTALLER ( bpkg )
 REM ----------------------------------------------------------------------------
 ) ELSE IF [%bpkg%]==[true] (
 CLS
-CD /D %buildd%\%option%
-ECHO.
 ECHO -----------------------------------------------------------------
 ECHO Building RC Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+CD /D %buildd%\%option%
+)
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -197,7 +213,7 @@ GOTO NSIS_PKG
 
 :: NSIS PACKAGE ( WSJT-X / Win32 ONLY)
 :NSIS_PKG
-cmake --build . --target package --clean-first
+cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
 ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxrcpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
@@ -212,11 +228,11 @@ ECHO -----------------------------------------------------------------
 ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO Installer Name ...... %WSJTXPKG%
-ECHO Installer Location .. %packagedir%
+ECHO  Installer Name ...... %WSJTXPKG%
+ECHO  Installer Location .. %packagedir%
 ECHO.
-ECHO To Install the package, browse to Installer Location, and
-ECHO run as you normally do to install Windows applications.
+ECHO  To Install the package, browse to Installer Location, and
+ECHO  run as you normally do to install Windows applications.
 ECHO.
 GOTO EOF
 
@@ -231,18 +247,20 @@ GOTO ASK_FINISH_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO   Would You Like To Run %app_name% Now? ^( y/n ^)
+ECHO Would You Like To Run %app_name% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
 ECHO.
-If /I "%answer%"=="Y" GOTO RUN_INSTALL
-If /I "%answer%"=="N" (
+If /I [%answer%]==[y] GOTO RUN_INSTALL
+If /I [%answer%]==[n] (
 GOTO EOF
 ) ELSE (
 CLS
 ECHO.
-ECHO   Please Answer With: ^( y or n ^) & ECHO. & GOTO ASK_FINISH_RUN
+ECHO Please Answer With: ^( y or n ^)
+ECHO.
+GOTO ASK_FINISH_RUN
 )
 
 :: RUN APP
