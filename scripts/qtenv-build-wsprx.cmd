@@ -97,7 +97,7 @@ ECHO Update from SVN Before Building? ^( y/n ^)
 SET answer=
 ECHO.
 SET /P answer=Type Response: %=%
-If /I [%answer%]==[n]GOTO BUILD
+If /I [%answer%]==[n] GOTO BUILD
 If /I [%answer%]==[y] (
 GOTO SVNUP
 ) ELSE (
@@ -333,8 +333,8 @@ ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
 ECHO.
-If /I [%answer%]=="y" ( GOTO RUN_DEBUG )
-If /I [%answer%]=="n" ( GOTO EOF
+If /I [%answer%]==[y] ( GOTO RUN_DEBUG )
+If /I [%answer%]==[n] ( GOTO EOF
 ) ELSE (
 CLS
 ECHO.
