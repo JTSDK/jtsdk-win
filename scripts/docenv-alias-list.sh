@@ -35,11 +35,10 @@ echo -e ${C_Y}"JTSDK-DOC ALIAS LIST ( short-cuts )\n"${C_NC}
 echo 'USAGE: [ command ]'
 echo ''
 echo -e ${C_C}"GENERAL COMMANDS"${C_NC}
-echo -e "  help-jtsdk    # JTSDK-DOC main help file (man page)
-  help-build    # Help with building documents
-  help-co       # Help with checking out documentation
-  checkout-doc  # Perform SVN Check ( anonymous )
-  lista         # Display this help screen"
+echo -e "  help-build    # Help with building documents
+  help-checkout # Help with checking out documentation
+  lista         # Display this help screen
+  checkout-doc  # Perform SVN Check ( anonymous )"
 echo ''
 echo -e ${C_C}"SVN COMMANDS"${C_NC}
 echo -e "  svnu          # Perform SVN Update

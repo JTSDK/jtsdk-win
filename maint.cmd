@@ -30,11 +30,11 @@ TITLE JTSDK General Maintenance And Upgrade
 ECHO.
 SET VER=2.0.0
 SET LANG=en_US
-SET BASED=C:\JTSDK
-SET SVND=%BASED%\subversion\bin
-SET TOOLS=%BASED%\tools\bin
-SET URL1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/postinstall.bat"
-SET PATH=%BASED%;%SVND%;%TOOLS%;%WINDIR%\System32
+SET based=C:\JTSDK
+SET svnd=%BASED%\subversion\bin
+SET tools=%BASED%\tools\bin
+SET url1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/postinstall.cmd"
+SET PATH=%based%;%svnd%;%tools%;%WINDIR%\System32
 
 :: Power-User Commands, add as many as you like
 DOSKEY clear=cls
@@ -48,11 +48,11 @@ DOSKEY log="svn.exe" log -l $*
 DOSKEY logv="svn.exe" log -v -l $*
 
 :: UPDATE & UPGRADE COMMANDS
-DOSKEY update="%SVND%\svn.exe" $* export --force %URL1% >nul 2>&1
+DOSKEY update="%svnd%\svn.exe" $* export --force %url1% >nul 2>&1
 DOSKEY upgrade="postinstall.bat" $* upgrade
 
 :: Start Main Script
-CD /D %BASED%
+CD /D %based%
 CLS
 ECHO ---------------------------------------------------------
 ECHO  JTSDK General Maintenance Environment

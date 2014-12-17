@@ -7,11 +7,10 @@
 #-------------------------------------------------------------------------------
 # GENERAL COMMANDS
 #-------------------------------------------------------------------------------
-alias help-jtsdk="man /scripts/cyg32/man1/docenv-help.1"
 alias help-build="/scripts/docenv-help-build.sh"
-alias help-co="/scripts/docenv-help-co.sh"
-alias checkout-doc="cd $HOME && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
+alias help-checkout="/scripts/docenv-help-co.sh"
 alias lista='/scripts/docenv-alias-list.sh'
+alias checkout-doc="cd $HOME && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
 
 #-------------------------------------------------------------------------------
 # SVN COMMANDS

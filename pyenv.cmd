@@ -1,5 +1,5 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: pyenv.bat
+:: Name .........: pyenv.cmd
 :: Function .....: JTSDK Python Environment for Win32
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Sets the Environment for building WSJT and WSPR
@@ -10,12 +10,12 @@
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: pyenv.bat is free software: you can redistribute it and/or modify it under the
+:: pyenv.cmd is free software: you can redistribute it and/or modify it under the
 :: terms of the GNU General Public License as published by the Free Software
 :: Foundation either version 3 of the License, or (at your option) any later
 :: version. 
 ::
-:: pyenv.bat is distributed in the hope that it will be useful, but WITHOUT ANY
+:: pyenv.cam is distributed in the hope that it will be useful, but WITHOUT ANY
 :: WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 :: A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 ::
