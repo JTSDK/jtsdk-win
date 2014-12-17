@@ -1,5 +1,5 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: qtenv-build-wsprx.cmd
+:: Name .........: qtenv-build-map65.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Build script for WSPRX
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
@@ -9,12 +9,12 @@
 :: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: qtenv-build-wsprx.cmd is free software: you can redistribute it and/or modify it
+:: qtenv-build-map65.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: qtenv-build-wsprx.cmd is distributed in the hope that it will be useful, but WITHOUT
+:: qtenv-build-map65.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -38,8 +38,8 @@ SET based=C:\JTSDK
 SET cmk=%based%\cmake\bin
 SET tools=%based%\tools\bin
 SET hl2=%based%\hamlib\bin
-SET ino=%based%\inno5
 SET fft=%based%\fftw3f
+SET ino=%based%\inno5
 SET gccd=%based%\qt5\Tools\mingw48_32\bin
 SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
@@ -52,20 +52,20 @@ SET PATH=%based%;%cmk%;%tools%;%hl2%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%ino%;%sr
 CD /D %based%
 
 :: VARIABLES USED IN PROCESS
-SET app_name=wsprx
-SET tchain=%scr%\wsprx-toolchain.cmake
+SET app_name=map65
+SET tchain=%scr%\map65-toolchain.cmake
 SET buildd=%based%\%app_name%\build
 SET installdir=%based%\%app_name%\install
 SET packagedir=%based%\%app_name%\package
 SET JJ=%NUMBER_OF_PROCESSORS%
-SET iss=%srcd%\%app_name%\wsprxb.iss
+SET iss=%srcd%\%app_name%\map65b.iss
 
 :: SET RELEASE, DEBUG, and TARGET BASED ON USER INPUT
 IF /I [%1]==[rconfig] (SET option=Release
 SET btree=true
 ) ELSE IF /I [%1]==[rinstall] (SET option=Release
 SET binstall=true
-) ELSE IF /I [%1]==[wsprx] (SET option=Release
+) ELSE IF /I [%1]==[map65] (SET option=Release
 SET binstall=true
 ) ELSE IF /I [%1]==[package] (SET option=Release
 SET bpkg=true
@@ -181,10 +181,10 @@ cmake --build . --target install
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 
 REM ----------------------------------------------------------------------------
-REM -- WSPR-X INSTALLL COPY ROUTINE
+REM -- MAP65 INSTALLL COPY ROUTINE
 REM    Needs to be added to CMakeLists.txt
 REM ----------------------------------------------------------------------------
-:WSPRX_INSTALL_COPY
+:MAP65_INSTALL_COPY
 ECHO -- Copying Additional Resources for ^( %app_name% ^)
 IF NOT EXIST %installdir%\%option%\bin\save\Samples ( mkdir %installdir%\%option%\bin\save\Samples )
 IF NOT EXIST %installdir%\%option%\bin\platforms ( mkdir %installdir%\%option%\bin\platforms )
@@ -196,20 +196,24 @@ XCOPY /Y /R %qt5d%\Qt5Core.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Gui.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Network.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Widgets.dll %installdir%\%option%\bin >nul
-XCOPY /Y /R %qt5p%\qwindows.dll %installdir%\%option%\bin\platforms >nul
+XCOPY /Y /R %QT5P%\qwindows.dll %installdir%\%option%\bin\platforms >nul
 :: GCC Runtime
 XCOPY /Y /R %fft%\libfftw3f-3.dll %installdir%\%option%\bin >nul
-XCOPY /Y /R %GCCD%\libgfortran-3.dll %installdir%\%option%\bin >nul
+XCOPY /Y /R %gccd%\libgfortran-3.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libquadmath-0.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R "%gccd%\libstdc++-6.dll" %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libwinpthread-1.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libgcc_s_dw2-1.dll %installdir%\%option%\bin >nul
-XCOPY /Y /R %HL2%\rigctl.exe %installdir%\%option%\bin >nul
 :: Add Misc files
+XCOPY /Y /R %buildd%\%option%\contrib\* %installdir%\%option%\bin >nul
+XCOPY /Y /R %srcd%\%app_name%\resources\* %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\palir-02.dll %installdir%\%option%\bin >nul
+XCOPY /Y /R %based%\mingw32\bin\mingwm10.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\wsjt.ico %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\*.dat %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\LICENSE_WHEATLEY.txt %installdir%\%option%\bin >nul
+XCOPY /Y /R %HL2%\rigctl.exe %installdir%\%option%\bin >nul
+XCOPY /Y /R %HL2%\rigctld.exe %installdir%\%option%\bin >nul
 
 :: CHECK IF DEBUG 
 IF /I [%option%]==[Debug] ( GOTO DEBUG_MAKEBAT ) ELSE ( GOTO FINISH )
@@ -234,10 +238,10 @@ cmake --build . --target install
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 
 REM ----------------------------------------------------------------------------
-REM -- WSPR-X PACKAGE COPY ROUTINE
+REM -- MAP65 PACKAGE COPY ROUTINE
 REM    Needs to be added to CMakeLists.txt
 REM ----------------------------------------------------------------------------
-:WSPRX_PACKAGE_COPY
+:MAP65_PACKAGE_COPY
 ECHO -- Copying Additional Resources for ^( %app_name% ^)
 IF NOT EXIST %installdir%\%option%\bin\save\Samples ( mkdir %installdir%\%option%\bin\save\Samples )
 IF NOT EXIST %installdir%\%option%\bin\platforms ( mkdir %installdir%\%option%\bin\platforms )
@@ -249,7 +253,7 @@ XCOPY /Y /R %qt5d%\Qt5Core.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Gui.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Network.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %qt5d%\Qt5Widgets.dll %installdir%\%option%\bin >nul
-XCOPY /Y /R %qt5p%\qwindows.dll %installdir%\%option%\bin\platforms >nul
+XCOPY /Y /R %QT5P%\qwindows.dll %installdir%\%option%\bin\platforms >nul
 :: GCC Runtime
 XCOPY /Y /R %fft%\libfftw3f-3.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libgfortran-3.dll %installdir%\%option%\bin >nul
@@ -257,12 +261,16 @@ XCOPY /Y /R %gccd%\libquadmath-0.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R "%gccd%\libstdc++-6.dll" %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libwinpthread-1.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %gccd%\libgcc_s_dw2-1.dll %installdir%\%option%\bin >nul
-XCOPY /Y /R %HL2%\rigctl.exe %installdir%\%option%\bin >nul
 :: Add Misc files
+XCOPY /Y /R %buildd%\%option%\contrib\* %installdir%\%option%\bin >nul
+XCOPY /Y /R %srcd%\%app_name%\resources\* %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\palir-02.dll %installdir%\%option%\bin >nul
+XCOPY /Y /R %based%\mingw32\bin\mingwm10.dll %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\wsjt.ico %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\*.dat %installdir%\%option%\bin >nul
 XCOPY /Y /R %srcd%\%app_name%\LICENSE_WHEATLEY.txt %installdir%\%option%\bin >nul
+XCOPY /Y /R %HL2%\rigctl.exe %installdir%\%option%\bin >nul
+XCOPY /Y /R %HL2%\rigctld.exe %installdir%\%option%\bin >nul
 
 REM -- Build The Installer
 ECHO -- Building Win32 Installer ^( %app_name%-win32.exe ^)
