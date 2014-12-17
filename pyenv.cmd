@@ -49,7 +49,7 @@ SET PATH=%based%;%MGW%;%pythonpath%;%tools%;%innno%;%scr%;%srcd%;%svnd%;%WINDIR%
 CD /D %based%
 
 :: MAKE SURE SRCD IS PRESENT
-IF NOT EXIST %srcd%\src\NUL ( mkdir %based%\src )
+IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
 
 :: CHECKOUT AND BUILD COMMANDS ( users *should not* edit these )
 DOSKEY checkout-wspr="%scr%\pyenv-checkout.cmd" $* wspr
