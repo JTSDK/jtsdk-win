@@ -49,7 +49,7 @@ DOSKEY logv="svn.exe" log -v -l $*
 
 :: UPDATE & UPGRADE COMMANDS
 DOSKEY update="%svnd%\svn.exe" $* export --force %url1% >nul 2>&1
-DOSKEY upgrade="postinstall.bat" $* upgrade
+DOSKEY upgrade="postinstall.cmd" $* upgrade
 
 :: Start Main Script
 CD /D %based%
