@@ -48,8 +48,11 @@ SET scr=%based%\scripts
 SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
 SET LIBRARY_PATH=
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
+
+:: MAKE SURE SRCD IS PRESENT
+IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
 
 :: CHECKOUT COMMANDS ( users *should not* edit these )
 DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx

@@ -57,10 +57,7 @@ SET packagedir=%based%\wsjt\package
 
 :: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
 CLS
-IF NOT EXIST %app_src%\.svn\NUL (
-mkdir %based%\src
-GOTO COMSG
-) ELSE (GOTO ASK_SVN)
+IF NOT EXIST %app_src%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO ASK_SVN )
 
 :: START WSJT BUILD
 :ASK_SVN

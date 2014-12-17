@@ -43,9 +43,13 @@ SET inno=%based%\inno5
 SET scr=%based%\scripts
 SET pythonpath=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
 SET svnd=%based%\subversion\bin
+SET srcd=%based%\src
 SET LIBRARY_PATH=
-SET PATH=%based%;%MGW%;%pythonpath%;%tools%;%innno%;%scr%;%svnd%;%WINDIR%\System32
+SET PATH=%based%;%MGW%;%pythonpath%;%tools%;%innno%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
 CD /D %based%
+
+:: MAKE SURE SRCD IS PRESENT
+IF NOT EXIST %srcd%\src\NUL ( mkdir %based%\src )
 
 :: CHECKOUT AND BUILD COMMANDS ( users *should not* edit these )
 DOSKEY checkout-wspr="%scr%\pyenv-checkout.cmd" $* wspr

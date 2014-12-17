@@ -75,8 +75,7 @@ REM  START MAIN SCRIPT
 REM ----------------------------------------------------------------------------
 
 CLS
-CD %based%
-IF NOT EXIST %SRCD%\NUL mkdir %SRCD%
+CD /D %based%
 IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
 IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
 IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
@@ -84,11 +83,7 @@ ECHO -----------------------------------------------------------------
 ECHO  ^( %app_name% ^) CMake Build Script
 ECHO -----------------------------------------------------------------
 ECHO.
-IF NOT EXIST %srcd%\%app_name%\.svn\NUL (
-GOTO COMSG
-) ELSE (
-GOTO SVNASK
-)
+IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
 
 :: ASK USER UPDATE FROM SVN
 :SVNASK
