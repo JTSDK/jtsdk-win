@@ -69,7 +69,7 @@ GOTO FINISH
 ECHO.
 ECHO Checkout complete.
 ECHO.
-IF /I [%app_name%]==[wsjtxrc]
+IF /I [%app_name%]==[wsjtxrc] (
 ECHO To Build, Type: build-wsjtxrc
 ) ELSE (
 ECHO To Build, Type: build-%APP_NAME%
