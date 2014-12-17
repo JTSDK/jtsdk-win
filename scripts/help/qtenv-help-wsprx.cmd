@@ -11,13 +11,13 @@ ECHO   [ rinstall ] or [ package]. After checkout-wsprx, use one of the
 ECHO   following:
 ECHO.
 ECHO   RELEASE TARGETS
-ECHO   rconfig ...... Configure Release Tree
-ECHO   rinstall ..... Build Release Insatall
-ECHO   package ...... Build the Win32 InnoSetup Installer
+ECHO    rconfig ...... Configure Release Tree
+ECHO    rinstall ..... Build Release Insatall
+ECHO    package ...... Build the Win32 InnoSetup Installer
 ECHO.
 ECHO   DEBUG TARGETS
-ECHO   dconfig ...... Configure Debug Tree
-ECHO   dinstall ..... Build Debug Insatall
+ECHO    dconfig ...... Configure Debug Tree
+ECHO    dinstall ..... Build Debug Insatall
 ECHO. 
 ECHO.  NOTES
 ECHO   [1] Debug targets ^*do not^* have a package targets

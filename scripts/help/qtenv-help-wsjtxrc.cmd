@@ -11,9 +11,9 @@ ECHO   [ rinstall ] or [ package]. After checkout-wsjtxrc, use one of the
 ECHO   following:
 ECHO.
 ECHO   RELEASE TARGETS
-ECHO   rconfig ...... Configure Release Tree
-ECHO   rinstall ..... Build Release Insatall
-ECHO   package ...... Build the Win32 NSIS Installer
+ECHO    rconfig ...... Configure Release Tree
+ECHO    rinstall ..... Build Release Insatall
+ECHO    package ...... Build the Win32 NSIS Installer
 ECHO. 
 ECHO.  NOTES
 ECHO   [1] At present, RC builds ^*do not^* include Debug targets
