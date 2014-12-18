@@ -30,4 +30,4 @@ if 1%ms% lss 100 set ms=0%ms%
 :: mission accomplished
 set /a totalsecs = %hours%*3600 + %mins%*60 + %secs% 
 echo.
-echo Command Took %hours%:%mins%:%secs%.%ms% (%totalsecs%.%ms%s total)
+echo Command Took: %hours%:%mins%:%secs%.%ms% (%totalsecs%.%ms%s total)
