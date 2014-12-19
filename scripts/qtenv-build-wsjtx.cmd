@@ -127,14 +127,11 @@ ECHO -----------------------------------------------------------------
 ECHO Configuring %option% Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %buildd%\%option%\NUL (
+IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-CD /D %buildd%\%option%
+RD /S /Q %srcd%\%app_name%\CmakeFiles >NUL 2>&1
 )
-ECHO -- Generating New Makefiles
-ECHO.
+ECHO -- Generating New ^( %app_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -174,14 +171,23 @@ ECHO -----------------------------------------------------------------
 ECHO Building %option% Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %buildd%\%option%\NUL (
+IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-CD /D %buildd%\%option%
+RD /S /Q %srcd%\%app_name%\CmakeFiles >NUL 2>&1
 )
-ECHO -- Generating New Makefiles
-ECHO.
+
+:: Build FFT check program if Debug is selected
+IF /I [%option%]==[Debug] (
+ECHO -- Building ^( chkfft ^)
+CD /D %srcd%\%app_name%\lib
+gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
+IF NOT EXIST %installdir%\%option%\bin\NUL (MKDIR %installdir%\%option%\bin)
+COPY /Y /B chkfft.exe %installdir%\%option%\bin\chkfft.exe >NUL 2>&1
+COPY /Y chkfft.txt %installdir%\%option%\bin\chkfft.txt >NUL 2>&1
+CD /D %srcd%\%app_name%
+)
+
+ECHO -- Generating New ^( %app_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -207,13 +213,11 @@ ECHO -----------------------------------------------------------------
 ECHO Building Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %buildd%\%option%\NUL (
+IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-CD /D %buildd%\%option%
+RD /S /Q %srcd%\%app_name%\CmakeFiles\* >NUL 2>&1
 )
-ECHO -- Generating New Makefiles
+ECHO -- Generating New ^( %app_name% ^) Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -239,17 +243,75 @@ GOTO FINISH_PKG
 :DEBUG_MAKEBAT
 ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
-IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
->%app_name%.bat (
-ECHO @ECHO OFF
+IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
+>%app_name%.cmd (
+@ECHO OFF
 ECHO REM -- Debug Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
+ECHO.
 ECHO TITLE JTSDK QT Debug Terminal
 ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%;%hl3%\lib
-ECHO CALL %app_name%.exe
+ECHO.
+ECHO SET based=C:\JTSDK
+ECHO SET fft=%based%\fftw3f
+ECHO SET gccd=%based%\qt5\Tools\mingw48_32\bin
+ECHO SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
+ECHO SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
+ECHO SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
+ECHO SET hl3=%based%\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
+ECHO SET scr=%based%\scripts
+ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%;%scr%
+ECBO.
+ECHO CALL wsjtx.exe
 ECHO ENDLOCAL
 ECHO EXIT /B 0
+)
+GOTO DEBUG_MAKEBAT_UTIL
+
+:: UTIL BATCH FILES
+:DEBUG_MAKEBAT_UTIL
+ECHO -- Generating Debug Utils Batch File for ^( %app_name% ^ )
+CD /D %installdir%\%option%\bin
+IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
+>%app_name%-debug-util.cmd (
+ECHO @ECHO OFF
+ECHO REM -- WSJTX Debug Utilities Batch File
+ECHO REM -- Part of the JTSDK v2.0 Project
+ECHO.
+ECHO TITLE WSJTX Debug Utilities Environment
+ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+ECHO COLOR 0B
+ECHO.
+ECHO ^:: SET PATHS
+ECHO SET based=C:\JTSDK
+ECHO SET fft=%based%\fftw3f
+ECHO SET gccd=%based%\qt5\Tools\mingw48_32\bin
+ECHO SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
+ECHO SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
+ECHO SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
+ECHO SET scr=%based%\scripts
+ECHO SET hl3=%based%\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
+ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%;%scr%
+ECHO.
+ECHO CLS
+ECHO ECHO --------------------------------------------------------------
+ECHO ECHO  Welcome to WSJT-X Testing Utilities
+ECHO ECHO --------------------------------------------------------------
+ECHO ECHO.
+ECHO ECHO  App Names ...: jt9code, jt65code, kvasd or chkfft
+ECHO ECHO  Help, type ..: [ app-name ] then ENTER
+ECHO ECHO.
+ECHO ECHO  Type ..: jt65code "message"  or  jt65code -t
+ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
+ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
+ECHO ECHO  Type ..: chkfft 131072 0 1 1 2
+ECHO ECHO.
+ECHO ECHO  NOTE^(s^)
+ECHO ECHO   ^[1^] See chkfft.txt for additional information on usage.
+ECHO ECHO.
+ECHO.
+ECHO ^:: OPEN CMD WINDOW
+ECHO ^%COMSPEC% ^/A ^/Q ^/K
 )
 GOTO DEBUG_FINISH
 
