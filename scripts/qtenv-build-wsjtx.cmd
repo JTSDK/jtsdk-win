@@ -127,11 +127,12 @@ ECHO -----------------------------------------------------------------
 ECHO Configuring %option% Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
+IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %srcd%\%app_name%\CmakeFiles >NUL 2>&1
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
 )
-CD /D %srcd%\%app_name%
+CD /D %buildd%\%option%
 ECHO -- Generating New ^( %app_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
@@ -172,11 +173,12 @@ ECHO -----------------------------------------------------------------
 ECHO Building %option% Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
+IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %srcd%\%app_name%\CmakeFiles >NUL 2>&1
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
 )
-CD /D %srcd%\%app_name%
+CD /D %buildd%\%option%
 :: Build FFT check program if Debug is selected
 IF /I [%option%]==[Debug] (
 ECHO -- Building ^( chkfft ^)
@@ -184,10 +186,8 @@ CD /D %srcd%\%app_name%\lib
 gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
 COPY /Y /B chkfft.exe %installdir%\%option%\bin\ >NUL 2>&1
 COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
-
-CD /D %srcd%\%app_name%
 )
-
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
@@ -214,10 +214,13 @@ ECHO -----------------------------------------------------------------
 ECHO Building Win32 Installer For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF EXIST %srcd%\%app_name%\CMakeFiles\NUL (
+ECHO.
+IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %srcd%\%app_name%\CmakeFiles\* >NUL 2>&1
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
