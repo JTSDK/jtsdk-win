@@ -273,7 +273,7 @@ ECHO -- Generating Debug Utils Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
 >%app_name%-debug-util.cmd (
-@ECHO OFF
+ECHO @ECHO OFF
 ECHO REM -- WSJTX Debug Utilities Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
 ECHO.
@@ -305,6 +305,7 @@ ECHO ECHO  Type ..: chkfft 131072 0 1 1 2
 ECHO ECHO.
 ECHO ECHO  NOTE^(s^)
 ECHO ECHO   ^[1^] See chkfft.txt for additional information on usage.
+ECHO ECHO.
 ECHO.
 ECHO ^:: OPEN CMD WINDOW
 ECHO ^%COMSPEC% /A /Q /K
