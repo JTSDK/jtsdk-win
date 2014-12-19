@@ -247,8 +247,8 @@ GOTO FINISH_PKG
 :DEBUG_MAKEBAT
 ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
-IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
->%app_name%.bat (
+IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
+>%app_name%.cmd (
 @ECHO OFF
 ECHO REM -- Debug Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
@@ -271,8 +271,8 @@ GOTO DEBUG_MAKEBAT_UTIL
 :DEBUG_MAKEBAT_UTIL
 ECHO -- Generating Debug Utils Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
-IF EXIST %app_name%-debug-util.bat (DEL /Q %app_name%-debug-util.bat)
->%app_name%.bat (
+IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
+>%app_name%-debug-util.cmd (
 @ECHO OFF
 ECHO REM -- WSJTX Debug Utilities Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
@@ -351,7 +351,7 @@ GOTO ASK_DEBUG_RUN
 ECHO.
 CD /D %installdir%\%option%\bin
 ECHO .. Starting: ^( %app_name% ^) in %option% Mode
-CALL %app_name%.bat
+CALL %app_name%.cmd
 GOTO EOF
 
 :: FINISHED PACKAGE MESSAGE
