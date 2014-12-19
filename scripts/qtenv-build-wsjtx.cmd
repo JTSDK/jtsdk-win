@@ -198,7 +198,6 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
-
 IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
@@ -266,12 +265,6 @@ ECHO REM -- Debug Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
 ECHO TITLE WSJT-X Debug Terminal
 ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-ECHO SET fft=C:\JTSDK\fftw3f
-ECHO SET gccd=C:\JTSDK\qt5\Tools\mingw48_32\bin
-ECHO SET qt5d=C:\JTSDK\qt5\5.2.1\mingw48_32\bin
-ECHO SET qt5a=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\accessible
-ECHO SET qt5p=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\platforms
-ECHO SET hl3=C:\JTSDK\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
 ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
 ECHO CALL wsjtx.exe
 ECHO
@@ -293,12 +286,6 @@ ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 ECHO COLOR 0B
 ECHO.
 ECHO ^:: SET PATHS
-ECHO SET fft=C:\JTSDK\fftw3f
-ECHO SET gccd=C:\JTSDK\qt5\Tools\mingw48_32\bin
-ECHO SET qt5d=C:\JTSDK\qt5\5.2.1\mingw48_32\bin
-ECHO SET qt5a=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\accessible
-ECHO SET qt5p=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\platforms
-ECHO SET hl3=C:\JTSDK\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
 ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
 ECHO.
 ECHO CLS

@@ -127,8 +127,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -172,8 +172,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -201,8 +201,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^

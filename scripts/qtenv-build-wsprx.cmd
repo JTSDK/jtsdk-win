@@ -132,8 +132,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -178,8 +178,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -239,8 +239,8 @@ IF EXIST %buildd%\%option%\NUL (
 ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
-CD /D %buildd%\%option%
 )
+CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
@@ -295,8 +295,8 @@ GOTO FINISH_PKG
 :DEBUG_MAKEBAT
 ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
-IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
->%app_name%.bat (
+IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
+>%app_name%.cmd (
 ECHO @ECHO OFF
 ECHO REM -- Debug Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
@@ -317,10 +317,10 @@ ECHO Finished %option% Build: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.bat
+ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
 ECHO.
 ECHO   When Running ^( %app_name% ^) Debug versions, please use
-ECHO   the provided  ^( %app_name%.bat ^) file as this sets up
+ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
 ECHO   environment variables and support file paths.
 ECHO.
 GOTO ASK_DEBUG_RUN
@@ -348,7 +348,7 @@ GOTO ASK_DEBUG_RUN
 ECHO.
 CD /D %installdir%\%option%\bin
 ECHO Starting: ^( %app_name% ^) in %option% Mode
-CALL %app_name%.bat
+CALL %app_name%.cmd
 GOTO EOF
 
 :: FINISHED PACKAGE MESSAGE
