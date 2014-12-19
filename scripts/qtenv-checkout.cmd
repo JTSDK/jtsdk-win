@@ -35,11 +35,11 @@ FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
 
 :: PATH VARIABLES
-SET BASED=C:\JTSDK
+SET based=C:\JTSDK
 SET tools=%based%\tools\bin
-SET SRCD=%based%\src
-SET SCR=%based%\scripts
-SET SVND=%based%\subversion\bin
+SET srcd=%based%\src
+SET scr=%based%\scripts
+SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%srcd%;%scr%;%svnd%;%WINDIR%\System32
 GOTO CHK_APP
 
@@ -53,6 +53,7 @@ GOTO EOF
 
 :: PERFORM WSPR CHECKOUT
 :SVN_CO
+IF NOT EXIST %srcd%\NUL (MKDIR %srcd% )
 CD /D %srcd%
 CLS
 ECHO.
