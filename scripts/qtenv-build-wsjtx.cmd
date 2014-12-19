@@ -198,7 +198,8 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
-IF /I IF /I [%option%]==[Release] (
+
+IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
