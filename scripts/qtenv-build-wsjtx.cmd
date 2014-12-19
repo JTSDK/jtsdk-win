@@ -269,15 +269,19 @@ GOTO DEBUG_MAKEBAT_UTIL
 
 :: UTIL BATCH FILES
 :DEBUG_MAKEBAT_UTIL
-ECHO -- Generating WSJTX Debug Utils Batch File for ^( %app_name% ^ )
+ECHO -- Generating Debug Utils Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%-debug-util.bat (DEL /Q %app_name%-debug-util.bat)
 >%app_name%.bat (
 @ECHO OFF
 ECHO REM -- WSJTX Debug Utilities Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
+ECHO.
 ECHO TITLE WSJTX Debug Utilities Batch File
 ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+ECHO COLOR 0B
+ECHO.
+ECHO ^:: SET PATHS
 ECHO SET fft=C:\JTSDK\fftw3f
 ECHO SET gccd=C:\JTSDK\qt5\Tools\mingw48_32\bin
 ECHO SET qt5d=C:\JTSDK\qt5\5.2.1\mingw48_32\bin
@@ -285,6 +289,8 @@ ECHO SET qt5a=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\accessible
 ECHO SET qt5p=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\platforms
 ECHO SET hl3=C:\JTSDK\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
 ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
+ECHO.
+ECHO CLS
 ECHO ECHO --------------------------------------------------------------
 ECHO ECHO  Welcome to WSJT-X Testing Utilities
 ECHO ECHO --------------------------------------------------------------
@@ -297,11 +303,11 @@ ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
 ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
 ECHO ECHO  Type ..: chkfft 131072 0 1 1 2
 ECHO ECHO.
-ECHO ECHO  NOTE(s)
-ECHO ECHO   [1] See chkfft.txt for additional information on usage.
+ECHO ECHO  NOTE^(s^)
+ECHO ECHO   ^[1^] See chkfft.txt for additional information on usage.
 ECHO.
-:: OPEN CMD WINDOW
-%COMSPEC% /A /Q /K
+ECHO ^:: OPEN CMD WINDOW
+ECHO ^%COMSPEC% /A /Q /K
 )
 GOTO DEBUG_FINISH
 
