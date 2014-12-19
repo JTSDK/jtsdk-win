@@ -189,12 +189,23 @@ COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
 )
 CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
+IF /I [%option%]==[Debug] (
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D WSJT_CREATE_WINMAIN=ON ^
+-D WSJT_INCLUDE_KVASD=ON ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D CMAKE_BUILD_TYPE=%option% ^
+-D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+)
+IF /I IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+)
 ECHO.
 ECHO -- Building %option% Install Target
 ECHO.
@@ -249,10 +260,10 @@ ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
 >%app_name%.cmd (
-@ECHO OFF
+ECHO @ECHO OFF
 ECHO REM -- Debug Batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
-ECHO TITLE JTSDK QT Debug Terminal
+ECHO TITLE WSJT-X Debug Terminal
 ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 ECHO SET fft=C:\JTSDK\fftw3f
 ECHO SET gccd=C:\JTSDK\qt5\Tools\mingw48_32\bin
@@ -262,8 +273,7 @@ ECHO SET qt5p=C:\JTSDK\qt5\5.2.1\mingw48_32\plugins\platforms
 ECHO SET hl3=C:\JTSDK\hamlib3\bin;C:\JTSDK\hamlib3\bin\lib
 ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
 ECHO CALL wsjtx.exe
-ECHO ENDLOCAL
-ECHO EXIT /B 0
+ECHO
 )
 GOTO DEBUG_MAKEBAT_UTIL
 
