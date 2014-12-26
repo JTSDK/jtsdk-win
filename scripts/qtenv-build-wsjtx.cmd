@@ -183,9 +183,11 @@ IF /I [%option%]==[Debug] (
 ECHO -- Building ^( chkfft ^)
 CD /D %srcd%\%app_name%\lib
 gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
-IF NOT EXIST %installdir%\%option%\bin\NUL ( MKDIR %installdir%\%option%\bin >NUL 2>&1)
+IF NOT EXIST %installdir%\%option%\bin\NUL ( MKDIR %installdir%\%option%\bin >NUL 2>&1 )
 COPY /Y /B chkfft.exe %installdir%\%option%\bin\ >NUL 2>&1
 COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
+COPY /Y nfft.dat %installdir%\%option%\bin\ >NUL 2>&1
+COPY /Y nfft.out %installdir%\%option%\bin\ >NUL 2>&1
 )
 CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
