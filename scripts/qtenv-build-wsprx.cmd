@@ -171,7 +171,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building %optiuon% Install Target For: ^( %app_name% ^)
+ECHO Building %option% Install Target For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
