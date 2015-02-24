@@ -250,10 +250,11 @@ ECHO -- Building Win32 Installer
 ECHO.
 cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
-ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxpkg=<p.k & rm p.k
+:: ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
-ECHO -- Moving installer to ..: %packagedir%
-MOVE /Y %wsjtxpkg% %packagedir% > nul
+dir /b *-win32.exe >p.k & wsjtxpkg=<p.k & rm p.k
+ECHO JTSDK: - Copying package to: %packagedir%
+COPY /Y %wsjtxpkg% %packagedir% > nul
 CD /D %based%
 GOTO FINISH_PKG
 
@@ -363,8 +364,8 @@ ECHO -----------------------------------------------------------------
 ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  Installer Name ...... %wsjtxpkg%
-ECHO  Installer Location .. %packagedir%
+ECHO  Installer Name ......: %wsjtxpkg%
+ECHO  Installer Location ..: %packagedir%\%wsjtxpkg%
 ECHO.
 ECHO  To Install the package, browse to Installer Location, and
 ECHO  run as you normally do to install Windows applications.
