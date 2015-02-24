@@ -2,12 +2,12 @@
 #
 # Title ........: msys-build-hamlib.sh
 # Version ......: snapshot
-# Description ..: Build Hammlib3 from source
+# Description ..: Build G4WJS Hammlib3 from source
 # Project URL ..: Git: git://git.code.sf.net/u/bsomervi/hamlib
 # Usage ........: ./build-hamlib.sh
 #
 # Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-# Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+# Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 # License ......: GPL-3
 #
 # msys-build-hamlib.sh is free software: you can redistribute it

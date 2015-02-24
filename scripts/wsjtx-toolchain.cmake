@@ -1,4 +1,4 @@
-# JTSDK-QT Tool-Chain File
+# JTSDK-QT Tool-Chain File for WSJTX
 # Part of the JTSDK v2.0.0 Project
 # NOTE: WSKT-X uses Hamlib3, not Hamlib2
 SET (CMAKE_SYSTEM_NAME Windows)

@@ -46,7 +46,7 @@ qtenv-help(1), docenv-help(1), msysenv-help(1)
 
 == COPYING
 
-Copyright &copy; 2014 Joseph H Taylor, Jr, K1JT
+Copyright &copy; 2014-2015 Joseph H Taylor, Jr, K1JT
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

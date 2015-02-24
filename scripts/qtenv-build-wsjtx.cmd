@@ -6,7 +6,7 @@
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-build-wsjtx.cmd is free software: you can redistribute it and/or modify it
@@ -146,11 +146,11 @@ ECHO Finished %option% Configuration for: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO  Package ............ %app_name%
-ECHO  Type ............... %option%
-ECHO  Build Directory .... %buildd%\%option%
-ECHO  Build Option List .. %buildd%\%option%\CmakeCache.txt
-ECHO  Target Directory ... %installdir%\%option%
+ECHO  Package ............: %app_name%
+ECHO  Type ...............: %option%
+ECHO  Build Directory ....: %buildd%\%option%
+ECHO  Build Option List ..: %buildd%\%option%\CmakeCache.txt
+ECHO  Target Directory ...: %installdir%\%option%
 ECHO.
 ECHO LIST ALL BUILD CONFIG OPTIONS
 ECHO  cat %buildd%\%option%\CmakeCache.txt ^| less
@@ -252,6 +252,7 @@ cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
 ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
+ECHO -- Moving installer to ..: %packagedir%
 MOVE /Y %wsjtxpkg% %packagedir% > nul
 CD /D %based%
 GOTO FINISH_PKG

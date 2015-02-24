@@ -6,7 +6,7 @@
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-build-wsjtxrc.cmd is free software: you can redistribute it and/or modify it
@@ -143,11 +143,11 @@ ECHO Finished RC Build Tree For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO  Package ............ %app_name%
-ECHO  Type ............... %option%
-ECHO  Build Directory .... %buildd%\%option%
-ECHO  Build option List .. %buildd%\%option%\CmakeCache.txt
-ECHO  Target Directory ... %installdir%\%option%
+ECHO  Package ............: %app_name%
+ECHO  Type ...............: %option%
+ECHO  Build Directory ....: %buildd%\%option%
+ECHO  Build option List ..: %buildd%\%option%\CmakeCache.txt
+ECHO  Target Directory ...: %installdir%\%option%
 ECHO.
 ECHO TO BUILD INSTALL TARGET
 ECHO  cd %buildd%\%option%
@@ -218,6 +218,7 @@ cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
 ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxrcpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
+ECHO -- Moving installer to ..: %packagedir%
 MOVE /Y %wsjtxrcpkg% %packagedir% > nul
 CD /D %based%
 GOTO FINISH_PKG
@@ -229,8 +230,8 @@ ECHO -----------------------------------------------------------------
 ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  Installer Name ...... %WSJTXPKG%
-ECHO  Installer Location .. %packagedir%
+ECHO  Installer Name ......: %WSJTXPKG%
+ECHO  Installer Location ..: %packagedir%
 ECHO.
 ECHO  To Install the package, browse to Installer Location, and
 ECHO  run as you normally do to install Windows applications.
@@ -244,8 +245,8 @@ ECHO -----------------------------------------------------------------
 ECHO Finished %option% Build: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\wsjtx.exe
+ECHO   Build Tree Location ..: %buildd%\%option%
+ECHO   Install Location .....: %installdir%\%option%\bin\wsjtx.exe
 GOTO ASK_FINISH_RUN
 
 :: ASK USER IF THEY WANT TO RUN THE APP

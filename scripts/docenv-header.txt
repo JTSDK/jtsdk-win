@@ -1,11 +1,11 @@
      _ _____ ___ ___  _  __   ___   ___   ___ 
   _ | |_   _/ __|   \| |/ /__|   \ / _ \ / __|
  | || | | | \__ \ |) | ' <___| |) | (_) | (__ 
-  \__/  |_| |___/___/|_|\_\  |___/ \___/ \___| v2.0.0-B2
+  \__/  |_| |___/___/|_|\_\  |___/ \___/ \___| v2.0
                                               
- Help Build, type .....: help-build
- Help Checkout, type ..: help-checkout
- List Shortcuts, type .: lista
- Checkout Docs, type ..: checkout-doc
- 
+ Help Build, type ......: help-build
+ Help Checkout, type ...: help-checkout
+ Checkout Docs, type ...: checkout-doc
+ Update Sources, type ..: uptate-doc
+ List Shortcuts, type ..: lista
  

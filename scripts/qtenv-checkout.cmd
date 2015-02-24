@@ -6,7 +6,7 @@
 :: Usage ........: This file is run from within qtenv.cmd
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-checkout.cmd is free software: you can redistribute it and/or modify it
@@ -72,13 +72,13 @@ ECHO.
 IF /I [%1%]==[wsjtxrc] (
 ECHO To Build, Type: build-wsjtxrc
 ) ELSE (
-ECHO To Build, Type: build-%APP_NAME%
+ECHO To Build, Type ..: build-%APP_NAME%
 )
 ECHO.
 IF /I [%1%]==[wsjtxrc] (
-ECHO For additional build options, type: help-wsjtxrc
+ECHO For additional build options, type ..: help-wsjtxrc
 ) ELSE (
-ECHO For additional build options, type: help-%app_name%
+ECHO For additional build options, type ..: help-%app_name%
 )
 ECHO.
 GOTO EOF

@@ -27,10 +27,10 @@ ECHO    shortcut to C:\JTSDK\qtenv.cmd
 ECHO.
 ECHO    DOSKEY commit=^"%svnd%\svn.exe^" --username=^<SF Username^> commit $^*
 ECHO.
-ECHO    Then simply use: commit -m "Commit Message"
+ECHO    Then type ..: commit -m "Commit Message"
 ECHO.
-ECHO   ^* List Help-Menu, type ....... help-qtenv
-ECHO   ^* Return to Main-Menu, type .. main-menu 
+ECHO   ^* List Help-Menu, type .......: help-qtenv
+ECHO   ^* Return to Main-Menu, type ..: main-menu 
 GOTO EOF
 
 :EOF

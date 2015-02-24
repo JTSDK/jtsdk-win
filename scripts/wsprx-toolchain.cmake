@@ -1,4 +1,4 @@
-# JTSDK QT5 Tool-Chain File
+# JTSDK QT5 Tool-Chain File for WSPRX
 # Part of the JTSDK v2.0.0 Project
 SET (CMAKE_SYSTEM_NAME Windows)
 SET (BASED C:/JTSDK)

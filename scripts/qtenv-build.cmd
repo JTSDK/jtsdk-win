@@ -6,7 +6,7 @@
 :: Usage ........: This file is run from within qtenv.bat
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-build.bat is free software: you can redistribute it and/or modify it
@@ -162,11 +162,11 @@ ECHO Finished %OPTION% Build Tree Configuration for: ^( %APP_NAME% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO   Package ............ %APP_NAME%
-ECHO   Type ............... %OPTION%
-ECHO   Build Directory .... %BUILDD%\%OPTION%
-ECHO   Build Option List .. %BUILDD%\%OPTION%\CmakeCache.txt
-ECHO   Target Directory ... %INSTALLD%\%OPTION%
+ECHO   Package ............: %APP_NAME%
+ECHO   Type ...............: %OPTION%
+ECHO   Build Directory ....: %BUILDD%\%OPTION%
+ECHO   Build Option List ..: %BUILDD%\%OPTION%\CmakeCache.txt
+ECHO   Target Directory ...: %INSTALLD%\%OPTION%
 ECHO.
 ECHO LIST ALL BUILD CONFIG OPTIONS
 ECHO   cat %BUILDD%\%OPTION%\CmakeCache.txt ^| less
@@ -584,7 +584,7 @@ ECHO In order to build ^( %APP_NAME% ^) you
 ECHO must first perform an SVN checkout.
 ECHO.
 ECHO ANONYMOUS CHECKOUT ^( %APP_NAME% ^):
-ECHO  Type: .. checkout %APP_NAME%
+ECHO  Type: ..: checkout %APP_NAME%
 ECHO.
 ECHO DEVELOPER CHECKOUT:
 ECHO  ^cd src
@@ -593,11 +593,11 @@ ECHO  ^cd ..
 ECHO  NOTE: Change ^( %USERNAME% ^) to your Sourforge Username
 ECHO.
 ECHO ACTIONS AFTER CHECKOUT:
-ECHO  Configure Build Tree: .... build %APP_NAME% rconfig
-ECHO  Build Install Target: .... build %APP_NAME% rinstall
+ECHO  Configure Build Tree: ..: build %APP_NAME% rconfig
+ECHO  Build Install Target: ..: build %APP_NAME% rinstall
 ECHO.
 ECHO OPTIONAL
-ECHO  Build Installer Package: .. build %APP_NAME% package
+ECHO  Build Installer Package: ..: build %APP_NAME% package
 ECHO.
 GOTO EOF
 
@@ -612,14 +612,14 @@ ECHO ^( %1% ^) Check Spelling or Syntax
 ECHO.
 ECHO USAGE:  build ^(app_name^) ^(type^)
 ECHO.
-ECHO  Applications ... wsjtx wsprx, map65
-ECHO  Release Types .. rconfig rinstall package
-ECHO  Debug Types .... dconfig dinstall
-ECHO    rconfig ...... Configure Release Build Tree
-ECHO    rinstall ..... Build Release Install Target
-ECHO    dconfig ...... Configure Debug Build Tree
-ECHO    dinstall ..... Build Debug Install Target
-ECHO    package ...... Build Win32 Installer
+ECHO  Applications ...: wsjtx wsprx, map65
+ECHO  Release Types ..: rconfig rinstall package
+ECHO  Debug Types ....: dconfig dinstall
+ECHO    rconfig ......: Configure Release Build Tree
+ECHO    rinstall .....: Build Release Install Target
+ECHO    dconfig ......: Configure Debug Build Tree
+ECHO    dinstall .....: Build Debug Install Target
+ECHO    package ......: Build Win32 Installer
 ECHO.
 ECHO  NOTE: MAP65 ^& WSPR-X Package Builds are ^( Experimental ^)
 ECHO.
@@ -647,14 +647,14 @@ ECHO ^( %2% ^) Check Spelling or Syntax
 ECHO.
 ECHO USAGE:  build ^(app_name^) ^(type^)
 ECHO.
-ECHO  Applications ... wsjtx wsprx, map65
-ECHO  Release Types .. rconfig rinstall package
-ECHO  Debug Types .... dconfig dinstall
-ECHO    rconfig ...... Configure Release Build Tree
-ECHO    rinstall ..... Build Release Install Target
-ECHO    dconfig ...... Configure Debug Build Tree
-ECHO    dinstall ..... Build Debug Install Target
-ECHO    package ...... Build Win32 Installer
+ECHO  Applications ...: wsjtx wsprx, map65
+ECHO  Release Types ..: rconfig rinstall package
+ECHO  Debug Types ....: dconfig dinstall
+ECHO    rconfig ......: Configure Release Build Tree
+ECHO    rinstall .....: Build Release Install Target
+ECHO    dconfig ......: Configure Debug Build Tree
+ECHO    dinstall .....: Build Debug Install Target
+ECHO    package ......: Build Win32 Installer
 ECHO.
 ECHO  NOTE: MAP65 ^& WSPR-X Package Builes are ^( Experimental ^)
 ECHO.

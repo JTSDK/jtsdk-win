@@ -6,7 +6,7 @@
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-build-map65.cmd is free software: you can redistribute it and/or modify it
@@ -147,11 +147,11 @@ ECHO Finished %option% Configuration for: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
-ECHO  Package ............ %app_name%
-ECHO  Type ............... %option%
-ECHO  Build Directory .... %buildd%\%option%
-ECHO  Build Option List .. %buildd%\%option%\CmakeCache.txt
-ECHO  Target Directory ... %installdir%\%option%
+ECHO  Package ............: %app_name%
+ECHO  Type ...............: %option%
+ECHO  Build Directory ....: %buildd%\%option%
+ECHO  Build Option List ..: %buildd%\%option%\CmakeCache.txt
+ECHO  Target Directory ...: %installdir%\%option%
 ECHO.
 ECHO LIST ALL BUILD CONFIG OPTIONS
 ECHO  cat %buildd%\%option%\CmakeCache.txt ^| less
@@ -365,8 +365,8 @@ ECHO -----------------------------------------------------------------
 ECHO Finished Installer Build For: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  Installer Name ...... %app_name%-win32.exe
-ECHO  Installer Location .. %packagedir%
+ECHO  Installer Name ......: %app_name%-win32.exe
+ECHO  Installer Location ..: %packagedir%
 ECHO.
 ECHO  To Install the package, browse to Installer Location, and
 ECHO  run as you normally do to install Windows applications.
@@ -380,8 +380,8 @@ ECHO -----------------------------------------------------------------
 ECHO Finished %option% Build: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\wsprx.exe
+ECHO   Build Tree Location ..: %buildd%\%option%
+ECHO   Install Location .....: %installdir%\%option%\bin\wsprx.exe
 GOTO ASK_FINISH_RUN
 
 :: ASK USER IF THEY WANT TO RUN THE APP
