@@ -250,9 +250,8 @@ ECHO -- Building Win32 Installer
 ECHO.
 cmake --build . --target package -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
-:: ls -al %buildd%\%option%\*-win32.exe |gawk "{print $8}" >p.k & SET /P wsjtxpkg=<p.k & rm p.k
+DIR /B %buildd%\%option%\*-win32.exe >p.k & SET /P wsjtxpkg=<p.k & rm p.k
 CD /D %buildd%\%option%
-dir /b *-win32.exe >p.k & wsjtxpkg=<p.k & rm p.k
 ECHO JTSDK: - Copying package to: %packagedir%
 COPY /Y %wsjtxpkg% %packagedir% > nul
 CD /D %based%
