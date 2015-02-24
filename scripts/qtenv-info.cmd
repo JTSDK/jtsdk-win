@@ -56,7 +56,7 @@ ECHO ---------------------------------------------------------
 g++.exe --version |grep Built |gawk "{print $7}" >g.v & set /p CVER=<g.v & rm g.v
 gfortran.exe --version |grep Fortran |gawk "{print $8}" >g.v & set /p GFOR=<g.v & rm g.v
 mingw32-make --version |grep Make |gawk "{print $3}" >g.v & set /p GNMK=<g.v & rm g.v
-ECHO  C^+^+ ......: %CVER%
+ECHO  C^+^+ ........: %CVER%
 ECHO  GFortran ...: %GFOR%
 ECHO  GNU Make ...: %GNMK%
 ECHO.
