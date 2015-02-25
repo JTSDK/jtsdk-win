@@ -1,20 +1,20 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: maint.bat
+:: Name .........: maint.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Maintenance script for updated & upgrades or general use
+:: Description ..: Maintenance script for general use
 :: Project URL ..: http://sourceforge.net/projects/jtsdk
 :: Usage ........: Run this file directly, or from the Windows Start Menu
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: maint.bat is free software: you can redistribute it and/or
+:: maint.cmd is free software: you can redistribute it and/or
 :: modify it under the terms of the GNU General Public License as published by
 :: the Free Software Foundation either version 3 of the License, or (at your
 :: option) any later version. 
 ::
-:: maint.bat is distributed in the hope that it will be useful, but
+:: maint.cmd is distributed in the hope that it will be useful, but
 :: WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 :: or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 :: more details.
