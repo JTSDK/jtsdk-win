@@ -34,8 +34,8 @@ SET cyinstaller=cyg32-setup-x86.exe
 SET cyarch=x86
 SET cyinstalld=%based%\cyg32
 SET cypkgd=%based%\scripts\cyg32\downloads
-REM SET cysite=http://mirrors.kernel.org/sourceware/cygwin/  <-- ALternate DL Site
-SET cysite=http://cygwin.mirrors.pair.com/
+SET cysite=http://mirrors.kernel.org/sourceware/cygwin/
+REM SET cysite=http://cygwin.mirrors.pair.com/   <-- ALternate DL Site
 SET cyopt=-B -q -D -L -X -g -N -d -o
 SET cypkgs=mintty,python,subversion,ncurses,source-highlight,python-pygments,most,rsync,wget,sqlite3,libsqlite3_0
 SET PATH=%based%;%WINDIR%\System32
@@ -51,7 +51,7 @@ GOTO ERROR1
 CD /D %based%\scripts\cyg32
 CLS
 ECHO ------------------------------------------------------
-ECHO  Building JTSDK-DOC ^( Cygwin x86 ^)
+ECHO  Installing JTSDK-DOC ^( Cygwin x86 ^)
 ECHO ------------------------------------------------------
 
 :: INSTALL DIRECTORY CHECK
