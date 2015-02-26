@@ -61,6 +61,8 @@ set -e
 # General use Vars and colour
 PKG_NAME=Hamlib3
 today=$(date +"%d-%m-%Y")
+timestamp=$(date +"%d-%m-%Y at %R")
+builder=$(whoami)
 
 # Tool-Chain Variables - Adjust to suit your QT5 Tool-Chain Locations
 export PATH="/c/JTSDK/qt5/Tools/mingw48_32/bin:$PATH"
@@ -140,7 +142,7 @@ fi
 # Start Git clone
 echo ''
 echo '---------------------------------------------------------------'
-echo -e ${C_Y} ' CLONE G4WJS HAMLIB3'${C_NC}
+echo -e ${C_Y} ' CLONING G4WJS HAMLIB3'${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
 
@@ -164,7 +166,7 @@ fi
 cd ~/g4wjs-hamlib/build
 echo ''
 echo '---------------------------------------------------------------'
-echo -e ${C_Y} " CONFIGURE THE [ $PKG_NAME ]"${C_NC}
+echo -e ${C_Y} " CONFIGURING [ $PKG_NAME ]"${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
 echo '.. This may take a several minutes to complete'
@@ -231,27 +233,29 @@ make install-strip
 # Generate README if build finishes .. OK ..
 if [ $? = "0" ];
 then
-	if [ -f $PREFIX/README.$PKG_NAME ]; then rm -f $PREFIX/README.$PKG_NAME ; fi
+	if [ -f $PREFIX/$PKG_NAME.build.info ]; then rm -f $PREFIX/$PKG_NAME.build.info ; fi
 
 	echo ''
 	echo '---------------------------------------------------------------'
-	echo -e ${C_Y} " ADDING README DOC [ README.$PKG_NAME ] "${C_NC}
+	echo -e ${C_Y} " ADDING BUILD INFO [ $PKG_NAME.build.info ] "${C_NC}
 	echo '---------------------------------------------------------------'
 	echo ''
-	echo '  Adding Readme'
+	echo '  Creating Hamlib3 Build Info File'
 
-# Generate Readme file
-# Ensure this matches the top of the page
+# Generate Build Info File
 (
-cat <<'EOF_README'
+cat <<EOF
 
 # Package Information
-PREFIX="C:/JTSDK/hamlib3" 
-BUILDER='Greg Beam, KI7MT <ki7mt@yahoo.com>'
-PKG_NAME=Hamlib3
-PKG_VER='devel'
-GIT_URL='git://git.code.sf.net/u/bsomervi/hamlib'
-GIT_EXTRA='git checkout integration'
+Build Date...: $timestamp
+Builder......: $builder
+Prefix.......: $PREFIX
+Pkg Name.....: $PKG_NAME
+Pkg Version..: development
+
+# Source Location and Integration
+Git URL......: git://git.code.sf.net/u/bsomervi/hamlib
+Git Extra....: git checkout integration'
 
 # Configure Options <for Static>
 autogen.sh --prefix=$PREFIX --disable-shared --enable-static \
@@ -269,10 +273,9 @@ LDFLAGS='-Wl,--gc-sections'
 make
 make install-strip
 
-EOF_README
+EOF
 ) > $PREFIX/$PKG_NAME.build.info
 	echo '  Finished'
-
 fi
 
 # Finished
@@ -280,11 +283,12 @@ if [ "$?" = "0" ];
 then
 	echo ''
 	echo '----------------------------------------------------------------'
-	echo -e ${C_G} "  FINISHED INSTALLING [ $PKG_NAME ]"${C_NC}
+	echo -e ${C_G} " FINISHED INSTALLING [ $PKG_NAME ]"${C_NC}
 	echo '----------------------------------------------------------------'
 	echo ''
 	touch C:/JTSDK/hamlib3/build-date-$today
-	echo "Install Location: $PREFIX"
+	echo "  Install Location..: $PREFIX"
+	echo "  Package Config....: $PREFIX/lib/pkgconfig/hamlib.pc"
 	echo ''
 	exit 0
 else
