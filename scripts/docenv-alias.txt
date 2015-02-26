@@ -17,11 +17,11 @@ alias update-doc="cd $HOME/doc && ./update.sh"
 # SVN COMMANDS
 #-------------------------------------------------------------------------------
 alias svnu="cd $HOME/doc && svn update"
-alias ss='svn status'						# Normal SVN status
-alias sv='svn status |grep -v "?"'			# List files not under SVN control
-alias sa='svn status |grep -v "A"'			# List Added files only
-alias sm='svn status |grep -v "M"'			# List Modified files only
-alias sd='svn status |grep -v "D"'			# List Deleted files only
+alias ss='svn status'				# Normal SVN status
+alias sv='svn status |grep "?"'		# List files not under SVN control
+alias sa='svn status |grep "A"'		# List Added files only
+alias sm='svn status |grep "M"'		# List Modified files only
+alias sd='svn status |grep "D"'		# List Deleted files only
 
 #-------------------------------------------------------------------------------
 # ALIAS BUILD COMMANDS ( requires doc checkout in $HOME/doc directory )

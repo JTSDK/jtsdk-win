@@ -43,7 +43,7 @@ echo -e "  help-build .....: Help with building documents
 
 echo ''
 echo -e ${C_C}"SVN COMMANDS"${C_NC}
-echo -e "  svnu ..........: Perform SVN Update
+echo -e "   svnu ..........: Perform SVN Update
    ss ............: Normal SVN status
    sv ............: List files not under SVN control
    sa ............: List Added files only
