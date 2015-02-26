@@ -6,7 +6,7 @@
 :: Usage ........: Run this file from the JTSDK Start Menu
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: update.cmd is free software: you can redistribute it and/or
@@ -35,6 +35,6 @@ SET PATH=%based%;%svnd%
 :: START JTSDK UPDATE / UPGRADE
 CD /D %based%
 START /wait %svnd%\svn.exe export --force %url1% >nul 2>&1
-START postinstall.cmd upgrade
+CALL postinstall.cmd upgrade
 ENDLOCAL
 EXIT /B 0
