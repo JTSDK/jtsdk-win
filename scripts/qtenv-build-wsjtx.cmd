@@ -321,10 +321,10 @@ ECHO Finished %option% Build: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.bat
+ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
 ECHO.
 ECHO   When Running ^( %app_name% ^) Debug versions, please use
-ECHO   the provided  ^( %app_name%.bat ^) file as this sets up
+ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
 ECHO   environment variables and support file paths.
 ECHO.
 GOTO ASK_DEBUG_RUN

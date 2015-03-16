@@ -1,7 +1,7 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: qtenv-build-wsjtxrc.cmd
+:: Name .........: qtenv-build-wsjtxexp.cmd
 :: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build script for WSJTX-RC
+:: Description ..: Build script for WSJTX_EXP Branch
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
 :: Usage ........: This file is run from within qtenv.cmd
 ::
@@ -9,12 +9,12 @@
 :: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: qtenv-build-wsjtxrc.cmd is free software: you can redistribute it and/or modify it
+:: qtenv-build-wsjtxexp.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: qtenv-build-wsjtxrc.cmd is distributed in the hope that it will be useful, but WITHOUT
+:: qtenv-build-wsjtxexp.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 :: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 :: details.
@@ -51,19 +51,8 @@ SET LIBRARY_PATH=""
 SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
-:: USER INPUT FILED 1 = %1
-IF /I [%1]==[rconfig] (SET option=Release
-SET btree=true
-) ELSE IF /I [%1]==[rinstall] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[wsjtxrc] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[package] (SET option=Release
-SET bpkg=true
-) ELSE ( GOTO BADTYPE )
-
 :: VARIABLES USED IN PROCESS
-SET app_name=wsjtx-1.4
+SET app_name=wsjtx_exp
 SET tchain=%scr%\wsjtx-toolchain.cmake
 SET buildd=%based%\%app_name%\build
 SET installdir=%based%\%app_name%\install
@@ -75,7 +64,7 @@ IF /I [%1]==[rconfig] (SET option=Release
 SET btree=true
 ) ELSE IF /I [%1]==[rinstall] (SET option=Release
 SET binstall=true
-) ELSE IF /I [%1]==[wsjtx] (SET option=Release
+) ELSE IF /I [%1]==[wsjtxexp] (SET option=Release
 SET binstall=true
 ) ELSE IF /I [%1]==[package] (SET option=Release
 SET bpkg=true
@@ -189,17 +178,6 @@ ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
 )
-:: Build FFT check program if Debug is selected
-IF /I [%option%]==[Debug] (
-ECHO -- Building ^( chkfft ^)
-CD /D %srcd%\%app_name%\lib
-gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
-IF NOT EXIST %installdir%\%option%\bin\NUL ( MKDIR %installdir%\%option%\bin >NUL 2>&1 )
-COPY /Y /B chkfft.exe %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.dat %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.out %installdir%\%option%\bin\ >NUL 2>&1
-)
 CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 IF /I [%option%]==[Debug] (
@@ -307,16 +285,13 @@ ECHO ECHO --------------------------------------------------------------
 ECHO ECHO  Welcome to WSJT-X Testing Utilities
 ECHO ECHO --------------------------------------------------------------
 ECHO ECHO.
-ECHO ECHO  App Names ...: jt9code, jt65code, kvasd or chkfft
+ECHO ECHO  App Names ...: jt9code, jt65code, jt4code, kvasd
 ECHO ECHO  Help, type ..: [ app-name ] then ENTER
 ECHO ECHO.
 ECHO ECHO  Type ..: jt65code "message"  or  jt65code -t
 ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
+ECHO ECHO  Type ..: jt4code "message"  or  jt4code -t
 ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
-ECHO ECHO  Type ..: chkfft 131072 0 1 1 2
-ECHO ECHO.
-ECHO ECHO  NOTE^(s^)
-ECHO ECHO   ^[1^] See chkfft.txt for additional information on usage.
 ECHO ECHO.
 ECHO.
 ECHO ^:: OPEN CMD WINDOW
