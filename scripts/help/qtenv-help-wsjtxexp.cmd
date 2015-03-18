@@ -4,7 +4,7 @@ ECHO. -----------------------------------------------------------------
 ECHO.  Help Build WSJTX EXP Branch
 ECHO. -----------------------------------------------------------------
 ECHO.
-ECHO   Usage: build-wsjtx ^( target ^)
+ECHO   Usage: build-wsjtxexp ^( target ^)
 ECHO.
 ECHO   There are several targets available for WSJTX EXP, the main being
 ECHO   [ rinstall ] or [ dinstall]. After checkout-wsjtxexp, use one of
