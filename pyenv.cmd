@@ -7,7 +7,7 @@
 :: Usage ........: Windows Start, run C:\JTSDK\pyenv.bat
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: pyenv.cmd is free software: you can redistribute it and/or modify it under the
