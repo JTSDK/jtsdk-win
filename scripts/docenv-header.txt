@@ -6,6 +6,6 @@
  Help Build, type ......: help-build
  Help Checkout, type ...: help-checkout
  Checkout Docs, type ...: checkout-doc
- Update Sources, type ..: uptate-doc
+ Update Sources, type ..: update-doc
  List Shortcuts, type ..: lista
  

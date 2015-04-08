@@ -11,7 +11,7 @@ alias help-build="/scripts/docenv-help-build.sh"
 alias help-checkout="/scripts/docenv-help-co.sh"
 alias lista='/scripts/docenv-alias-list.sh'
 alias checkout-doc="cd $HOME && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
-alias update-doc="cd $HOME/doc && ./update.sh"
+alias update-doc="cd $HOME/doc && ./build-doc.sh update"
 
 #-------------------------------------------------------------------------------
 # SVN COMMANDS
