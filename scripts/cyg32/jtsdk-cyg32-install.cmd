@@ -37,7 +37,7 @@ SET cypkgd=%based%\scripts\cyg32\downloads
 SET cysite=http://mirrors.kernel.org/sourceware/cygwin/
 REM SET cysite=http://cygwin.mirrors.pair.com/   <-- ALternate DL Site
 SET cyopt=-B -q -D -L -X -g -N -d -o
-SET cypkgs=mintty,python,subversion,ncurses,source-highlight,python-pygments,most,rsync,wget,sqlite3,libsqlite3_0
+SET cypkgs=mintty,python,subversion,dialog,ncurses,source-highlight,python-pygments,most,rsync,wget,openssh,sqlite3,libsqlite3_0
 SET PATH=%based%;%WINDIR%\System32
 
 :: START INSTALL
