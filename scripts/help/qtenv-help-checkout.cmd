@@ -5,8 +5,9 @@ ECHO.  JTSDK-QT Help Checkout
 ECHO. -----------------------------------------------------------------
 ECHO. 
 ECHO.  To Checkout ^( WSJTX, WSJTXRC, WSPRX or MAP65 ^)
-ECHO    Type ..: checkout-wsjtx
-ECHO    Type ..: checkout-wsjtxrc
+ECHO    Type ..: checkout-wsjtxexp (exp) 
+ECHO    Type ..: checkout-wsjtx    (devel)
+ECHO    Type ..: checkout-wsjtxrc  (release candidates)
 ECHO    Type ..: checkout-wsprx
 ECHO    Type ..: checkout-map65
 ECHO. 
