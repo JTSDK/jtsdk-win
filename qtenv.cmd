@@ -74,7 +74,7 @@ DOSKEY help-qtenv=CALL %based%\scripts\help\qtenv-help-main.cmd
 DOSKEY help-checkout=CALL %based%\scripts\help\qtenv-help-checkout.cmd
 DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
 DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
-DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
+DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
 DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
 DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
 

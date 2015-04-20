@@ -10,8 +10,10 @@ ECHO.  COMMAND           Description
 ECHO. -----------------------------------------------------------------
 ECHO.  help-qtenv .....: Shows this screen
 ECHO.  help-checkout ..: Help with package checkout
-ECHO.  help-wsjx ......: Help with building WSJT-X
-ECHO.  help-wsjxrc ....: Help with building WSJTX-RC
+ECHO.  help-wsjt ......: Help with building WSJT-X 
+ECHO.  help-wsjtexp....: Help with building WSJTX (exp)
+ECHO.  help-wsjt ......: Help with building WSJTX (devel)
+ECHO.  help-wsjtrc ....: Help with building WSJTX (release candidates)
 ECHO.  help-wsprx .....: Help with building WSPR-X
 ECHO.  help-map65 .....: Help with building MAP65
 ECHO.  main-menu ......: Returns user to main menu

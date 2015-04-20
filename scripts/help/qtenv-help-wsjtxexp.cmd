@@ -6,6 +6,10 @@ ECHO. -----------------------------------------------------------------
 ECHO.
 ECHO   Usage: build-wsjtxexp ^( target ^)
 ECHO.
+ECHO   The WSJTX Exp brach is an experimental branch for adding new modes
+ECHO   and testing new features. Not all functins or features may be
+ECHO   fully functional or even included in any of the final releases.
+ECHO.
 ECHO   There are several targets available for WSJTX EXP, the main being
 ECHO   [ rinstall ] or [ dinstall]. After checkout-wsjtxexp, use one of
 ECHO   the following:
