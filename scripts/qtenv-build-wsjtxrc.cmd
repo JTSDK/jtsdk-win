@@ -84,7 +84,7 @@ IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
 IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
 IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
 ECHO -----------------------------------------------------------------
-ECHO  ^( %app_name% ^) CMake Build Script
+ECHO  ^( %app_name% RC%RCV% ^) CMake Build Script
 ECHO -----------------------------------------------------------------
 ECHO.
 IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
@@ -264,7 +264,7 @@ GOTO FINISH_PKG
 
 :: DEBUG MAKE BATCH FILE 
 :DEBUG_MAKEBAT
-ECHO -- Generating Debug Batch File for ^( %app_name% ^)
+ECHO -- Generating Debug Batch File for ^( %app_name% RC%RCV% ^)
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
 >%app_name%.cmd (
@@ -328,7 +328,7 @@ ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
 ECHO.
-ECHO   When Running ^( %app_name% ^) Debug versions, please use
+ECHO   When Running ^( %app_name% RC%RCV% ^) Debug versions, please use
 ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
 ECHO   environment variables and support file paths.
 ECHO.
@@ -337,7 +337,7 @@ GOTO ASK_DEBUG_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP, DEBUG MODE
 :ASK_DEBUG_RUN
 ECHO.
-ECHO Would You Like To Run %app_name% Now? ^( y/n ^)
+ECHO   Would You Like To Run %app_name% RC%RCV% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -357,7 +357,7 @@ GOTO ASK_DEBUG_RUN
 :RUN_DEBUG
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( %app_name% ^) in %option% Mode
+ECHO .. Starting: ^( %app_name% RC%RCV% ^) in %option% Mode
 CALL %app_name%.cmd
 GOTO EOF
 
@@ -467,7 +467,7 @@ ECHO  will be displayed. Please use the syntax
 ECHO  as outlined and choose the correct
 ECHO  target to build.
 ECHO.
-ECHO  Example: build-%app_name% rinstall
+ECHO  Example: build-wsjtxrc rinstall
 ECHO.
 PAUSE
 CALL %scr%\help\qtenv-help-%app_name%.cmd
@@ -483,7 +483,7 @@ ECHO.
 ECHO  There was a problem building ^( %app_name% RC%RCV% ^)
 ECHO.
 ECHO  Check the screen for error messages, correct, then try to
-ECHO  re-build ^( %app_name% ^)
+ECHO  re-build with: build-wsjtxrc
 ECHO.
 ECHO.
 GOTO EOF
