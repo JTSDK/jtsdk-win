@@ -51,17 +51,6 @@ SET LIBRARY_PATH=""
 SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
-:: USER INPUT FILED 1 = %1
-IF /I [%1]==[rconfig] (SET option=Release
-SET btree=true
-) ELSE IF /I [%1]==[rinstall] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[wsjtxrc] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[package] (SET option=Release
-SET bpkg=true
-) ELSE ( GOTO BADTYPE )
-
 :: VARIABLES USED IN PROCESS
 SET app_name=wsjtx-1.5
 SET tchain=%scr%\wsjtx-toolchain.cmake
@@ -75,7 +64,7 @@ IF /I [%1]==[rconfig] (SET option=Release
 SET btree=true
 ) ELSE IF /I [%1]==[rinstall] (SET option=Release
 SET binstall=true
-) ELSE IF /I [%1]==[wsjtx] (SET option=Release
+) ELSE IF /I [%1]==[wsjtxrc] (SET option=Release
 SET binstall=true
 ) ELSE IF /I [%1]==[package] (SET option=Release
 SET bpkg=true
@@ -135,7 +124,7 @@ REM ----------------------------------------------------------------------------
 IF [%btree%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Configuring %option% Build For: ^( %app_name% ^)
+ECHO Configuring %option% Build For: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -153,7 +142,7 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Configuration for: ^( %app_name% ^)
+ECHO Finished %option% Configuration for: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
@@ -181,7 +170,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building %option% Install Target For: ^( %app_name% ^)
+ECHO Building %option% Install Target For: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -235,7 +224,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%bpkg%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building Win32 Installer For: ^( %app_name% ^)
+ECHO Building Win32 Installer For: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO.
@@ -287,7 +276,7 @@ GOTO DEBUG_MAKEBAT_UTIL
 
 :: UTIL BATCH FILES
 :DEBUG_MAKEBAT_UTIL
-ECHO -- Generating Debug Utils Batch File for ^( %app_name% ^ )
+ECHO -- Generating Debug Utils Batch File for ^( %app_name% RC1 ^ )
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
 >%app_name%-debug-util.cmd (
@@ -328,7 +317,7 @@ GOTO DEBUG_FINISH
 :DEBUG_FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO Finished %option% Build: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
@@ -371,7 +360,7 @@ GOTO EOF
 :FINISH_PKG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished Installer Build For: ^( %app_name% ^)
+ECHO Finished Installer Build For: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO  Installer Name ......: %wsjtxpkg%
@@ -386,7 +375,7 @@ GOTO EOF
 :FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO Finished %option% Build: ^( %app_name% RC1 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
