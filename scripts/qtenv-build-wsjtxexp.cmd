@@ -84,7 +84,7 @@ IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
 IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
 IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
 ECHO -----------------------------------------------------------------
-ECHO  ^( wsjtx-1.5-rc1 ^) CMake Build Script
+ECHO  ^( wsjtx-1.6 ^) CMake Build Script
 ECHO -----------------------------------------------------------------
 ECHO.
 IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
@@ -124,7 +124,7 @@ REM ----------------------------------------------------------------------------
 IF [%btree%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Configuring %option% Build For: ^( wsjtx-1.5-rc1 ^)
+ECHO Configuring %option% Build For: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -142,7 +142,7 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Configuration for: ^( wsjtx-1.5-rc1 ^)
+ECHO Finished %option% Configuration for: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
@@ -170,7 +170,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building %option% Install Target For: ^( wsjtx-1.5-rc1 ^)
+ECHO Building %option% Install Target For: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -213,7 +213,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%bpkg%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building Win32 Installer For: ^( wsjtx-1.5-rc1 ^)
+ECHO Building Win32 Installer For: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO.
@@ -248,7 +248,7 @@ GOTO FINISH_PKG
 
 :: DEBUG MAKE BATCH FILE 
 :DEBUG_MAKEBAT
-ECHO -- Generating Debug Batch File for ^( wsjtx-1.5-rc1 ^)
+ECHO -- Generating Debug Batch File for ^( wsjtx-1.6 ^)
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
 >%app_name%.cmd (
@@ -265,7 +265,7 @@ GOTO DEBUG_MAKEBAT_UTIL
 
 :: UTIL BATCH FILES
 :DEBUG_MAKEBAT_UTIL
-ECHO -- Generating Debug Utils Batch File for ^( wsjtx-1.5-rc1 ^)
+ECHO -- Generating Debug Utils Batch File for ^( wsjtx-1.6 ^)
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
 >%app_name%-debug-util.cmd (
@@ -303,13 +303,13 @@ GOTO DEBUG_FINISH
 :DEBUG_FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %app_name% ^)
+ECHO Finished %option% Build: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
 ECHO.
-ECHO   When Running ^( wsjtx-1.5-rc1 ^) Debug versions, please use
+ECHO   When Running ^( wsjtx-1.6 ^) Debug versions, please use
 ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
 ECHO   environment variables and support file paths.
 ECHO.
@@ -318,7 +318,7 @@ GOTO ASK_DEBUG_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP, DEBUG MODE
 :ASK_DEBUG_RUN
 ECHO.
-ECHO Would You Like To Run ^( wsjtx-1.5-rc1 ^) Now? ^( y/n ^)
+ECHO Would You Like To Run ^( wsjtx-1.6 ^) Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -338,7 +338,7 @@ GOTO ASK_DEBUG_RUN
 :RUN_DEBUG
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( wsjtx-1.5-rc1 ^) in %option% Mode
+ECHO .. Starting: ^( wsjtx-1.6 ^) in %option% Mode
 CALL %app_name%.cmd
 GOTO EOF
 
@@ -346,7 +346,7 @@ GOTO EOF
 :FINISH_PKG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished Installer Build For: ^( wsjtx-1.5-rc1 ^)
+ECHO Finished Installer Build For: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO  Installer Name ......: %wsjtxpkg%
@@ -361,7 +361,7 @@ GOTO EOF
 :FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( wsjtx-1.5-rc1 ^)
+ECHO Finished %option% Build: ^( wsjtx-1.6 ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
@@ -371,7 +371,7 @@ GOTO ASK_FINISH_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO Would You Like To Run ^( wsjtx-1.5-rc1 ^) Now? ^( y/n ^)
+ECHO Would You Like To Run ^( wsjtx-1.6 ^) Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -391,7 +391,7 @@ GOTO ASK_FINISH_RUN
 :RUN_INSTALL
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO Starting: ^( wsjtx-1.5-rc1 ^) in %option% Mode
+ECHO Starting: ^( wsjtx-1.6 ^) in %option% Mode
 CALL wsjtx.exe
 )
 GOTO EOF
@@ -422,7 +422,7 @@ ECHO ----------------------------------------
 ECHO  %srcd%\%app_name% Not Found
 ECHO ----------------------------------------
 ECHO.
-ECHO  In order to build ^( wsjtx-1.5-rc1 ^) you
+ECHO  In order to build ^( wsjtx-1.6 ^) you
 ECHO  must first perform a checkout from 
 ECHO  SourceForge:
 ECHO.
@@ -461,7 +461,7 @@ ECHO -----------------------------------------------------------------
 ECHO                    CMAKE BUILD ERROR
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  There was a problem building ^( wsjtx-1.5-rc1 ^)
+ECHO  There was a problem building ^( wsjtx-1.6 ^)
 ECHO.
 ECHO  Check the screen for error messages, correct, then try to
 ECHO  re-build ^( %app_name% ^)
