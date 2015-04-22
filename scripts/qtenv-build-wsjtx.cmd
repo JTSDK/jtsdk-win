@@ -12,7 +12,7 @@
 :: qtenv-build-wsjtx.cmd is free software: you can redistribute it and/or modify it
 :: under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
-:: later version. 
+:: later version.
 ::
 :: qtenv-build-wsjtx.cmd is distributed in the hope that it will be useful, but WITHOUT
 :: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -214,7 +214,7 @@ ECHO.
 cmake --build . --target install -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 
-:: CHECK IF DEBUG 
+:: CHECK IF DEBUG
 IF /I [%OPTION%]==[Debug] ( GOTO DEBUG_MAKEBAT ) ELSE ( GOTO FINISH )
 GOTO FINISH
 
@@ -257,7 +257,7 @@ COPY /Y %wsjtxpkg% %packagedir% > nul
 CD /D %based%
 GOTO FINISH_PKG
 
-:: DEBUG MAKE BATCH FILE 
+:: DEBUG MAKE BATCH FILE
 :DEBUG_MAKEBAT
 ECHO -- Generating Debug Batch File for ^( %app_name% ^ )
 CD /D %installdir%\%option%\bin
@@ -270,7 +270,7 @@ ECHO TITLE WSJT-X Debug Terminal
 ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
 ECHO CALL wsjtx.exe
-ECHO
+ECHO.
 )
 GOTO DEBUG_MAKEBAT_UTIL
 
@@ -437,7 +437,7 @@ ECHO  %srcd%\%app_name% Not Found
 ECHO ----------------------------------------
 ECHO.
 ECHO  In order to build ^( %app_name% ^) you
-ECHO  must first perform a checkout from 
+ECHO  must first perform a checkout from
 ECHO  SourceForge:
 ECHO.
 ECHO  Type ..: checkout-%app_name%
@@ -456,7 +456,7 @@ ECHO.
 ECHO -----------------------------------------------------------------
 ECHO   ^( %1 ^) IS AN INVALID TARGET
 ECHO -----------------------------------------------------------------
-ECHO. 
+ECHO.
 ECHO  After the pause, a build help menu
 ECHO  will be displayed. Please use the syntax
 ECHO  as outlined and choose the correct
@@ -504,6 +504,7 @@ GOTO EOF
 :: END QTENV-WSJTXRC.CMD
 :EOF
 CD /D %based%
+COLOR 0B
 ENDLOCAL
 
 EXIT /B 0
