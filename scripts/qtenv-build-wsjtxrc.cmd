@@ -63,7 +63,7 @@ SET bpkg=true
 ) ELSE ( GOTO BADTYPE )
 
 :: VARIABLES USED IN PROCESS
-SET app_name=wsjtx-1.4
+SET app_name=wsjtx-1.5
 SET tchain=%scr%\wsjtx-toolchain.cmake
 SET buildd=%based%\%app_name%\build
 SET installdir=%based%\%app_name%\install

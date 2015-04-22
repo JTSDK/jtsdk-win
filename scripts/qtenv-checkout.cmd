@@ -45,7 +45,7 @@ GOTO CHK_APP
 
 :: CHECK IF APPLICATION NAME IF SUPPORTED
 :CHK_APP
-IF /I [%1]==[wsjtxrc] ( SET app_name=wsjtx-1.4 &GOTO SVN_CO )
+IF /I [%1]==[wsjtxrc] ( SET app_name=wsjtx-1.5 &GOTO SVN_CO )
 IF /I [%1]==[wsjtxexp] ( SET app_name=wsjtx_exp & GOTO SVN_CO )
 IF /I [%1]==[wsjtx] ( SET app_name=wsjtx & GOTO SVN_CO )
 IF /I [%1]==[wsprx] ( SET app_name=wsprx & GOTO SVN_CO )
