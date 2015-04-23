@@ -37,22 +37,22 @@ ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\     \__\_\^|_^| v2.0
 ECHO.
 ECHO.
 ECHO BUILD APPLICATIONS: ^( WSJT-X WSJTX-RC WSPR-X MAP65 ^)
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 ECHO.
 ECHO USAGE:  build-^(app_name^) ^(type^)
 ECHO.
-ECHO  App Names ............: wsjtx wsjtxrc wsprx map65
+ECHO  App Names ............: wsjtx wsjtxrc wsjtxexp wsprx map65
 ECHO  Release Types ........: rconfig rinstall package
 ECHO  Debug Types ..........: dconfig dinstall
 ECHO.
 ECHO HELP SCREENS
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 ECHO  JTSDK-QT Help, Type ..: help-qtenv
 ECHO  Checkout Help, Type ..: help-checkout
 ECHO  Build Help, Type .....: help-(app_name)
 ECHO.
 ECHO COMPILER INFO (mingw48_32)
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 g++.exe --version |grep Built |gawk "{print $7}" >g.v & set /p CVER=<g.v & rm g.v
 gfortran.exe --version |grep Fortran |gawk "{print $8}" >g.v & set /p GFOR=<g.v & rm g.v
 mingw32-make --version |grep Make |gawk "{print $3}" >g.v & set /p GNMK=<g.v & rm g.v
@@ -61,7 +61,7 @@ ECHO  GFortran ...: %GFOR%
 ECHO  GNU Make ...: %GNMK%
 ECHO.
 ECHO CRITICAL APP INFO
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 cmake --version |gawk "{print $3}" >c.m & set /p CMV=<c.m & rm c.m
 cpack --version |gawk "{print $3}" >c.p & set /p CPV=<c.p & rm c.p
 qmake --version |gawk "FNR==2 {print $4}" >q.m & set /p QTV=<q.m & rm q.m
