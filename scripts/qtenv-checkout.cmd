@@ -45,11 +45,32 @@ GOTO CHK_APP
 
 :: CHECK IF APPLICATION NAME IF SUPPORTED
 :CHK_APP
-IF /I [%1]==[wsjtxrc] ( SET app_name=wsjtx-1.5 &GOTO SVN_CO )
-IF /I [%1]==[wsjtxexp] ( SET app_name=wsjtx_exp & GOTO SVN_CO )
-IF /I [%1]==[wsjtx] ( SET app_name=wsjtx & GOTO SVN_CO )
-IF /I [%1]==[wsprx] ( SET app_name=wsprx & GOTO SVN_CO )
-IF /I [%1]==[map65] ( SET app_name=map65 & GOTO SVN_CO )
+IF /I [%1]==[wsjtxrc] (
+SET app_name=wsjtx-1.5
+SET display_name=WSJTX-1.5-RC
+GOTO SVN_CO
+)
+IF /I [%1]==[wsjtxexp] (
+SET app_name=wsjtx_exp
+SET display_name=WSJTX-1.6.1-devel
+GOTO SVN_CO
+)
+IF /I [%1]==[wsjtx] (
+SET app_name=wsjtx
+SET display_name=WSJTX-1.6.0-devel
+GOTO SVN_CO
+)
+IF /I [%1]==[wsprx] (
+SET app_name=wsprx
+SET display_name=WSPRX
+GOTO SVN_CO
+)
+IF /I [%1]==[map65] (
+SET app_name=map65
+SET display_name=MAP65
+GOTO SVN_CO
+) 
+:: If its not supported, goto EOF
 GOTO EOF
 
 :: PERFORM WSPR CHECKOUT
@@ -59,7 +80,7 @@ CD /D %srcd%
 CLS
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Checking Out ^( %app_name% ^) From SVN
+ECHO Checking Out ^( %display_name% ^) From SVN
 ECHO -----------------------------------------------------------------
 start /wait svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/%app_name%
 CD %based%
@@ -71,22 +92,27 @@ ECHO.
 ECHO Checkout complete.
 ECHO.
 IF /I [%1%]==[wsjtxrc] (
-ECHO To Build, Type: build-wsjtxrc
-) ELSE IF /I [%1]==[wsjtxexp] (
-ECHO To Build, Type ..: build-wsjtxexp
-) ELSE (
-ECHO To Build, Type ..: build-%APP_NAME%
+ECHO To Build, Type ...........: build-wsjtxrc
+ECHO For build options, type ..: help-wsjtxrc
 )
-ECHO.
-IF /I [%1%]==[wsjtxrc] (
-ECHO For additional build options, type ..: help-wsjtxrc
-) ELSE IF /I [%1%]==[wsjtxexp] (
-ECHO For additional build options, type ..: help-wsjtxexp
-) ELSE (
-ECHO For additional build options, type ..: help-%app_name%
+IF /I [%1]==[wsjtxexp] (
+ECHO To Build, Type ...........: build-wsjtxexp
+ECHO For build options, type ..: help-wsjtxexp
 )
-ECHO.
+IF /I [%1]==[wsjtx] (
+ECHO To Build, Type ...........: build-wsjtx
+ECHO For build options, type ..: help-wsjtx
+)
+IF /I [%1]==[wsprx] (
+ECHO To Build, Type ...........: build-wsprx
+ECHO For build options, type ..: help-wsprx
+)
+IF /I [%1]==[map65] (
+ECHO To Build, Type ...........: build-map65
+ECHO For build options, type ..: help-map65
+) ELSE (
 GOTO EOF
+)
 
 :: WARN ON DOUBLE CLICK
 :DOUBLE_CLICK_ERROR
@@ -105,6 +131,7 @@ GOTO EOF
 :: END OF QTENV-CO.BAT
 :EOF
 CD /D %based%
+COLOR 0B
 ENDLOCAL
 
 EXIT /B 0

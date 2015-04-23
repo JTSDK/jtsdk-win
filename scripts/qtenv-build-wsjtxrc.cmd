@@ -52,6 +52,7 @@ SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%in
 CD /D %based%
 
 :: VARIABLES USED IN PROCESS
+SET display_name=WSJTX-1.5-RC
 SET app_name=wsjtx-1.5
 SET tchain=%scr%\wsjtx-toolchain.cmake
 SET buildd=%based%\%app_name%\build
@@ -84,7 +85,7 @@ IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
 IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
 IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
 ECHO -----------------------------------------------------------------
-ECHO  ^( %app_name% RC%RCV% ^) CMake Build Script
+ECHO  ^( %display_name% ^) CMake Build Script
 ECHO -----------------------------------------------------------------
 ECHO.
 IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
@@ -129,7 +130,7 @@ REM ----------------------------------------------------------------------------
 IF [%btree%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Configuring %option% Build For: ^( %app_name% RC%RCV% ^)
+ECHO Configuring %option% Build For: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -138,7 +139,7 @@ RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
 )
 CD /D %buildd%\%option%
-ECHO -- Generating New ^( %app_name% ^) Makefiles
+ECHO -- Generating New ^( %display_name%%RCV% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -147,7 +148,7 @@ cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Configuration for: ^( %app_name% RC%RCV% ^)
+ECHO Finished %option% Configuration for: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO BASE BUILD CONFIGURATION
@@ -175,7 +176,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%binstall%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building %option% Install Target For: ^( %app_name% RC%RCV% ^)
+ECHO Building %option% Install Target For: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF EXIST %buildd%\%option%\NUL (
@@ -183,19 +184,9 @@ ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
 )
-:: Build FFT check program if Debug is selected
-IF /I [%option%]==[Debug] (
-ECHO -- Building ^( chkfft ^)
-CD /D %srcd%\%app_name%\lib
-gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
-IF NOT EXIST %installdir%\%option%\bin\NUL ( MKDIR %installdir%\%option%\bin >NUL 2>&1 )
-COPY /Y /B chkfft.exe %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.dat %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.out %installdir%\%option%\bin\ >NUL 2>&1
-)
+
 CD /D %buildd%\%option%
-ECHO -- Generating New Makefiles
+ECHO -- Generating New Makefiles for: %display_name%%RCV%
 IF /I [%option%]==[Debug] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_CREATE_WINMAIN=ON ^
@@ -229,7 +220,7 @@ REM ----------------------------------------------------------------------------
 ) ELSE IF [%bpkg%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
-ECHO Building Win32 Installer For: ^( %app_name% RC%RCV% ^)
+ECHO Building Win32 Installer For: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO.
@@ -239,7 +230,7 @@ RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
 )
 CD /D %buildd%\%option%
-ECHO -- Generating New Makefiles
+ECHO -- Generating New Makefiles for: %display_name%%RCV%
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
@@ -264,7 +255,7 @@ GOTO FINISH_PKG
 
 :: DEBUG MAKE BATCH FILE 
 :DEBUG_MAKEBAT
-ECHO -- Generating Debug Batch File for ^( %app_name% RC%RCV% ^)
+ECHO -- Generating Debug Batch File for ^( %display_name%%RCV% ^)
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
 >%app_name%.cmd (
@@ -281,7 +272,7 @@ GOTO DEBUG_MAKEBAT_UTIL
 
 :: UTIL BATCH FILES
 :DEBUG_MAKEBAT_UTIL
-ECHO -- Generating Debug Utils Batch File for ^( %app_name% RC%RCV% ^)
+ECHO -- Generating Debug Utils Batch File for ^( %display_name%%RCV% ^)
 CD /D %installdir%\%option%\bin
 IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
 >%app_name%-debug-util.cmd (
@@ -322,13 +313,13 @@ GOTO DEBUG_FINISH
 :DEBUG_FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %app_name% RC%RCV% ^)
+ECHO Finished %option% Build: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
 ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
 ECHO.
-ECHO   When Running ^( %app_name% RC%RCV% ^) Debug versions, please use
+ECHO   When Running ^( %display_name%%RCV% ^) Debug versions, please use
 ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
 ECHO   environment variables and support file paths.
 ECHO.
@@ -337,7 +328,7 @@ GOTO ASK_DEBUG_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP, DEBUG MODE
 :ASK_DEBUG_RUN
 ECHO.
-ECHO   Would You Like To Run %app_name% RC%RCV% Now? ^( y/n ^)
+ECHO   Would You Like To Run %display_name%%RCV% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -357,7 +348,7 @@ GOTO ASK_DEBUG_RUN
 :RUN_DEBUG
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( %app_name% RC%RCV% ^) in %option% Mode
+ECHO .. Starting: ^( %display_name%%RCV% ^) in %option% Mode
 CALL %app_name%.cmd
 GOTO EOF
 
@@ -365,7 +356,7 @@ GOTO EOF
 :FINISH_PKG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished Installer Build For: ^( %app_name% RC%RCV% ^)
+ECHO Finished Installer Build For: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO  Installer Name ......: %wsjtxpkg%
@@ -380,7 +371,7 @@ GOTO EOF
 :FINISH
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %app_name% RC%RCV% ^)
+ECHO Finished %option% Build: ^( %display_name%%RCV% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location .. %buildd%\%option%
@@ -390,7 +381,7 @@ GOTO ASK_FINISH_RUN
 :: ASK USER IF THEY WANT TO RUN THE APP
 :ASK_FINISH_RUN
 ECHO.
-ECHO Would You Like To Run %app_name% RC%RCV% Now? ^( y/n ^)
+ECHO   Would You Like To Run %display_name%%RCV% Now? ^( y/n ^)
 ECHO.
 SET answer=
 SET /P answer=Type Response: %=%
@@ -410,7 +401,7 @@ GOTO ASK_FINISH_RUN
 :RUN_INSTALL
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO Starting: ^( %app_name% RC%RCV% ^) in %option% Mode
+ECHO .. Starting: ^( %display_name%%RCV% ^) in %option% Mode
 CALL wsjtx.exe
 )
 GOTO EOF
@@ -441,7 +432,7 @@ ECHO ----------------------------------------
 ECHO  %srcd%\%app_name% Not Found
 ECHO ----------------------------------------
 ECHO.
-ECHO  In order to build ^( %app_name% RC%RCV% ^) you
+ECHO  In order to build ^( %display_name%%RCV% ^) you
 ECHO  must first perform a checkout from 
 ECHO  SourceForge:
 ECHO.
@@ -480,7 +471,7 @@ ECHO -----------------------------------------------------------------
 ECHO                    CMAKE BUILD ERROR
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO  There was a problem building ^( %app_name% RC%RCV% ^)
+ECHO  There was a problem building ^( %display_name%%RCV% ^)
 ECHO.
 ECHO  Check the screen for error messages, correct, then try to
 ECHO  re-build with: build-wsjtxrc
