@@ -392,7 +392,7 @@ GOTO ASK_FINISH_RUN
 :RUN_INSTALL
 ECHO.
 CD /D %installdir%\%option%\bin
-ECHO Starting: ^( wsjtx-1.6 ^) in %option% Mode
+ECHO Starting: ^( %display_name% ^) in %option% Mode
 CALL wsjtx.exe
 )
 GOTO EOF
