@@ -138,6 +138,7 @@ ECHO -- Generating New ^( %display_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
@@ -194,17 +195,19 @@ CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 IF /I [%option%]==[Debug] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D WSJT_CREATE_WINMAIN=ON ^
--D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_GENERATE_DOCS=ON ^
+-D WSJT_CREATE_WINMAIN=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
 IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
@@ -239,6 +242,8 @@ ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
