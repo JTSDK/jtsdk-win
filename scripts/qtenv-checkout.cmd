@@ -94,23 +94,26 @@ ECHO.
 IF /I [%1%]==[wsjtxrc] (
 ECHO To Build, Type ...........: build-wsjtxrc
 ECHO For build options, type ..: help-wsjtxrc
+GOTO EOF
 )
 IF /I [%1]==[wsjtxexp] (
 ECHO To Build, Type ...........: build-wsjtxexp
 ECHO For build options, type ..: help-wsjtxexp
+GOTO EOF
 )
 IF /I [%1]==[wsjtx] (
 ECHO To Build, Type ...........: build-wsjtx
 ECHO For build options, type ..: help-wsjtx
+GOTO EOF
 )
 IF /I [%1]==[wsprx] (
 ECHO To Build, Type ...........: build-wsprx
 ECHO For build options, type ..: help-wsprx
+GOTO EOF
 )
 IF /I [%1]==[map65] (
 ECHO To Build, Type ...........: build-map65
 ECHO For build options, type ..: help-map65
-) ELSE (
 GOTO EOF
 )
 
