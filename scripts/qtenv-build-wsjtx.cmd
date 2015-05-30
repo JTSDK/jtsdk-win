@@ -58,6 +58,7 @@ SET tchain=%scr%\wsjtx-toolchain.cmake
 SET buildd=%based%\%app_name%\build
 SET installdir=%based%\%app_name%\install
 SET packagedir=%based%\%app_name%\package
+SET ugdir=%based%\%app_name%\userguide
 SET JJ=%NUMBER_OF_PROCESSORS%
 
 :: SET RELEASE, DEBUG, and TARGET BASED ON USER INPUT
@@ -73,6 +74,7 @@ SET bpkg=true
 SET btree=true
 ) ELSE IF /I [%1]==[dinstall] (SET option=Debug
 SET binstall=true
+) ELSE IF /I [%1]==[doc] (SET option=userguide
 ) ELSE ( GOTO BADTYPE )
 
 REM ----------------------------------------------------------------------------
@@ -84,6 +86,8 @@ CD /D %based%
 IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
 IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
 IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
+IF NOT EXIST %ugdir%\NUL mkdir %ugdir%
+
 ECHO -----------------------------------------------------------------
 ECHO  ^( %display_name% ^) CMake Build Script
 ECHO -----------------------------------------------------------------
@@ -118,10 +122,36 @@ start /wait svn update
 ECHO.
 
 REM ----------------------------------------------------------------------------
-REM  CONFIGURE BUILD TREE ( btree )
+REM  CONFIGURE BUILD TREE ( btree ) or Build User Guide
 REM ----------------------------------------------------------------------------
 
 :BUILD
+IF /I [%option%]==[userguide] (
+echo.
+ECHO -----------------------------------------------------------------
+ECHO Building User Guide for: ^( %display_name% ^)
+ECHO -----------------------------------------------------------------
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+)
+CD /D %buildd%\%option%
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D CMAKE_BUILD_TYPE=Release ^
+-D CMAKE_INSTALL_PREFIX=%ugdir% %srcd%/%app_name%/doc
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+ECHO.
+cmake --build . --target docs -- -j %JJ%
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+DIR /B %buildd%\%option%\*-*.html >p.k & SET /P htmlname=<p.k & rm p.k
+cp -f *.html %ugdir%
+::COPY /Y %htmlname% %ugdir% > nul
+CD /D %based%
+GOTO USER_GUIDE_MSG
+)
+
 IF [%btree%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
@@ -138,7 +168,6 @@ ECHO -- Generating New ^( %display_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
--D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
@@ -180,24 +209,12 @@ ECHO -- Cleaning previous build tree
 RD /S /Q %buildd%\%option% >NUL 2>&1
 mkdir %buildd%\%option%
 )
-:: Build FFT check program if Debug is selected
-IF /I [%option%]==[Debug] (
-ECHO -- Building ^( chkfft ^)
-CD /D %srcd%\%app_name%\lib
-gfortran -o chkfft chkfft.f90 four2a.f90 f77_wisdom.f90 gran.c %fft%\libfftw3f-3.dll >NUL 2>&1
-IF NOT EXIST %installdir%\%option%\bin\NUL ( MKDIR %installdir%\%option%\bin >NUL 2>&1 )
-COPY /Y /B chkfft.exe %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y chkfft.txt %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.dat %installdir%\%option%\bin\ >NUL 2>&1
-COPY /Y nfft.out %installdir%\%option%\bin\ >NUL 2>&1
-)
 CD /D %buildd%\%option%
 ECHO -- Generating New Makefiles
 IF /I [%option%]==[Debug] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D WSJT_INCLUDE_KVASD=ON ^
--D WSJT_GENERATE_DOCS=ON ^
 -D WSJT_CREATE_WINMAIN=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
@@ -207,7 +224,6 @@ IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D WSJT_INCLUDE_KVASD=ON ^
--D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
@@ -243,7 +259,6 @@ ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D WSJT_INCLUDE_KVASD=ON ^
--D WSJT_GENERATE_DOCS=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
@@ -414,6 +429,19 @@ CD /D %installdir%\%option%\bin
 ECHO Starting: ^( %display_name% ^) in %option% Mode
 CALL wsjtx.exe
 )
+GOTO EOF
+
+:: DISPLAY USER GUIDE MESSAGE
+:USER_GUIDE_MSG
+ECHO.
+ECHO -----------------------------------------------------------------
+ECHO Finished User Guide Build for: : ^( %display_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO   Document Name .. %htmlname%
+ECHO   Location ....... %ugdir%
+ECHO.
+ECHO.
 GOTO EOF
 
 REM ----------------------------------------------------------------------------
