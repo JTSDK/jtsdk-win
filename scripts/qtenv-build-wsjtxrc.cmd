@@ -322,16 +322,13 @@ ECHO ECHO --------------------------------------------------------------
 ECHO ECHO  Welcome to WSJT-X Testing Utilities
 ECHO ECHO --------------------------------------------------------------
 ECHO ECHO.
-ECHO ECHO  App Names ...: jt9code, jt65code, kvasd or chkfft
+ECHO ECHO  App Names ...: jt9code, jt65code, jt4code or kvasd
 ECHO ECHO  Help, type ..: [ app-name ] then ENTER
 ECHO ECHO.
 ECHO ECHO  Type ..: jt65code "message"  or  jt65code -t
 ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
+ECHO ECHO  Type ..: jt4code "message"  or  jt4code -t
 ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
-ECHO ECHO  Type ..: chkfft 131072 0 1 1 2
-ECHO ECHO.
-ECHO ECHO  NOTE^(s^)
-ECHO ECHO   ^[1^] See chkfft.txt for additional information on usage.
 ECHO ECHO.
 ECHO.
 ECHO ^:: OPEN CMD WINDOW
