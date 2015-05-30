@@ -440,11 +440,11 @@ GOTO EOF
 :USER_GUIDE_MSG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished User Guide Build for: : ^( %display_name% ^)
+ECHO Finished User Guide Build for: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO   Document Name .. %htmlname%
-ECHO   Location ....... %ugdir%
+ECHO   Document Name ..: %htmlname%
+ECHO   Location .......: %ugdir%
 ECHO.
 ECHO.
 GOTO EOF
