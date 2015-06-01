@@ -66,7 +66,7 @@ IF /I [%1]==[rconfig] (SET option=Release
 SET btree=true
 ) ELSE IF /I [%1]==[rinstall] (SET option=Release
 SET binstall=true
-) ELSE IF /I [%1]==[wsjtxrc] (SET option=Release
+) ELSE IF /I [%1]==[wsjtx] (SET option=Release
 SET binstall=true
 ) ELSE IF /I [%1]==[package] (SET option=Release
 SET bpkg=true
@@ -74,7 +74,8 @@ SET bpkg=true
 SET btree=true
 ) ELSE IF /I [%1]==[dinstall] (SET option=Debug
 SET binstall=true
-) ELSE IF /I [%1]==[doc] (SET option=userguide
+) ELSE IF /I [%1]==[doc] (SET option=Release
+SET rdoc=true
 ) ELSE ( GOTO BADTYPE )
 
 REM ----------------------------------------------------------------------------
@@ -131,28 +132,28 @@ REM  CONFIGURE BUILD TREE ( btree ) or Build User Guide
 REM ----------------------------------------------------------------------------
 
 :BUILD
-IF /I [%option%]==[userguide] (
-echo.
+IF /I [%rdoc%]==[true] (
 ECHO -----------------------------------------------------------------
 ECHO Building User Guide for: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
-IF EXIST %buildd%\%option%\NUL (
+IF EXIST %ugdir%\build\NUL (
 ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
+RD /S /Q %ugdir%\build >NUL 2>&1
+mkdir %ugdir%\build
 )
-CD /D %buildd%\%option%
+IF NOT EXIST %ugdir%\build\NUL mkdir %ugdir%\build
+IF NOT EXIST %ugdir%\install\NUL mkdir %ugdir%\install
+CD /D %ugdir%\build
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=Release ^
--D CMAKE_INSTALL_PREFIX=%ugdir% %srcd%/%app_name%/doc
+-D CMAKE_INSTALL_PREFIX=%ugdir%/install %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
 cmake --build . --target docs -- -j %JJ%
+CD /D %ugdir%\build\doc
+mingw32-make install > NUL 2>&1
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-DIR /B %buildd%\%option%\*-*.html >p.k & SET /P htmlname=<p.k & rm p.k
-cp -f *.html %ugdir%
-::COPY /Y %htmlname% %ugdir%
+DIR /B %ugdir%\install\bin\doc\*-*.html >p.k & SET /P docname=<p.k & rm p.k
 CD /D %based%
 GOTO USER_GUIDE_MSG
 )
@@ -437,11 +438,11 @@ GOTO EOF
 :USER_GUIDE_MSG
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO Finished User Guide Build for: ^( %display_name% ^)
+ECHO Finished User Guide Build for: : ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO   Document Name ..: %htmlname%
-ECHO   Location .......: %ugdir%
+ECHO   Document Name ..: %docname%
+ECHO   Location .......: %ugdir%\install\bin\doc\%docname%
 ECHO.
 ECHO.
 GOTO EOF
