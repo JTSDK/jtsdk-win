@@ -30,6 +30,8 @@ SET LANG=en_US
 
 :: SET PATH TO F2PY
 SET F2PY=C:\JTSDK\Python33\Scripts\f2py.py
+SET PYTHON3=C:\JTSDK\Python33\python.exe
+SET PIP=C:\JTSDK\Python33\Scripts\pip3.3-script.py
 
 :: PRINT HEADER
 CLS
@@ -70,14 +72,14 @@ ECHO.
 ECHO PYTHON ENVIRONMENT
 ECHO ---------------------------------------------------------
 
-python --version >> py.ver 2>&1 
+%PYTHON3% --version >> py.ver 2>&1 
 grep "^Python" py.ver |gawk "{print $2}" > py.v & set /p PYV=<py.v & rm py.ver & rm py.v
-pip list > pkg.tmp
+%PYTHON3% %PIP% list > pkg.tmp
 grep "^cx-" pkg.tmp |gawk "{print $2}" > ver.v & set /p CXV=<ver.v & rm ver.v
 grep "^numpy" pkg.tmp |gawk "{print $2}" > ver.v & set /p NMY=<ver.v & rm ver.v
 grep "^Pill" pkg.tmp |gawk "{print $2}" > ver.v & set /p PIL=<ver.v & rm ver.v
 grep "^pywin" pkg.tmp |gawk "{print $2}" > ver.v & set /p PYW=<ver.v & rm ver.v
-python %F2PY% -v |gawk "{print $0}" >f2.v & set /p F2PYV=<f2.v & rm f2.v
+%PYTHON3% %F2PY% -v |gawk "{print $0}" >f2.v & set /p F2PYV=<f2.v & rm f2.v
 
 ECHO Python .....: %PYV%
 ECHO  cxfreeze ..: %CXV:~1,-1%

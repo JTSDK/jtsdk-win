@@ -41,11 +41,12 @@ SET tools=%based%\tools\bin
 SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET scr=%based%\scripts
-SET pythonpath=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
+SET python2path=%based%\python27;%based%\python27\Scripts;%based%\python27\DLLs
+SET python3path=%based%\Python33;%based%\python33\Scripts;%based%\python33\DLLs
 SET svnd=%based%\subversion\bin
 SET srcd=%based%\src
 SET LIBRARY_PATH=
-SET PATH=%based%;%MGW%;%pythonpath%;%tools%;%innno%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
+SET PATH=%based%;%python2path%;%python3path%;%MGW%;%tools%;%innno%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
 CD /D %based%
 
 :: MAKE SURE SRCD IS PRESENT
@@ -78,12 +79,11 @@ DOSKEY logr="svn.exe" log -r $*
 DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
+DOSKEY python2="C:\JTSDK\python27\python.exe" %*
+DOSKEY python3="C:\JTSDK\python33\python.exe" %*
 
 :: RE-SET FILE ASSOCIATIONS
-SET PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.py
-assoc .py=Python.File > NUL
-assoc .pyc=Python.File > NUL
-ftype Python.File=%based%\Python33\python.exe "%1" %* > NUL
+SET PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
 
 :: RUN VERSION INFORMATION SCRIPT
 CALL %scr%\pyenv-info.cmd

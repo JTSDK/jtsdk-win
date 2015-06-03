@@ -42,9 +42,8 @@ SET tools=%based%\tools\bin
 SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET scr=%based%\scripts
-SET python_home=%based%\Python33;%based%\Python33\Scripts;%based%\Python33\DLLs
 SET svnd=%based%\subversion\bin
-SET PATH=%based%;%mgw%;%python_home%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
+SET PATH=%based%;%mgw%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
 
 :: VARS USED IN PROCESS
 SET JJ=%NUMBER_OF_PROCESSORS%
@@ -131,6 +130,9 @@ GOTO BUILD_TARGET
 ) ELSE IF /I [%1]==[w.pyd] (
 SET target=WsprMod/w.pyd
 GOTO BUILD_TARGET
+) ELSE IF /I [%1]==[doc] (
+SET target=user-guide
+GOTO BUILD_TARGET
 ) ELSE ( GOTO UNSUPPORTED_TARGET )
 
 :: ------------------------------------------------------------------------------
@@ -192,6 +194,7 @@ mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
 ECHO ..Running mingw32-make all
 ECHO.
 mingw32-make -f Makefile.jtsdk2
+
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 mingw32-make -f Makefile.jtsdk2 install
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
@@ -205,8 +208,11 @@ ECHO -----------------------------------------------------------------
 ECHO   Starting Build for Target^( %target% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-ECHO ..Running mingw32-make To Build ^( %target% ^)
-ECHO.
+IF [%target%]==[user-guide] (
+mingw32-make -f Makefile.jtsdk2 user-guide
+IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
+GOTO EOF
+)
 mingw32-make -f Makefile.jtsdk2 %target%
 IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 GOTO SINGLE_FINISH
