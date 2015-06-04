@@ -126,7 +126,7 @@ GOTO BUILD_TARGET
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Clean Targets for ^( %app_name% ^)
+ECHO  Clean Targets for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO ..Running mingw32-make clean
@@ -139,7 +139,7 @@ GOTO EOF
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Distclean Targets for ^( %app_name% ^)
+ECHO  Distclean Targets for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO ..Running mingw32-make distclean
@@ -151,7 +151,7 @@ GOTO EOF
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Install Build for ^( %app_name% ^)
+ECHO  Starting Install Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO ..Running mingw32-make clean
@@ -168,7 +168,7 @@ GOTO MAKEBAT
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Package Build for ^( %app_name% ^)
+ECHO  Starting Package Build for ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO ..Running mingw32-make distclean
@@ -187,7 +187,7 @@ GOTO MAKEBAT
 CD /D %app_src%
 CLS
 ECHO -----------------------------------------------------------------
-ECHO   Starting Build for Target^( %target% ^)
+ECHO  Starting Build for Target ^( %target% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 IF [%target%]==[user-guide] (
@@ -265,7 +265,7 @@ REM ----------------------------------------------------------------------------
 CLS
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   ^( %1 ^) IS AN INVALID TARGET
+ECHO  ^( %1 ^) IS AN INVALID TARGET
 ECHO -----------------------------------------------------------------
 ECHO. 
 ECHO  After the pause, the build help menu
@@ -314,7 +314,7 @@ GOTO EOF
 :BUILD_ERROR
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   Compiler Build Warning
+ECHO  Compiler Build Warning
 ECHO -----------------------------------------------------------------
 ECHO. 
 ECHO  mingw32-make exited with a non-(0) build status. Check and or 
