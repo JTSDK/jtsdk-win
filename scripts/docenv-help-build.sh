@@ -34,16 +34,16 @@ clear
 echo -e ${C_Y}"JTSDK-DOC BUILD HELP PAGE\n"${C_NC}
 echo 'USAGE: [ build-doc.sh ] [ option ]'
 echo ''
-echo 'OPTION(s): all map65 simjt wsjt wsjtx'
-echo '           wspr wsprx wfmt devg qref help clean'
+echo 'OPTION(s): all map65 simjt wsprx wfmt'
+echo '           devg qref help clean'
 echo ''
 echo -e ${C_C}"BUILD LINKED"${C_NC}
 echo '  All .....: ./build-doc.sh all'
-echo '  WSJT-X ..: ./build-doc.sh wsjtx'
+echo '  WSJT-X ..: ./build-doc.sh wsprx'
 echo
 echo -e ${C_C}"BUILD DATA-URI - ( single-file )"${C_NC}
 echo '  All .....: ./build-doc.sh dall'
-echo '  WSJT-X ..: ./build-doc.sh dwsjtx'
+echo '  WSJT-X ..: ./build-doc.sh dwsprx'
 echo
 echo -e ${C_C}"CLEAN FILES & FOLDERS"${C_NC}
 echo '  All .....: ./build-doc.sh clean'
