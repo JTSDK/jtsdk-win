@@ -25,30 +25,35 @@
 #--------------------------------------------------------------------#
 
 # Exit on Errors
-#set -e
+set -e
 
 # Source Color Variables
 source /scripts/color-variables
 
-# Display Document Help Help Message
 clear
-echo -e ${C_Y}"JTSDK-DOC CHECKOUT HELP PAGE"${C_NC}
-echo '  In order to build WSJT Documentation, you'
-echo '  must first perform a checkout from'
-echo '  WSJT @ SourceForge'
+echo -e ${C_Y}"JTSDK-DOC BUILD HELP PAGE\n"${C_NC}
+echo 'USAGE: [ build-doc.sh ] [ option ]'
 echo ''
-echo -e ${C_C}"ANONYMOUS CHECKOUT"${C_NC}
-echo '  Type: checkout-doc'
+echo 'OPTION(s): all map65 simjt wsjt wsjtx'
+echo '           wspr wsprx wfmt devg qref help clean'
 echo ''
-echo -e ${C_C}"DEVELOPER CHECKOUT"${C_NC}
-echo "  cd $HOME"
-echo "  svn co https://$USER@svn.code.sf.net/p/wsjt/wsjt/branches/doc"
+echo -e ${C_C}"BUILD LINKED"${C_NC}
+echo '  All .....: ./build-doc.sh all'
+echo '  WSJT-X ..: ./build-doc.sh wsjtx'
+echo
+echo -e ${C_C}"BUILD DATA-URI - ( single-file )"${C_NC}
+echo '  All .....: ./build-doc.sh dall'
+echo '  WSJT-X ..: ./build-doc.sh dwsjtx'
+echo
+echo -e ${C_C}"CLEAN FILES & FOLDERS"${C_NC}
+echo '  All .....: ./build-doc.sh clean'
 echo ''
-echo -e "  Replace [ ${C_Y}$USER${C_NC} ] with your SorceForge User Name."
-echo ''
-echo -e ${C_C}"BUILD COMMANDS"${C_NC}
-echo '  To List build commands, type ..: help-build'
-echo '  To List Short-Cuts, type ......: lista'
+echo -e ${C_C}"NOTE(s)"${C_NC}
+echo -e '  [1] The same method is used for all documentaion.
+      The prefix "d" designates a DATA-URI ( single-file )
+      version of the document.
+  
+  [2] To see additional Short-Cuts, type: lista'
 echo ''
 
 exit 0
