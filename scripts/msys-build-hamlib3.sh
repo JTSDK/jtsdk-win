@@ -121,7 +121,7 @@ echo -e ' Pkg-Config  ... '${C_G}"$(pkg-config --version)"${C_NC}
 #--------------------------------------------------------------------#
 
 # Run Tool Check
-cd $HOME
+cd "$HOME"
 clsb
 tool_check
 
@@ -146,7 +146,7 @@ echo -e ${C_Y} ' CLONING G4WJS HAMLIB3'${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
 
-cd $HOME
+cd "$HOME"
 mkdir -p ~/g4wjs-hamlib/build
 if [[ -f ~/g4wjs-hamlib/src/autogen.sh ]];
 then
