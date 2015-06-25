@@ -160,10 +160,14 @@ fi
 
 # Patch Hamlib autogen.sh script
 # This is required for usernames with spaces
-cd ~/g4wjs-hamlib/src
-grep 'autogen.p1' autogen.sh > /dev/null 2>&1
-if [[ $? -ne 0 ]] ;
+if [[ ! -f ~/g4wjs-hamlib/src/autogen-p1.mkr ]] ;
 then
+	echo ''
+	echo '---------------------------------------------------------------'
+	echo -e ${C_Y} " PATCHING AUTOGEN SCRIPT"${C_NC}
+	echo '---------------------------------------------------------------'
+	echo ''
+	echo '.. Updating User Path Variables' 
 	patch -p4 autogen.sh /scripts/msys/patch/hamlib3/autogen.p1 > /dev/null 2>&1 || {
 	echo ''
 	echo 'Autogen Patch Failed: Check JTSDK-MSYS and msys-build-hamlib3.sh script'
@@ -171,7 +175,8 @@ then
 	echo ''
 	exit 1
 	}
-	echo '# autogen.p1' >> ~/g4wjs-hamlib/src/autogen.sh
+	touch ~/g4wjs-hamlib/src/autogen-p1.mkr
+	echo '.. Finished'
 fi
 
 # Run configure
