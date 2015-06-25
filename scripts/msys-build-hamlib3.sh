@@ -145,42 +145,43 @@ echo '---------------------------------------------------------------'
 echo -e ${C_Y} ' CLONING G4WJS HAMLIB3'${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
-mkdir -p ~/g4wjs-hamlib/build
-if [[ -f ~/g4wjs-hamlib/src/autogen.sh ]];
+mkdir -p C:/JTSDK/src/hamlib3/build
+if [[ -f C:/JTSDK/src/hamlib3/src/autogen.sh ]];
 then
-	cd ~/g4wjs-hamlib/src
+	cd C:/JTSDK/src/hamlib3/src
 	git pull
 else
-	cd ~/g4wjs-hamlib
-	if [ -d ~/g4wjs-hamlib/src ]; then rm -rf ~/g4wjs-hamlib/src ; fi
+	cd C:/JTSDK/src/hamlib3
+	if [ -d C:/JTSDK/src/hamlib3/src ]; then rm -rf C:/JTSDK/src/hamlib3/src ; fi
 	git clone git://git.code.sf.net/u/bsomervi/hamlib src
-	cd ~/g4wjs-hamlib/src
+	cd C:/JTSDK/src/hamlib3/src
 	git checkout integration
 fi
 
+# Commented out for testing alternate Source Location
 # Patch Hamlib autogen.sh script
 # This is required for usernames with spaces
-if [[ ! -f ~/g4wjs-hamlib/src/autogen-p1.mkr ]] ;
-then
-	echo ''
-	echo '---------------------------------------------------------------'
-	echo -e ${C_Y} " PATCHING AUTOGEN SCRIPT"${C_NC}
-	echo '---------------------------------------------------------------'
-	echo ''
-	echo '.. Updating User Path Variables' 
-	patch -p4 autogen.sh /scripts/msys/patch/hamlib3/autogen.p1 > /dev/null 2>&1 || {
-	echo ''
-	echo 'Autogen Patch Failed: Check JTSDK-MSYS and msys-build-hamlib3.sh script'
-	echo 'for errors and report the problem to the wsjt-devel list'
-	echo ''
-	exit 1
-	}
-	touch ~/g4wjs-hamlib/src/autogen-p1.mkr
-	echo '.. Finished'
-fi
+#if [[ ! -f C:/JTSDK/src/hamlib3/src/autogen-p1.mkr ]] ;
+#then
+#	echo ''
+#	echo '---------------------------------------------------------------'
+#	echo -e ${C_Y} " PATCHING AUTOGEN SCRIPT"${C_NC}
+#	echo '---------------------------------------------------------------'
+#	echo ''
+#	echo '.. Updating User Path Variables' 
+#	patch -p4 autogen.sh /scripts/msys/patch/hamlib3/autogen.p1 > /dev/null 2>&1 || {
+#	echo ''
+#	echo 'Autogen Patch Failed: Check JTSDK-MSYS and msys-build-hamlib3.sh script'
+#	echo 'for errors and report the problem to the wsjt-devel list'
+#	echo ''
+#	exit 1
+#	}
+#	touch C:/JTSDK/src/hamlib3/src/autogen-p1.mkr
+#	echo '.. Finished'
+#fi
 
 # Run configure
-cd ~/g4wjs-hamlib/build
+cd C:/JTSDK/src/hamlib3/build
 echo ''
 echo '---------------------------------------------------------------'
 echo -e ${C_Y} " CONFIGURING [ $PKG_NAME ]"${C_NC}
@@ -221,7 +222,7 @@ echo ''
 fi
 
 # Make clean check
-if [ -f ~/g4wjs-hamlib/build/tests/rigctld.exe ];
+if [ -f C:/JTSDK/src/hamlib3/build/tests/rigctld.exe ];
 then
 	echo ''
 	echo '---------------------------------------------------------------'
@@ -304,6 +305,8 @@ then
 	echo '----------------------------------------------------------------'
 	echo ''
 	touch C:/JTSDK/hamlib3/build-date-$today
+	echo '  Source Location...: C:/JTSDK/src/hamlib3/src'
+	echo '  Build Location....: C:/JTSDK/src/hamlib3/build'
 	echo "  Install Location..: $PREFIX"
 	echo "  Package Config....: $PREFIX/lib/pkgconfig/hamlib.pc"
 	echo ''
