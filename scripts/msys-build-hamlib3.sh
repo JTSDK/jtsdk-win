@@ -76,7 +76,7 @@ C_Y='\033[01;33m'		# yellow
 C_C='\033[01;36m'		# cyan
 C_NC='\033[01;37m'		# no color
 
-# Function -----------------------------------------------------------
+# Tool Check Function ----------------------------------------------------------
 tool_check() {
 echo ''
 echo '---------------------------------------------------------------'
@@ -114,14 +114,14 @@ echo -e ' Libtool ver ... '${C_G}"$(libtool --version |awk 'FNR==1')"${C_NC}
 echo -e ' Pkg-Config  ... '${C_G}"$(pkg-config --version)"${C_NC}
 
 }
-# End Function -------------------------------------------------------
+# Tool Check End Function ------------------------------------------------------
 
 #--------------------------------------------------------------------#
 # START MAIN SCRIPT                                                  #
 #--------------------------------------------------------------------#
 
 # Run Tool Check
-cd "$HOME"
+cd
 clsb
 tool_check
 
@@ -145,21 +145,33 @@ echo '---------------------------------------------------------------'
 echo -e ${C_Y} ' CLONING G4WJS HAMLIB3'${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
-
-cd "$HOME"
 mkdir -p ~/g4wjs-hamlib/build
 if [[ -f ~/g4wjs-hamlib/src/autogen.sh ]];
 then
 	cd ~/g4wjs-hamlib/src
 	git pull
-	git checkout integration
 else
 	cd ~/g4wjs-hamlib
 	if [ -d ~/g4wjs-hamlib/src ]; then rm -rf ~/g4wjs-hamlib/src ; fi
 	git clone git://git.code.sf.net/u/bsomervi/hamlib src
 	cd ~/g4wjs-hamlib/src
 	git checkout integration
+fi
 
+# Patch Hamlib autogen.sh script
+# This is required for usernames with spaces
+cd ~/g4wjs-hamlib/src
+grep 'autogen.p1' autogen.sh > /dev/null 2>&1
+if [[ $? -ne 0 ]] ;
+then
+	patch -p4 autogen.sh /scripts/msys/patch/hamlib3/autogen.p1 > /dev/null 2>&1 || {
+	echo ''
+	echo 'Autogen Patch Failed: Check JTSDK-MSYS and msys-build-hamlib3.sh script'
+	echo 'for errors and report the problem to the wsjt-devel list'
+	echo ''
+	exit 1
+	}
+	echo '# autogen.p1' >> ~/g4wjs-hamlib/src/autogen.sh
 fi
 
 # Run configure

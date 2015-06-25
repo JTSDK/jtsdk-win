@@ -1,6 +1,6 @@
 # CAUTION: This file is updated each time the user updates from SVN. If you
 #          want custom local alias commands, use the file located in your
-#          $HOME directory: $HOME/.bash_alias. This file is sourced "Last",
+#          ~/ directory: ~/.bash_alias. This file is sourced "Last",
 #          as such, any commands with the same name, listed or exported
 #          elsewhere, will be superseded.
 
@@ -10,13 +10,13 @@
 alias help-build="/scripts/docenv-help-build.sh"
 alias help-checkout="/scripts/docenv-help-co.sh"
 alias lista='/scripts/docenv-alias-list.sh'
-alias checkout-doc="cd $HOME && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
-alias update-doc="cd $HOME/doc && ./build-doc.sh update"
+alias checkout-doc="cd ~/ && svn co https://svn.code.sf.net/p/wsjt/wsjt/branches/doc"
+alias update-doc="cd ~/doc && ./build-doc.sh update"
 
 #-------------------------------------------------------------------------------
 # SVN COMMANDS
 #-------------------------------------------------------------------------------
-alias svnu="cd $HOME/doc && svn update"
+alias svnu="cd ~/doc && svn update"
 alias ss='svn status'				# Normal SVN status
 alias sv='svn status |grep "?"'		# List files not under SVN control
 alias sa='svn status |grep "A"'		# List Added files only
@@ -24,48 +24,48 @@ alias sm='svn status |grep "M"'		# List Modified files only
 alias sd='svn status |grep "D"'		# List Deleted files only
 
 #-------------------------------------------------------------------------------
-# ALIAS BUILD COMMANDS ( requires doc checkout in $HOME/doc directory )
+# ALIAS BUILD COMMANDS ( requires doc checkout in ~//doc directory )
 #-------------------------------------------------------------------------------
 
 # ALL DOCS
-alias build-dall="cd $HOME/doc && ./build-doc.sh dall"
-alias build-all="cd $HOME/doc && ./build-doc.sh all"
+alias build-dall="cd ~/doc && ./build-doc.sh dall"
+alias build-all="cd ~/doc && ./build-doc.sh all"
 
 # WSJT-X
-alias build-dwsjtx="cd $HOME/doc && ./build-doc.sh dwsjtx"
-alias build-wsjtx="cd $HOME/doc && ./build-doc.sh wsjtx"
+alias build-dwsjtx="cd ~/doc && ./build-doc.sh dwsjtx"
+alias build-wsjtx="cd ~/doc && ./build-doc.sh wsjtx"
 
 # WSJT
-alias build-dwsjt="cd $HOME/doc && ./build-doc.sh dwsjt"
-alias build-wsjt="cd $HOME/doc && ./build-doc.sh wsjt"
+alias build-dwsjt="cd ~/doc && ./build-doc.sh dwsjt"
+alias build-wsjt="cd ~/doc && ./build-doc.sh wsjt"
 
 # WSPR
-alias build-dwspr="cd $HOME/doc && ./build-doc.sh dwspr"
-alias build-wspr="cd $HOME/doc && ./build-doc.sh wspr"
+alias build-dwspr="cd ~/doc && ./build-doc.sh dwspr"
+alias build-wspr="cd ~/doc && ./build-doc.sh wspr"
 
 # BUILD WFMT
-alias build-dwfmt="cd $HOME/doc && ./build-doc.sh dwfmt"
-alias build-wfmt="cd $HOME/doc && ./build-doc.sh wfmt"
+alias build-dwfmt="cd ~/doc && ./build-doc.sh dwfmt"
+alias build-wfmt="cd ~/doc && ./build-doc.sh wfmt"
 
 # WSPR-X
-alias build-dwsprx="cd $HOME/doc && ./build-doc.sh dwsprx"
-alias build-wsprx="cd $HOME/doc && ./build-doc.sh wsprx"
+alias build-dwsprx="cd ~/doc && ./build-doc.sh dwsprx"
+alias build-wsprx="cd ~/doc && ./build-doc.sh wsprx"
 
 # MAP65
-alias build-dmap65="cd $HOME/doc && ./build-doc.sh dmap65"
-alias build-map65="cd $HOME/doc && ./build-doc.sh map65"
+alias build-dmap65="cd ~/doc && ./build-doc.sh dmap65"
+alias build-map65="cd ~/doc && ./build-doc.sh map65"
 
 # BUILD SIMJT
-alias build-dsimjt="cd $HOME/doc && ./build-doc.sh dsimjt"
-alias build-simjt="cd $HOME/doc && ./build-doc.sh simjt"
+alias build-dsimjt="cd ~/doc && ./build-doc.sh dsimjt"
+alias build-simjt="cd ~/doc && ./build-doc.sh simjt"
 
 # BUILD DEV-GUIDE
-alias build-ddevg="cd $HOME/doc && ./build-doc.sh ddevg"
-alias build-devg="cd $HOME/doc && ./build-doc.sh devg"
+alias build-ddevg="cd ~/doc && ./build-doc.sh ddevg"
+alias build-devg="cd ~/doc && ./build-doc.sh devg"
 
 # BUILD QUICK REF GUIDE
-alias build-dqref="cd $HOME/doc && ./build-doc.sh dqref"
-alias build-qref="cd $HOME/doc && ./build-doc.sh qref"
+alias build-dqref="cd ~/doc && ./build-doc.sh dqref"
+alias build-qref="cd ~/doc && ./build-doc.sh qref"
 
 # BUILD CLEAN
-alias build-clean="cd $HOME/doc && ./build-doc.sh clean"
+alias build-clean="cd ~/doc && ./build-doc.sh clean"
