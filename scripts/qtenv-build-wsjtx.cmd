@@ -33,6 +33,11 @@ COLOR 0B
 FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
 
+:: VARIABLES USED IN PROCESS
+SET display_name=WSJTX-1.6.0-devel
+SET app_name=wsjtx
+SET JJ=%NUMBER_OF_PROCESSORS%
+
 :: PATH VARIABLES
 SET based=C:\JTSDK
 SET cmk=%based%\cmake\bin
@@ -71,10 +76,6 @@ SET LIBRARY_PATH=""
 SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
-:: VARIABLES USED IN PROCESS
-SET display_name=WSJTX-1.6.0-devel
-SET app_name=wsjtx
-SET JJ=%NUMBER_OF_PROCESSORS%
 
 :: SET RELEASE, DEBUG, and TARGET BASED ON USER INPUT
 IF /I [%1]==[rconfig] (SET option=Release
