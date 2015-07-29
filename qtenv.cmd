@@ -23,9 +23,11 @@
 :: along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ::-----------------------------------------------------------------------------::
 
+
 :: ENVIRONMENT
 @ECHO OFF
 ECHO Setting Up JTSDK-QT v2 Environment variables ...
+ECHO\
 TITLE JTSDK QT5 Development Environment
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET PROMPT=$CJTSDK-QT$F $P$F
@@ -40,46 +42,32 @@ SET hl3=%based%\hamlib3\bin
 SET fft=%based%\fftw3f
 SET nsi=%based%\nsis
 SET ino=%based%\inno5
+SET scr=%based%\scripts
+SET srcd=%based%\src
+SET svnd=%based%\subversion\bin
+:: Optional enable / Disable use of QT55 for testing
+:: *DO NOT EDIT MANYALLY*
+IF EXIST qt55-enabled.txt (
+SET gccd=%based%\qt55\Tools\mingw492_32\bin
+SET qt5d=%based%\qt55\5.5\mingw492_32\bin
+SET qt5p=%based%\qt55\5.5\mingw492_32\plugins\platforms
+SET qt5a=
+SET LIBRARY_PATH=
+) ELSE (
 SET gccd=%based%\qt5\Tools\mingw48_32\bin
 SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
 SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
-SET scr=%based%\scripts
-SET srcd=%based%\src
-SET svnd=%based%\subversion\bin
 SET LIBRARY_PATH=
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
-CD /D %based%
 
-:: MAKE SURE SRCD IS PRESENT
-IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
+)
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
-:: CHECKOUT COMMANDS ( users *should not* edit these )
-DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
-DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
-DOSKEY checkout-wsjtxexp="%scr%\qtenv-checkout.cmd" $* wsjtxexp
-DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
-DOSKEY checkout-map65="%scr%\qtenv-checkout.cmd" $* map65
 
-:: BUILD COMMANDS ( users *should not* edit these )
-DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
-DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
-DOSKEY build-wsjtxexp="%scr%\qtenv-build-wsjtxexp.cmd" $* wsjtxexp
-DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
-DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
+::----------------------------------------------------------------------------::
+::                    USER DEFINABLE ALIAS COMMANDS                           ::
+::----------------------------------------------------------------------------::
 
-:: HELP PAGES ( users *should not* edit these )
-DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
-DOSKEY help-qtenv=CALL %based%\scripts\help\qtenv-help-main.cmd
-DOSKEY help-checkout=CALL %based%\scripts\help\qtenv-help-checkout.cmd
-DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
-DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
-DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
-DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
-DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
-
-:: USER DEFINABLE ALIAS COMMANDS ( use edit-alias to edit list )
-:: Note, this file gets overwritten with SVN update changes
 DOSKEY clear=CLS
 DOSKEY ss="svn.exe" $* status
 DOSKEY sv="svn.exe" $* status ^|grep "?"
@@ -92,8 +80,57 @@ DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
 
+
+::----------------------------------------------------------------------------::
+::                   DO NOT EDIT BELOW THIS LINE                              ::
+::----------------------------------------------------------------------------::
+
+:: ENSURE WE ARE IN THER JTSDK ROOT DIRECTORY
+CD /D %based%
+
+:: MAKE SURE SRCD IS PRESENT
+IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
+
+
+:: CHECKOUT COMMANDS ( users *should not* edit these )
+DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
+DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
+DOSKEY checkout-map65="%scr%\qtenv-checkout.cmd" $* map65
+DOSKEY checkout-wsjtxexp="%scr%\qtenv-checkout.cmd" $* wsjtxexp
+
+
+:: BUILD COMMANDS ( users *should not* edit these )
+DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
+DOSKEY build-wsjtxexp="%scr%\qtenv-build-wsjtxexp.cmd" $* wsjtxexp
+DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
+DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
+
+
+:: HELP PAGES ( users *should not* edit these )
+DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
+DOSKEY help-qtenv=CALL %based%\scripts\help\qtenv-help-main.cmd
+DOSKEY help-checkout=CALL %based%\scripts\help\qtenv-help-checkout.cmd
+DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
+DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
+DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
+DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
+
+
+:: WSJT-X RELEASE CANDIDATES ( users *should not* edit these )
+DOSKEY checkout-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+DOSKEY help-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+DOSKEY build-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+:: DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
+:: DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
+:: DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
+
+
+:: ENABLE / DISABLE Qt5.5 ( users *should not* edit these )
+DOSKEY qt55-enable="touch.exe" C:\JTSDK\qt55-enabled.txt
+DOSKEY qt55-disable="rm.exe" -f C:\JTSDK\qt55-enabled.txt
+
 CALL %scr%\qtenv-info.cmd
-IF NOT EXIST %based%\src\NUL mkdir %based%\src
+IF NOT EXIST %based%\src\NUL ( mkdir %based%\src )
 GOTO EOF
 
 :: LAUNCH CMD WINDOW
