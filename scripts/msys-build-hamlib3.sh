@@ -65,9 +65,22 @@ timestamp=$(date +"%d-%m-%Y at %R")
 builder=$(whoami)
 
 # Tool-Chain Variables - Adjust to suit your QT5 Tool-Chain Locations
-export PATH="/c/JTSDK/qt5/Tools/mingw48_32/bin:$PATH"
-TC='C:/JTSDK/qt5/Tools/mingw48_32/bin'
-PREFIX='C:/JTSDK/hamlib3'
+# $ Updated to allow for QT5.5 Testing
+if [ -f C:/JTSDK/qt55-enabled.txt ] ;
+then
+	export PATH="/c/JTSDK/qt55/Tools/mingw492_32/bin:$PATH"
+	TC='C:/JTSDK/qt55/Tools/mingw492_32/bin'
+	PREFIX='C:/JTSDK/hamlib3-qt55'
+	QTV="QT 5.5"
+	BUILDD="C:/JTSDK/src/hamlib3/build-qt55"
+else
+	export PATH="/c/JTSDK/qt5/Tools/mingw48_32/bin:$PATH"
+	TC='C:/JTSDK/qt5/Tools/mingw48_32/bin'
+	PREFIX='C:/JTSDK/hamlib3'
+	QTV="QT 5.2"
+	BUILDD="C:/JTSDK/src/hamlib3/build"
+fi
+
 
 # Foreground colours
 C_R='\033[01;31m'		# red
@@ -80,7 +93,7 @@ C_NC='\033[01;37m'		# no color
 tool_check() {
 echo ''
 echo '---------------------------------------------------------------'
-echo -e ${C_Y}' CHECKING TOOL-CHAIN'${C_NC}
+echo -e ${C_Y}"' CHECKING TOOL-CHAIN ( $QTV Enabled )"${C_NC}
 echo '---------------------------------------------------------------'
 
 # Setup array and perform simple version checks
@@ -145,7 +158,7 @@ echo '---------------------------------------------------------------'
 echo -e ${C_Y} ' CLONING G4WJS HAMLIB3'${C_NC}
 echo '---------------------------------------------------------------'
 echo ''
-mkdir -p C:/JTSDK/src/hamlib3/build
+mkdir -p $BUILDD
 if [[ -f C:/JTSDK/src/hamlib3/src/autogen.sh ]];
 then
 	cd C:/JTSDK/src/hamlib3/src
@@ -181,7 +194,7 @@ fi
 #fi
 
 # Run configure
-cd C:/JTSDK/src/hamlib3/build
+cd $BUILDD
 echo ''
 echo '---------------------------------------------------------------'
 echo -e ${C_Y} " CONFIGURING [ $PKG_NAME ]"${C_NC}
@@ -222,7 +235,7 @@ echo ''
 fi
 
 # Make clean check
-if [ -f C:/JTSDK/src/hamlib3/build/tests/rigctld.exe ];
+if [ -f $BUILDD/tests/rigctld.exe ];
 then
 	echo ''
 	echo '---------------------------------------------------------------'
@@ -270,6 +283,7 @@ Builder......: $builder
 Prefix.......: $PREFIX
 Pkg Name.....: $PKG_NAME
 Pkg Version..: development
+Tool Chain...: $QTV
 
 # Source Location and Integration
 Git URL......: git://git.code.sf.net/u/bsomervi/hamlib
@@ -304,7 +318,8 @@ then
 	echo -e ${C_G} " FINISHED INSTALLING [ $PKG_NAME ]"${C_NC}
 	echo '----------------------------------------------------------------'
 	echo ''
-	touch C:/JTSDK/hamlib3/build-date-$today
+	touch $PREFIX/build-date-$today
+	echo "  Tool-Chain........: $QTV"
 	echo '  Source Location...: C:/JTSDK/src/hamlib3/src'
 	echo '  Build Location....: C:/JTSDK/src/hamlib3/build'
 	echo "  Install Location..: $PREFIX"
