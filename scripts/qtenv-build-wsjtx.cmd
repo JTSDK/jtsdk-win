@@ -38,7 +38,7 @@ SET display_name=WSJTX-1.6.0-devel
 SET app_name=wsjtx
 SET JJ=%NUMBER_OF_PROCESSORS%
 
-:: PATH VARIABLES
+:: BASE PATH VARIABLES
 SET based=C:\JTSDK
 SET cmk=%based%\cmake\bin
 SET tools=%based%\tools\bin
@@ -47,7 +47,8 @@ SET nsi=%based%\nsis
 SET scr=%based%\scripts
 SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
-:: Optional enable / Disable use of QT55 for testing
+
+:: OPTIONAL FOR ENABLE / DISABLE of QT 5.5 / GCC 4.9
 :: *DO NOT EDIT MANYALLY*
 IF EXIST qt55-enabled.txt (
 SET gccd=%based%\qt55\Tools\mingw492_32\bin
@@ -61,6 +62,8 @@ SET installdir=%based%\%app_name%-qt55\install
 SET packagedir=%based%\%app_name%-qt55\package
 SET ugdir=%based%\%app_name%-qt55\userguide
 ) ELSE (
+:: DEFAULT TOOL-CHAIN FOR QT 5.2 / GCC 4.8
+:: *DO NOT EDIT MANYALLY*
 SET gccd=%based%\qt5\Tools\mingw48_32\bin
 SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
@@ -72,8 +75,9 @@ SET installdir=%based%\%app_name%\install
 SET packagedir=%based%\%app_name%\package
 SET ugdir=%based%\%app_name%\userguide
 )
+
 SET LIBRARY_PATH=""
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%inno%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
 
