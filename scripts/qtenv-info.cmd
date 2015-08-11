@@ -29,9 +29,9 @@ SET LANG=en_US
 
 :: Check if Qt5.5 is enabled
 IF EXIST C:\JTSDK\qt55-enabled.txt (
-SET gccinfo="Mingw 49_32"
+SET gccinfo=Mingw 49_32
 ) ELSE (
-SET gccinfo="Mingw 48_32"
+SET gccinfo=Mingw 48_32
 )
 
 :: START GATHERING VERSION INFO
