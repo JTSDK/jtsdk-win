@@ -49,7 +49,7 @@ ECHO  Checkout Help, Type ......: help-checkout
 ECHO  Build Help, Type .........: help-(wsjt or wspr)
 ECHO  Build and Install, Type ..: build-(wsjt or wspr)
 ECHO.
-ECHO COMPILER ENV ( mingw32 )
+ECHO COMPILER ENV ( Mingw 48_32 )
 ECHO ---------------------------------------------------------
 
 :: GET and DISPLAY CRITICAL TOOL INFORMATION
