@@ -47,6 +47,7 @@ SET hl3=%based%\hamlib3\bin
 SET fft=%based%\fftw3f
 SET nsi=%based%\nsis
 SET ino=%based%\inno5
+SET ruby=%based%\Ruby\bin
 SET scr=%based%\scripts
 SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
@@ -66,7 +67,7 @@ SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
 SET LIBRARY_PATH=
 
 )
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
 
 ::----------------------------------------------------------------------------::
