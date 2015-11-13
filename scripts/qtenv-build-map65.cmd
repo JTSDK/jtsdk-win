@@ -381,7 +381,7 @@ ECHO Finished %option% Build: ^( %app_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Build Tree Location ..: %buildd%\%option%
-ECHO   Install Location .....: %installdir%\%option%\bin\wsprx.exe
+ECHO   Install Location .....: %installdir%\%option%\bin\%app_name%.exe
 GOTO ASK_FINISH_RUN
 
 :: ASK USER IF THEY WANT TO RUN THE APP
