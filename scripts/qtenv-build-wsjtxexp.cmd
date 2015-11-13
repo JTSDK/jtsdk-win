@@ -79,13 +79,12 @@ SET LIBRARY_PATH=""
 SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
 CD /D %based%
 
-
 :: SET RELEASE, DEBUG, and TARGET BASED ON USER INPUT
 IF /I [%1]==[rconfig] (SET option=Release
 SET btree=true
 ) ELSE IF /I [%1]==[rinstall] (SET option=Release
 SET binstall=true
-) ELSE IF /I [%1]==[wsjtxexp] (SET option=Release
+) ELSE IF /I [%1]==[wsjtx] (SET option=Release
 SET binstall=true
 ) ELSE IF /I [%1]==[package] (SET option=Release
 SET bpkg=true
@@ -93,6 +92,8 @@ SET bpkg=true
 SET btree=true
 ) ELSE IF /I [%1]==[dinstall] (SET option=Debug
 SET binstall=true
+) ELSE IF /I [%1]==[doc] (SET option=Release
+SET rdoc=true
 ) ELSE ( GOTO BADTYPE )
 
 REM ----------------------------------------------------------------------------
@@ -142,6 +143,30 @@ REM  CONFIGURE BUILD TREE ( btree )
 REM ----------------------------------------------------------------------------
 
 :BUILD
+IF /I [%rdoc%]==[true] (
+cls
+ECHO -----------------------------------------------------------------
+ECHO Building User Guide for: ^( %display_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+IF NOT EXIST %ugdir%\build\NUL mkdir %ugdir%\build
+CD /D %ugdir%\build
+IF NOT EXIST Makefile (
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_BUILD_TYPE=Release ^
+-D CMAKE_INSTALL_PREFIX=%ugdir%/install %srcd%/%app_name%
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+ECHO.
+)
+cmake --build . --target docs -- -j %JJ%
+CD /D %ugdir%\build\doc
+mingw32-make install > NUL 2>&1
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+DIR /B %ugdir%\install\bin\doc\*-*.html >p.k & SET /P docname=<p.k & rm p.k
+CD /D %based%
+GOTO USER_GUIDE_MSG
+)
+
 IF [%btree%]==[true] (
 CLS
 ECHO -----------------------------------------------------------------
@@ -156,7 +181,7 @@ mkdir %buildd%\%option%
 CD /D %buildd%\%option%
 ECHO -- Generating New ^( %display_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_INCLUDE_KVASD=OFF ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
@@ -204,7 +229,7 @@ ECHO -- Generating New Makefiles
 IF /I [%option%]==[Debug] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D WSJT_CREATE_WINMAIN=ON ^
--D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_INCLUDE_KVASD=OFF ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
@@ -212,7 +237,7 @@ IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
 IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D WSJT_INCLUDE_KVASD=ON ^
+-D WSJT_INCLUDE_KVASD=OFF ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
@@ -306,13 +331,12 @@ ECHO ECHO --------------------------------------------------------------
 ECHO ECHO  Welcome to WSJT-X Testing Utilities
 ECHO ECHO --------------------------------------------------------------
 ECHO ECHO.
-ECHO ECHO  App Names ...: jt9code, jt65code, jt4code, kvasd
+ECHO ECHO  App Names ...: jt9code, jt65code, jt4code
 ECHO ECHO  Help, type ..: [ app-name ] then ENTER
 ECHO ECHO.
 ECHO ECHO  Type ..: jt65code "message"  or  jt65code -t
 ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
 ECHO ECHO  Type ..: jt4code "message"  or  jt4code -t
-ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
 ECHO ECHO.
 ECHO.
 ECHO ^:: OPEN CMD WINDOW
@@ -417,6 +441,19 @@ CALL wsjtx.exe
 )
 GOTO EOF
 
+:: DISPLAY USER GUIDE MESSAGE
+:USER_GUIDE_MSG
+ECHO.
+ECHO -----------------------------------------------------------------
+ECHO Finished User Guide Build for: : ^( %display_name% ^)
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO   Document Name ..: %docname%
+ECHO   Location .......: %ugdir%\install\bin\doc\%docname%
+ECHO.
+ECHO.
+GOTO EOF
+
 REM ----------------------------------------------------------------------------
 REM  POST BUILD
 REM ----------------------------------------------------------------------------
@@ -472,7 +509,7 @@ ECHO.
 ECHO  Example: build-wsjtxexp rinstall
 ECHO.
 PAUSE
-CALL %scr%\help\qtenv-help-%app_name%.cmd
+CALL %scr%\help\qtenv-help-wsjtxexp.cmd
 GOTO EOF
 
 :: GENERAL CMAKE ERROR MESSAGE

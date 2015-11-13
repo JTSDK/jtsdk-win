@@ -14,6 +14,7 @@ ECHO   RELEASE TARGETS
 ECHO    rconfig ...: Configure Release Tree
 ECHO    rinstall ..: Build Release Insatall
 ECHO    package ...: Build Win32 Installer
+ECHO    doc .......: Build User Guide
 ECHO.
 ECHO   DEBUG TARGETS
 ECHO    dconfig ...: Configure Debug Tree
