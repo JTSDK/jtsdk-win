@@ -46,18 +46,19 @@ GOTO CHK_APP
 :: CHECK IF APPLICATION NAME IF SUPPORTED
 :CHK_APP
 IF /I [%1]==[wsjtxrc] (
-SET app_name=wsjtx-1.5
-SET display_name=WSJTX-1.5-RC
+SET app_name=wsjtx-1.6
+SET display_name=WSJTX-1.6-RC
 GOTO SVN_CO
 )
 IF /I [%1]==[wsjtxexp] (
-SET app_name=wsjtx_exp
-SET display_name=WSJTX-1.6.1-devel
-GOTO SVN_CO
+CALL "%scr%\qtenv-exp-message.cmd"
+:: SET app_name=wsjtx_exp
+:: display_name=WSJTX-1.6.1-devel
+GOTO EOF
 )
 IF /I [%1]==[wsjtx] (
 SET app_name=wsjtx
-SET display_name=WSJTX-1.6.0-devel
+SET display_name=WSJTX-1.7.0-devel
 GOTO SVN_CO
 )
 IF /I [%1]==[wsprx] (
@@ -96,10 +97,11 @@ ECHO To Build, Type ...........: build-wsjtxrc
 ECHO For build options, type ..: help-wsjtxrc
 GOTO EOF
 )
-IF /I [%1]==[wsjtxexp] (
-ECHO To Build, Type ...........: build-wsjtxexp
-ECHO For build options, type ..: help-wsjtxexp
-GOTO EOF
+:: The EXP Branch is currently dorment
+:: IF /I [%1]==[wsjtxexp] (
+:: ECHO To Build, Type ...........: build-wsjtxexp
+:: ECHO For build options, type ..: help-wsjtxexp
+:: GOTO EOF
 )
 IF /I [%1]==[wsjtx] (
 ECHO To Build, Type ...........: build-wsjtx
