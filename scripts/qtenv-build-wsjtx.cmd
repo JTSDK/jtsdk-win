@@ -34,7 +34,7 @@ FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
 
 :: VARIABLES USED IN PROCESS
-SET display_name=WSJTX-1.6.0-devel
+SET display_name=WSJTX-1.7.0-devel
 SET app_name=wsjtx
 SET JJ=%NUMBER_OF_PROCESSORS%
 

@@ -67,7 +67,7 @@ SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
 SET LIBRARY_PATH=
 
 )
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%srcd%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
 
 ::----------------------------------------------------------------------------::
@@ -97,38 +97,43 @@ CD /D %based%
 :: MAKE SURE SRCD IS PRESENT
 IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
 
-
 :: CHECKOUT COMMANDS ( users *should not* edit these )
-DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
 DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
 DOSKEY checkout-map65="%scr%\qtenv-checkout.cmd" $* map65
-DOSKEY checkout-wsjtxexp="%scr%\qtenv-checkout.cmd" $* wsjtxexp
-
 
 :: BUILD COMMANDS ( users *should not* edit these )
-DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
-DOSKEY build-wsjtxexp="%scr%\qtenv-build-wsjtxexp.cmd" $* wsjtxexp
 DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
 DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
-
 
 :: HELP PAGES ( users *should not* edit these )
 DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
 DOSKEY help-qtenv=CALL %based%\scripts\help\qtenv-help-main.cmd
 DOSKEY help-checkout=CALL %based%\scripts\help\qtenv-help-checkout.cmd
-DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
-DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
 DOSKEY help-wsprx=CALL %based%\scripts\help\qtenv-help-wsprx.cmd
 DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
 
+:: WSJTX DEVEL BRANCH ( users *should not* edit these )
+DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
+DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
+DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
 
-:: WSJT-X RELEASE CANDIDATES ( users *should not* edit these )
-DOSKEY checkout-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-DOSKEY help-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-DOSKEY build-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-:: DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
-:: DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
-:: DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
+:: WSJT-X RC BRANCH ( users *should not* edit these )
+DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
+DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
+DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
+:: DOSKEY help-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+:: DOSKEY build-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+:: DOSKEY checkout-wsjtxrc="%scr%\qtenv-rc-message.cmd"
+
+:: WSJT-X EXP BRANCH ( users *should not* edit these )
+DOSKEY checkout-wsjtxexp="%scr%\qtenv-exp-message.cmd"
+DOSKEY build-wsjtxexp="%scr%\qtenv-exp-message.cmd"
+DOSKEY help-wsjtxexp="%scr%\qtenv-exp-message.cmd"
+
+:: DOSKEY checkout-wsjtxexp="%scr%\qtenv-checkout.cmd" $* wsjtxexp
+:: DOSKEY build-wsjtxexp="%scr%\qtenv-exp-message.cmd"
+:: DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
+:: DOSKEY build-wsjtxexp="%scr%\qtenv-build-wsjtxexp.cmd" $* wsjtxexp
 
 
 :: ENABLE / DISABLE Qt5.5 ( users *should not* edit these )

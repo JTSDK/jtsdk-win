@@ -34,8 +34,8 @@ FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
 IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
 
 :: VARIABLES USED IN PROCESS
-SET display_name=WSJTX-1.5-RC
-SET app_name=wsjtx-1.5
+SET display_name=WSJTX-1.6-RC
+SET app_name=wsjtx-1.6
 SET JJ=%NUMBER_OF_PROCESSORS%
 
 :: BASE PATH VARIABLES
@@ -153,22 +153,20 @@ REM ----------------------------------------------------------------------------
 
 :BUILD
 IF /I [%rdoc%]==[true] (
+cls
 ECHO -----------------------------------------------------------------
 ECHO Building User Guide for: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
-IF EXIST %ugdir%\build\NUL (
-ECHO -- Cleaning previous build tree
-RD /S /Q %ugdir%\build >NUL 2>&1
-mkdir %ugdir%\build
-)
+ECHO.
 IF NOT EXIST %ugdir%\build\NUL mkdir %ugdir%\build
-IF NOT EXIST %ugdir%\install\NUL mkdir %ugdir%\install
 CD /D %ugdir%\build
+IF NOT EXIST Makefile (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=Release ^
 -D CMAKE_INSTALL_PREFIX=%ugdir%/install %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
+)
 cmake --build . --target docs -- -j %JJ%
 CD /D %ugdir%\build\doc
 mingw32-make install > NUL 2>&1
