@@ -9,7 +9,7 @@ SET (BASED C:/JTSDK)
 # for AsciiDoctor ( Ruby version )
 SET (ADOCT C:/JTSDK/Ruby/bin) 
 
- # for AsciiDoc ( Python27 version )
+# for AsciiDoc ( Python27 version )
 SET (ADOCD C:/JTSDK/asciidoc)
 SET (PY27D C:/JTSDK/python27)
 
