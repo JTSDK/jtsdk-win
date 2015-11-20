@@ -28,6 +28,10 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+SET based=C:\JTSDK
+SET tools=%based%\tools\bin
+
+:: Need tools for this funciton
 svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
 SET version=v2.0.3-r%rev%
 ECHO\
@@ -44,9 +48,7 @@ SET LANG=en_US
 COLOR 0B
 
 :: PATH VARIABLES
-SET based=C:\JTSDK
 SET cmk=%based%\cmake\bin
-SET tools=%based%\tools\bin
 SET hl3=%based%\hamlib3\bin
 SET fft=%based%\fftw3f
 SET nsi=%based%\nsis

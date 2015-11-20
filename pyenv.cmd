@@ -28,6 +28,10 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+SET based=C:\JTSDK
+SET tools=%based%\tools\bin
+
+:: need tools for this function
 svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
 SET version=v2.0.3-r%rev%
 SET title-string=JTSDK Python Development Environment %version%
@@ -38,8 +42,6 @@ SET LANG=en_US
 COLOR 0A
 
 :: PATH VARIABLES
-SET based=C:\JTSDK
-SET tools=%based%\tools\bin
 SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET ruby=%based%\Ruby\bin
