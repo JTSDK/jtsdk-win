@@ -28,7 +28,8 @@
 
 :: ENVIRONMENT
 @ECHO OFF
-SET version=v2.0.3
+svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
+SET version=v2.0.3-r%rev%
 ECHO\
 IF EXIST qt55-enabled.txt (
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
