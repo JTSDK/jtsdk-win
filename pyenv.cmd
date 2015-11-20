@@ -34,8 +34,8 @@ SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
 svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
-SET rev-svn=%version%-%rev%
-SET title-string=JTSDK Python Development Environment %rev-svn%
+SET version=%version%-%rev%
+SET title-string=JTSDK Python Development Environment %version%
 TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
