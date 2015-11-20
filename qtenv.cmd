@@ -4,7 +4,7 @@
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Sets the Environment for building WSJT-X, WSPR-X and MAP65
 :: Project URL ..: http://sourceforge.net/projects/jtsdk 
-:: Usage ........: Windows Start, run C:\JTSDK\qtenv.bat
+:: Usage ........: Windows Start, run C:\JTSDK\qtenv.cmd
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
 :: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
@@ -23,13 +23,16 @@
 :: along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ::-----------------------------------------------------------------------------::
 
+:: Windows commands and Variables are in CAPS
+:: User Defined variables are lower case like %based%
 
 :: ENVIRONMENT
 @ECHO OFF
+SET version="2.0.3"
 ECHO Setting Up JTSDK-QT v2 Environment variables ...
 ECHO\
 IF EXIST qt55-enabled.txt (
-TITLE JTSDK QT 5.5 Development Environment
+TITLE JTSDK QT 5.5 Development Environment %version%
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
 ) ELSE (
 TITLE JTSDK QT 5.2 Development Environment

@@ -3,7 +3,7 @@
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Batch file to check version informaiton
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
-:: Usage ........: This file is run from within qtenv.bat
+:: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
 :: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
@@ -40,7 +40,7 @@ ECHO      _ _____ ____  ____  _  __      ___ _____
 ECHO     ^| ^|_   _/ ___^|^|  _ \^| ^|/ /     / _ \_   _^|
 ECHO  _  ^| ^| ^| ^| \___ \^| ^| ^| ^| ' /_____^| ^| ^| ^|^| ^|  
 ECHO ^| ^|_^| ^| ^| ^|  ___) ^| ^|_^| ^| . \_____^| ^|_^| ^|^| ^|  
-ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\     \__\_\^|_^| v2.0
+ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\     \__\_\^|_^| %version%
 ECHO\
 ECHO\
 ECHO BUILD APPLICATIONS: ^( WSJT-X WSJTX-RC WSPR-X MAP65 ^)

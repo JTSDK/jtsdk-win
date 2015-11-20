@@ -3,7 +3,7 @@
 :: Project ......: Part of the JTSDK v2.0.0 Project
 :: Description ..: Batch file to check version information
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
-:: Usage ........: This file is run from within pyenv.bat
+:: Usage ........: This file is run from within pyenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
 :: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
@@ -39,7 +39,7 @@ ECHO      _ _____ ____  ____  _  __     ______   __
 ECHO     ^| ^|_   _/ ___^|^|  _ \^| ^|/ /    ^|  _ \ \ / /
 ECHO  _  ^| ^| ^| ^| \___ \^| ^| ^| ^| ' /_____^| ^|_) \ V / 
 ECHO ^| ^|_^| ^| ^| ^|  ___) ^| ^|_^| ^| . \_____^|  __/ ^| ^|  
-ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\    ^|_^|    ^|_^| v2.0                                   
+ECHO  \___/  ^|_^| ^|____/^|____/^|_^|\_\    ^|_^|    ^|_^| %version%                              
 ECHO.                               
 ECHO.
 ECHO BUILD APPLICATIONS: ^( WSJT WSPR ^)
