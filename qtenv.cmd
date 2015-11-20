@@ -30,10 +30,11 @@
 @ECHO OFF
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
-
-:: Need tools for this funciton
+SET svnd=%based%\subversion\bin
+:: set temporary path for the next function 
+SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
 svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
-SET version=v2.0.3-r%rev%
+SET version=v2.0.3-%rev%
 ECHO\
 IF EXIST qt55-enabled.txt (
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F

@@ -30,10 +30,10 @@
 @ECHO OFF
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
-
-:: need tools for this function
+:: set temp[orary path for the next function 
+SET PATH=%based%;%tools%;%WINDIR%\System32
 svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
-SET version=v2.0.3-r%rev%
+SET version=v2.0.3-%rev%
 SET title-string=JTSDK Python Development Environment %version%
 TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
