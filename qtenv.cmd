@@ -29,15 +29,15 @@
 :: ENVIRONMENT
 @ECHO OFF
 SET version=v2.0.3
-SET title-string=JTSDK QT 5.5 Development Environment %version%
 ECHO\
 IF EXIST qt55-enabled.txt (
-TITLE %title-string%
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
+SET title-string=JTSDK QT 5.5 Development Environment %version%
 ) ELSE (
-TITLE %title-string%
 SET PROMPT=$CJTSDK-QT 5.2 $F $P$F
+SET title-string=JTSDK QT 5.2 Development Environment %version%
 )
+TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET LANG=en_US
 COLOR 0B
