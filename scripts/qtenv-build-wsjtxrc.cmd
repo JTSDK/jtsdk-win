@@ -520,7 +520,7 @@ ECHO.
 ECHO  Example: build-wsjtxrc rinstall
 ECHO.
 PAUSE
-CALL %scr%\help\qtenv-help-%app_name%.cmd
+CALL %scr%\help\qtenv-help-wsjtxrc.cmd
 GOTO EOF
 
 :: GENERAL CMAKE ERROR MESSAGE
