@@ -24,9 +24,9 @@
 ::-----------------------------------------------------------------------------::
 
 @ECHO OFF
+SET version=2.0.3
 COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-SET version=2.0.3
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
@@ -60,23 +60,23 @@ DOSKEY upgrade="postinstall.cmd" $* upgrade
 :: Start Main Script
 CD /D %based%
 CLS
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 ECHO  JTSDK General Maintenance Environment
-ECHO ---------------------------------------------------------
+ECHO -------------------------------------------------------------
 ECHO.
-ECHO  ^* Provides Access To: Subversion an Gnu Tools
+ECHO  ^* Provides Access To: Subversion, Gnu Tools and Asciidoctor
 ECHO  ^* Upgrades JTSDK Main Scripts and Packages when needed
 ECHO.
 ECHO  TO UPDATE and UPGRADE
-ECHO   Type, .......: update
-ECHO   Then Type, ..: upgrade
+ECHO   Type .......: update
+ECHO   Then Type ..: upgrade
 ECHO.
 ECHO  GENERAL: MAINTENANCE
 ECHO   With this env, you have access to all the Gnu
 ECHO   Tools, Subversion and Asciidoctor. It can be used
-ECHO    to perform most any task needed by the SDK.
-ECHO    There are no Tool-Chains or Frameworks ( Qt / Python )
-ECHO    in ^*PATH^*
+ECHO   to perform most any task needed by the SDK.
+ECHO   There are no Tool-Chains or Frameworks ( Qt / Python )
+ECHO   in ^*PATH^*
 ECHO.
 
 %COMSPEC% /A /Q /K
