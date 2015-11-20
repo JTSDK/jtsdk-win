@@ -28,9 +28,9 @@
 
 :: ENVIRONMENT
 @ECHO OFF
-SET version="2.0.3"
-ECHO Setting Up JTSDK-PY v2 Environment variables ...
-TITLE JTSDK Python Development Environment %version%
+SET version=v2.0.3
+SET title-string=JTSDK Python Development Environment %version%
+TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
 SET LANG=en_US
