@@ -24,7 +24,7 @@
 ::-----------------------------------------------------------------------------::
 
 @ECHO OFF
-SET version=2.0.3
+SET version=v2.0.3
 COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET based=C:\JTSDK
@@ -61,7 +61,7 @@ DOSKEY upgrade="postinstall.cmd" $* upgrade
 CD /D %based%
 CLS
 ECHO -------------------------------------------------------------
-ECHO  JTSDK General Maintenance Environment
+ECHO  JTSDK General Maintenance Environment - %version%
 ECHO -------------------------------------------------------------
 ECHO.
 ECHO  ^* Provides Access To: Subversion, Gnu Tools and Asciidoctor
