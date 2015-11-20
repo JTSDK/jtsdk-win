@@ -26,15 +26,21 @@
 @ECHO OFF
 COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-TITLE JTSDK General Maintenance And Upgrade
-ECHO.
-SET VER=2.0.0
-SET LANG=en_US
+SET version=2.0.3
 SET based=C:\JTSDK
-SET svnd=%BASED%\subversion\bin
-SET tools=%BASED%\tools\bin
+SET tools=%based%\tools\bin
+SET svnd=%based%\subversion\bin
+SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
+svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
+SET version=%version%-%rev%
+
+TITLE JTSDK General Maintenance and Upgrades %version%
+ECHO.
+SET LANG=en_US
+SET rubyd=%based%\Ruby\bin
+SET tools=%based%\tools\bin
 SET url1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/postinstall.cmd"
-SET PATH=%based%;%svnd%;%tools%;%WINDIR%\System32
+SET PATH=%based%;%svnd%;%tools%;%rubyd%;%WINDIR%\System32
 
 :: Power-User Commands, add as many as you like
 DOSKEY clear=cls
@@ -67,9 +73,10 @@ ECHO   Then Type, ..: upgrade
 ECHO.
 ECHO  GENERAL: MAINTENANCE
 ECHO   With this env, you have access to all the Gnu
-ECHO   Tools plus subversion. It can be used to perform
-ECHO   most any task needed by the SDK. There are no
-ECHO   Tool-Chains or Frameworks ( Qt / Python ) in ^*PATH^*
+ECHO   Tools, Subversion and Asciidoctor. It can be used
+ECHO    to perform most any task needed by the SDK.
+ECHO    There are no Tool-Chains or Frameworks ( Qt / Python )
+ECHO    in ^*PATH^*
 ECHO.
 
 %COMSPEC% /A /Q /K
