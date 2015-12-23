@@ -155,15 +155,18 @@ ECHO -----------------------------------------------------------------
 ECHO.
 IF NOT EXIST %ugdir%\build\NUL mkdir %ugdir%\build
 CD /D %ugdir%\build
+IF NOT EXIST Makefile (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=Release ^
 -D CMAKE_INSTALL_PREFIX=%ugdir%/install %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 ECHO.
+)
 cmake --build . --target docs -- -j %JJ%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 CD /D %ugdir%\build\doc
-DIR /B %ugdir%\build\doc\*-*.html >p.k & SET /P docname=<p.k & rm p.k
+mingw32-make install > NUL 2>&1
+IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
+DIR /B %ugdir%\install\bin\doc\*-*.html >p.k & SET /P docname=<p.k & rm p.k
 CD /D %based%
 GOTO USER_GUIDE_MSG
 )
@@ -174,13 +177,19 @@ ECHO -----------------------------------------------------------------
 ECHO Configuring %option% Build For: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+)
 CD /D %buildd%\%option%
+ECHO -- Generating New ^( %display_name% ^) Makefiles
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D WSJT_INCLUDE_KVASD=ON ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-
 ECHO.
 ECHO -----------------------------------------------------------------
 ECHO Finished %option% Configuration for: ^( %display_name% ^)
@@ -214,25 +223,30 @@ ECHO -----------------------------------------------------------------
 ECHO Building %option% Install Target For: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
-IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+)
 CD /D %buildd%\%option%
+ECHO -- Generating New Makefiles
 IF /I [%option%]==[Debug] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
 -D WSJT_CREATE_WINMAIN=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-)
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
-
 IF /I [%option%]==[Release] (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-)
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 )
-
 ECHO.
 ECHO -- Building %option% Install Target
 ECHO.
@@ -253,13 +267,19 @@ ECHO Building Win32 Installer For: ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO.
-IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
+IF EXIST %buildd%\%option%\NUL (
+ECHO -- Cleaning previous build tree
+RD /S /Q %buildd%\%option% >NUL 2>&1
+mkdir %buildd%\%option%
+)
 CD /D %buildd%\%option%
+ECHO -- Generating New Makefiles
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=ON ^
 -D CMAKE_BUILD_TYPE=%option% ^
 -D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-)
 IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
 GOTO NSIS_PKG
 
@@ -435,7 +455,7 @@ ECHO Finished User Guide Build for: : ^( %display_name% ^)
 ECHO -----------------------------------------------------------------
 ECHO.
 ECHO   Document Name ..: %docname%
-ECHO   Location .......: %ugdir%\build\doc\%docname%
+ECHO   Location .......: %ugdir%\install\bin\doc\%docname%
 ECHO.
 ECHO.
 GOTO EOF
