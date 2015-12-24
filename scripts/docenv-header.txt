@@ -1,0 +1,11 @@
+     _ _____ ___ ___  _  __   ___   ___   ___ 
+  _ | |_   _/ __|   \| |/ /__|   \ / _ \ / __|
+ | || | | | \__ \ |) | ' <___| |) | (_) | (__ 
+  \__/  |_| |___/___/|_|\_\  |___/ \___/ \___| v2.0
+                                              
+ Help Build, type ......: help-build
+ Help Checkout, type ...: help-checkout
+ Checkout Docs, type ...: checkout-doc
+ Update Sources, type ..: update-doc
+ List Shortcuts, type ..: lista
+ 

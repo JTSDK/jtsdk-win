@@ -1,0 +1,7 @@
+Current Development Version: JTSDK v2.0.0
+
+2014-12-12 Greg Beam <ki7mt@yahoo.com>
+
+* Move all Win32 related files to win32 folder
+* Add misc files to win32 directory
+
