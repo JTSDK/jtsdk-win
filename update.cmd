@@ -34,6 +34,7 @@ SET PATH=%based%;%svnd%
 
 :: START JTSDK UPDATE / UPGRADE
 CD /D %based%
+START /wait %svnd%\svn.exe cleanup
 START /wait %svnd%\svn.exe export --force %url1% >nul 2>&1
 CALL postinstall.cmd upgrade
 ENDLOCAL
