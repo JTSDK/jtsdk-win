@@ -37,6 +37,7 @@ SET version=%version%-%rev%
 TITLE JTSDK General Maintenance and Upgrades %version%
 ECHO.
 SET LANG=en_US
+MODE con:cols=100 lines=40
 SET rubyd=%based%\Ruby\bin
 SET tools=%based%\tools\bin
 SET url1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/postinstall.cmd"

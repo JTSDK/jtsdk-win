@@ -46,6 +46,7 @@ SET title-string=JTSDK QT 5.2 Development Environment %version%
 TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET LANG=en_US
+MODE con:cols=100 lines=40
 COLOR 0B
 
 :: PATH VARIABLES
