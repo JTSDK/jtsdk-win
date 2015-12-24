@@ -1,12 +1,12 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: maint.cmd
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Maintenance script for general use
 :: Project URL ..: http://sourceforge.net/projects/jtsdk
 :: Usage ........: Run this file directly, or from the Windows Start Menu
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: maint.cmd is free software: you can redistribute it and/or
@@ -24,14 +24,14 @@
 ::-----------------------------------------------------------------------------::
 
 @ECHO OFF
-SET version=v2.0.3
+SET version=2.0.3
 COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
-svn info |grep Revision |gawk "{print $2}" >r.v & set /p rev=<r.v & rm r.v
+svn info |grep "Rev:" |gawk "{print $4}" >r.v & set /p rev=<r.v & rm r.v
 SET version=%version%-%rev%
 
 TITLE JTSDK General Maintenance and Upgrades %version%
@@ -40,7 +40,7 @@ SET LANG=en_US
 MODE con:cols=100 lines=40
 SET rubyd=%based%\Ruby\bin
 SET tools=%based%\tools\bin
-SET url1="http://svn.code.sf.net/p/jtsdk/jtsdk/trunk/installers/postinstall.cmd"
+SET url1="http://svn.code.sf.net/p/jtsdk/jtsdk/jtsdk-win/updates/postinstall.cmd"
 SET PATH=%based%;%svnd%;%tools%;%rubyd%;%WINDIR%\System32
 
 :: Power-User Commands, add as many as you like
@@ -57,6 +57,7 @@ DOSKEY logv="svn.exe" log -v -l $*
 :: UPDATE & UPGRADE COMMANDS
 DOSKEY update="%svnd%\svn.exe" $* export --force %url1% >nul 2>&1
 DOSKEY upgrade="postinstall.cmd" $* upgrade
+DOSKEY version="postinstall.cmd" $* version-info
 
 :: Start Main Script
 CD /D %based%
@@ -71,6 +72,9 @@ ECHO.
 ECHO  TO UPDATE and UPGRADE
 ECHO   Type .......: update
 ECHO   Then Type ..: upgrade
+ECHO.
+ECHO  TO DISPLAY CURRENT VERSION INFORMATION
+ECHO   Type .......: version
 ECHO.
 ECHO  GENERAL: MAINTENANCE
 ECHO   With this env, you have access to all the Gnu
