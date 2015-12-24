@@ -1,5 +1,5 @@
 ::-----------------------------------------------------------------------------::
-:: Name .........: qtenvq-build-list.cmd
+:: Name .........: qtenv-build-list.cmd
 :: Project ......: Part of the JTSDK v2.0
 :: Description ..: Batch file to generate WSJT-X Build targets
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
@@ -9,12 +9,12 @@
 :: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
-:: qtenvq-build-list.cmd is free software: you can redistribute it and/or modify
+:: qtenv-build-list.cmd is free software: you can redistribute it and/or modify
 :: it under the terms of the GNU General Public License as published by the Free
 :: Software Foundation either version 3 of the License, or (at your option) any
 :: later version. 
 ::
-:: qtenvq-build-list.cmd is distributed in the hope that it will be useful, but
+:: qtenv-build-list.cmd is distributed in the hope that it will be useful, but
 :: WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 :: FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 :: more details.
@@ -80,6 +80,7 @@ ECHO GA and RC List from^: ^( ^^/tags ^):
 cat %garlist%
 GOTO EOF
 
+
 :: DEVELOPMENT LIST ------------------------------------------------------------
 :: -d option
 :DEV_LIST
@@ -98,6 +99,7 @@ GOTO EOF
 
 
 :: GA and RELEASE CANDIDATE LIST -----------------------------------------------
+:: -g option
 :GAR_LIST
 CLS
 ECHO --------------------------------------------
@@ -114,6 +116,7 @@ GOTO EOF
 
 
 :: UPDATE LISTS ----------------------------------------------------------------
+:: -u option
 :UPDATE_LIST
 CD /D %cfg%
 CLS
@@ -154,7 +157,8 @@ ECHO.
 IF [%errorlevel%]==[0] ( touch "%cfg%\list-update-time-stamp" )
 GOTO EOF
 
-:: MUST HAVE ONE OPTION
+
+:: MUST HAVE ONE OPTION --------------------------------------------------------
 :MISSING_OPTION
 CLS
 ECHO --------------------------------------------
@@ -192,7 +196,6 @@ REM ----------------------------------------------------------------------------
 REM ERROR MESSAGES
 REM ----------------------------------------------------------------------------
 
-:: UPDATE LISTS ----------------------------------------------------------------
 :INET_ERROR
 CLS
 ECHO --------------------------------------------
@@ -200,7 +203,7 @@ ECHO  Internet Connection Failed
 ECHO --------------------------------------------
 ECHO.
 ECHO  Build list was unable to connect to the
-ECHO  Internet properly, check your connection
+ECHO  Internet properly. Check your connection
 ECHO  and try to update again.
 ECHO.
 GOTO EOF
@@ -214,8 +217,8 @@ ECHO.
 ECHO  Build list was unable to connect to the
 ECHO  Sourceforge SVN Repository. The service
 ECHO  may be down or undergoing maintenance.
-ECHO  Check the follwoing link for curent site
-ECHO  status reports^:
+ECHO  Check the following link for current site
+ECHO  status reports:
 ECHO.
 ECHO  http://sourceforge.net/blog/category/sitestatus/
 ECHO.
@@ -233,6 +236,7 @@ ECHO   Use JTSDK-QT Environment
 ECHO.
 ECHO     to run this script
 ECHO.
+PAUSE
 GOTO EOF
 
 
