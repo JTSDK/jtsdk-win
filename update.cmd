@@ -28,7 +28,7 @@ COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 TITLE JTSDK UPDATE and UPGRADE
 SET based=C:\JTSDK
-SET svnd=%BASED%\subversion\bin
+SET svnd=%based%%\subversion\bin
 SET url="http://svn.code.sf.net/p/jtsdk/jtsdk/jtsdk-win/updates/postinstall.cmd"
 SET PATH=%based%;%svnd%
 
