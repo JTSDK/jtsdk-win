@@ -1,12 +1,12 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: qtenv-info.bat
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Batch file to check version informaiton
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-info.bat is free software: you can redistribute it and/or modify it
@@ -69,23 +69,24 @@ ECHO  GNU Make ...: %GNMK%
 ECHO\
 ECHO CRITICAL APP INFO
 ECHO -------------------------------------------------------------
+asciidoctor --version |grep "asciidoctor" |awk "{print $2}" >a.v & set /p ADV=<a.v & rm a.v
 cmake --version |gawk "{print $3}" >c.m & set /p CMV=<c.m & rm c.m
 cpack --version |gawk "{print $3}" >c.p & set /p CPV=<c.p & rm c.p
 qmake --version |gawk "FNR==2 {print $4}" >q.m & set /p QTV=<q.m & rm q.m
 qmake --version |gawk "FNR==1 {print $3}" >q.m & set /p QMV=<q.m & rm q.m
 makensis.exe /VERSION  >n.m & set /p NSM=<n.m & rm n.m
 pkg-config --version >p.c & set /p PKG=<p.c & rm p.c
-ECHO  Cmake ......: %CMV%
-ECHO  Cpack ......: %CPV%
-ECHO  QT5 ........: %QTV%
-ECHO  QMake ......: %QMV%
-ECHO  NSIS .......: %NSM%
-ECHO  InnoSetup ..: 5.5.5a
-ECHO  Pkg-Cfg ....: %PKG%
+ECHO  Asciidoctor..: %ADV%
+ECHO  Cmake .......: %CMV%
+ECHO  Cpack .......: %CPV%
+ECHO  QT5 .........: %QTV%
+ECHO  QMake .......: %QMV%
+ECHO  NSIS ........: %NSM%
+ECHO  InnoSetup ...: 5.5.5a
+ECHO  Pkg-Cfg .....: %PKG%
 ECHO\
 GOTO EOF
 
 :: END QTENV-INFO.BAT
 :EOF
 EXIT /B 0
-
