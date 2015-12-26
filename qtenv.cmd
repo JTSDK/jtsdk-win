@@ -28,13 +28,28 @@
 
 :: ENVIRONMENT
 @ECHO OFF
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-MODE con:cols=100 lines=38
-COLOR 0A
-
-:: PATHS
 SET version=2.0.3
 SET based=C:\JTSDK
+SET tools=%based%\tools\bin
+SET svnd=%based%\subversion\bin
+SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
+%svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
+SET version=%version%-%rev%
+ECHO\
+IF EXIST qt55-enabled.txt (
+SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
+SET title-string=JTSDK QT 5.5 Development Environment %version%
+) ELSE (
+SET PROMPT=$CJTSDK-QT 5.2 $F $P$F
+SET title-string=JTSDK QT 5.2 Development Environment %version%
+)
+TITLE %title-string%
+SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+SET LANG=en_US
+MODE con:cols=100 lines=40
+COLOR 0B
+
+:: PATH VARIABLES
 SET cmk=%based%\cmake\bin
 SET hl3=%based%\hamlib3\bin
 SET fft=%based%\fftw3f
@@ -51,28 +66,16 @@ SET gccd=%based%\qt55\Tools\mingw492_32\bin
 SET qt5d=%based%\qt55\5.5\mingw492_32\bin
 SET qt5p=%based%\qt55\5.5\mingw492_32\plugins\platforms
 SET qt5a=
+SET LIBRARY_PATH=
 ) ELSE (
 SET gccd=%based%\qt5\Tools\mingw48_32\bin
 SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
 SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
-)
 SET LIBRARY_PATH=
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
-:: Setup QT5 Version Var
-IF EXIST qt55-enabled.txt (
-SET QT5V=5.5
-) ELSE (
-SET QT5V=5.2
 )
-:: Get SVN Rev:
-%tools%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
-:: Set Version + SVN Rev
-SET version=%version%-%rev%
-:: Set the Title Bar
-TITLE %title-string%
-SET PROMPT=$CJTSDK-QT %QT5V% $F $P$F
+SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
 
 ::----------------------------------------------------------------------------::
