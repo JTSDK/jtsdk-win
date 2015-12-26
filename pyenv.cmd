@@ -28,32 +28,35 @@
 
 :: ENVIRONMENT
 @ECHO OFF
-SET version=2.0.3
-SET based=C:\JTSDK
-SET tools=%based%\tools\bin
-SET svnd=%based%\subversion\bin
-SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
-svn info |grep "Rev:" |awk "{print $4}" >r.v & set /p rev=<r.v & rm r.v
-SET version=%version%-%rev%
-SET title-string=JTSDK Python Development Environment %version%
-TITLE %title-string%
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
-SET LANG=en_US
 MODE con:cols=100 lines=38
 COLOR 0A
 
-:: PATH VARIABLES
-SET mgw=%based%\mingw32\bin
+:: PATHS
+SET version=2.0.3
+SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
+SET LANG=en_US
+SET based=C:\JTSDK
 SET inno=%based%\inno5
-SET ruby=%based%\Ruby\bin
-SET scr=%based%\scripts
+SET mgw=%based%\mingw32\bin
 SET python2path=%based%\python27;%based%\python27\Scripts;%based%\python27\DLLs
 SET python3path=%based%\Python33;%based%\python33\Scripts;%based%\python33\DLLs
-SET svnd=%based%\subversion\bin
+SET ruby=%based%\Ruby\bin
+SET scr=%based%\scripts
 SET srcd=%based%\src
+SET svnd=%based%\subversion\bin
+SET tools=%based%\tools\bin
 SET LIBRARY_PATH=
-SET PATH=%based%;%python2path%;%python3path%;%MGW%;%tools%;%innno%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
+SET PATH=%based%;%python2path%;%python3path%;%innno%;%MGW%;%ruby%;%scr%;%srcd%;%svnd%;%tools%;%WINDIR%\System32
+
+:: Set the title string
+:: Some versions of Windows require the full path to svn.exe
+:: Why this is now a problem is unknown.
+%svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
+SET version=%version%-%rev%
+SET title-string=JTSDK Python Development Environment %version%
+TITLE %title-string%
+
 CD /D %based%
 
 :: MAKE SURE SRCD IS PRESENT
