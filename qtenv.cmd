@@ -33,7 +33,7 @@ SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
-svn info |grep "Rev:" |awk "{print $4}" >r.v & set /p rev=<r.v & rm r.v
+%svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
 SET version=%version%-%rev%
 ECHO\
 IF EXIST qt55-enabled.txt (
