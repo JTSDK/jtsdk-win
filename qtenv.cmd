@@ -28,6 +28,11 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+COLOR 0B
+MODE con:cols=100 lines=40
+SET LANG=en_US
+
 SET version=2.0.3
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
@@ -44,10 +49,7 @@ SET PROMPT=$CJTSDK-QT 5.2 $F $P$F
 SET title-string=JTSDK QT 5.2 Development Environment %version%
 )
 TITLE %title-string%
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-SET LANG=en_US
-MODE con:cols=100 lines=40
-COLOR 0B
+
 
 :: PATH VARIABLES
 SET cmk=%based%\cmake\bin
