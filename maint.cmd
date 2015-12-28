@@ -24,11 +24,12 @@
 ::-----------------------------------------------------------------------------::
 
 @ECHO OFF
-COLOR 0E
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+COLOR 0E
 MODE con:cols=100 lines=40
-SET version=2.0.3
 SET LANG=en_US
+
+SET version=2.0.3
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin

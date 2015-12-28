@@ -28,6 +28,11 @@
 
 :: ENVIRONMENT
 @ECHO OFF
+SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+COLOR 0A
+MODE con:cols=100 lines=38
+SET LANG=en_US
+
 SET version=2.0.3
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
@@ -37,11 +42,7 @@ SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
 SET version=%version%-%rev%
 SET title-string=JTSDK Python Development Environment %version%
 TITLE %title-string%
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
-SET LANG=en_US
-MODE con:cols=100 lines=38
-COLOR 0A
 
 :: PATH VARIABLES
 SET mgw=%based%\mingw32\bin
