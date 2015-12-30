@@ -25,8 +25,7 @@
 
 :: ENVIRONMENT
 @ECHO OFF
-SETLOCAL EnableExtensions
-SETLOCAL EnableDelayedExpansion
+SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 SET LANG=en_US
 MODE con:cols=100 lines=40
 COLOR 0B
@@ -40,6 +39,7 @@ SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET cfg=%based%\config
 SET svnd=%based%\subversion\bin
+SET sed="%based%\msys\bin\sed.exe"
 SET PATH=%based%;%tools%;%cfg%;%svnd%;%WINDIR%\System32
 
 :: PROCESS FILES, URL's and FOLDERS
@@ -65,9 +65,16 @@ IF /I [%1]==[-u] ( GOTO UPDATE_LIST
 :: All Lists -------------------------------------------------------------------
 :: -a option
 :LIST_ALL
-CLS
+IF NOT EXIST "%devlist%" (
+SET missing=dev-list.txt
+GOTO MISSING_LIST
+)
+IF NOT EXIST "%garlist%" (
+SET missing=gar-list.txt
+GOTO MISSING_LIST
+)
 ECHO --------------------------------------------
-ECHO Development^, GA and RC List
+ECHO Development^, GA and RC Lists
 ECHO --------------------------------------------
 ls -al %timestamp% |awk "{print $6, $7}" >t.k & SET /P modtime=<t.k & rm t.k
 ECHO.
@@ -141,28 +148,27 @@ ECHO ^* Updating Development List
 
 :: wsjtx will always be in the list
 ECHO wsjtx > %devlist%
-svn list %devurl% | grep ^wsjtx-[1-9]\.[5-9] | sed "s:/*$::" | sort |uniq >> %devlist%
+svn list %devurl% | grep ^wsjtx-[1-9]\.[5-9] | %sed% "s:/*$::" | sort |uniq >> %devlist%
 
 :: Add wsjtx_exp in case Joe wanted to eenable it
 ECHO wsjtx_exp >> %devlist%
 ECHO ^* Updating GA and RC List
-svn list %garurl% | grep ^wsjtx-[1-9]\.[5-9] | sed "s:/*$::" | sort |uniq > %garlist%
+svn list %garurl% | grep ^wsjtx-[1-9]\.[5-9] | %sed% "s:/*$::" | sort |uniq > %garlist%
 ECHO.
-ECHO New Development List from^: ^( ^^/branches ^):
+ECHO Development List from^: ^( ^^/branches ^):
 cat %devlist%
 ECHO.
-ECHO New GA and RC List from^: ^( ^^/tags ^):
+ECHO GA and RC List from^: ^( ^^/tags ^):
 cat %garlist%
 ECHO.
 IF [%errorlevel%]==[0] ( touch "%cfg%\list-update-time-stamp" )
 GOTO EOF
 
-
 :: MUST HAVE ONE OPTION --------------------------------------------------------
 :MISSING_OPTION
 CLS
 ECHO --------------------------------------------
-ECHO  Invalid Number of Options - ^[0^]
+ECHO  Invalid Number of Arguments - ^[0^]
 ECHO --------------------------------------------
 ECHO.
 ECHO  Build List requires at least ^[1^] option
@@ -170,6 +176,25 @@ ECHO  to be entered by the user.
 ECHO.
 PAUSE
 GOTO HELP
+
+:: MISSING LIST ITEM
+: MISSING_LIST
+CLS
+ECHO --------------------------------------------
+ECHO  Missing [ %missing% ]
+ECHO --------------------------------------------
+ECHO.
+ECHO  ^[ %missing% ^] is either missing or could
+ECHO  not be opened.
+ECHO.
+ECHO  To correct this, run with option [ -u ]
+ECHO.
+ECHO  qtenv-build-list -u
+ECHO.
+ECHO  If the problem presists after updating,
+ECHO  contact the development list.
+ECHO.
+GOTO EOF
 
 :: DISPLAY HELP MESSAGE --------------------------------------------------------
 :HELP
