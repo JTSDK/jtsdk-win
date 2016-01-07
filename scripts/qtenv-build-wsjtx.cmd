@@ -1,560 +1,803 @@
-::-----------------------------------------------------------------------------::
-:: Name .........: qtenv-build-wsjtx.cmd
-:: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build script for WSJTX
-:: Project URL ..: http://sourceforge.net/projects/wsjt/
-:: Usage ........: This file is run from within qtenv.cmd
-::
-:: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
-:: License ......: GPL-3
-::
-:: qtenv-build-wsjtx.cmd is free software: you can redistribute it and/or modify it
-:: under the terms of the GNU General Public License as published by the Free
-:: Software Foundation either version 3 of the License, or (at your option) any
-:: later version.
-::
-:: qtenv-build-wsjtx.cmd is distributed in the hope that it will be useful, but WITHOUT
-:: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-:: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-:: details.
-::
-:: You should have received a copy of the GNU General Public License
-:: along with this program.  If not, see <http://www.gnu.org/licenses/>.
-::-----------------------------------------------------------------------------::
-
-:: ENVIRONMENT
 @ECHO OFF
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-SET LANG=en_US
-COLOR 0B
+REM  ---------------------------------------------------------------------------
+REM  Name .........: qtenv-build-wsjtx.cmd
+REM  Project ......: Part of the JTSDK 2.0 Project
+REM  Description ..: Build script for WSJTX
+REM  Project URL ..: http://sourceforge.net/projects/wsjt/
+REM  Usage ........: This file is run from within qtenv.cmd
+REM
+REM  Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
+REM  Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
+REM  License ......: GPL-3
+REM
+REM  qtenv-build-wsjtx.cmd is free software: you can redistribute it and/or
+REM  modify it under the terms of the GNU General Public License as published
+REM  by the Free Software Foundation either version 3 of the License, or
+REM  (at your option) any later version.
+REM
+REM  qtenv-build-wsjtx.cmd is distributed in the hope that it will be useful,
+REM  but WITHOUT ANY WARRANTY; without even the implied warranty of
+REM  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+REM  Public License for more details.
+REM
+REM  You should have received a copy of the GNU General Public License
+REM  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+REM ----------------------------------------------------------------------------
 
-:: TEST DOUBLE CLICK, if YES, GOTO ERROR MESSAGE
-FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
-IF DEFINED GUI CALL GOTO DOUBLE_CLICK_ERROR
+CLS
+SET devurl=http://svn.code.sf.net/p/wsjt/wsjt/branches
+SET garurl=http://svn.code.sf.net/p/wsjt/wsjt/tags
+SET baseurl=http://svn.code.sf.net/p/wsjt/wsjt
+SET devlist=%cfgd%\devlist.txt
+SET garlist=%cfgd%\garlist.txt
+SET timestamp=%cfgd%\list-update-time-stamp
+SET separate=No
+SET qt55=No
+SET quiet-mode=No
+GOTO TOOL-CHAIN
 
-:: VARIABLES USED IN PROCESS
-SET display_name=WSJTX-1.7.0-devel
-SET app_name=wsjtx
-SET JJ=%NUMBER_OF_PROCESSORS%
-
-:: BASE PATH VARIABLES
-SET based=C:\JTSDK
-SET cmk=%based%\cmake\bin
-SET tools=%based%\tools\bin
-SET fft=%based%\fftw3f
-SET nsi=%based%\nsis
-SET scr=%based%\scripts
-SET srcd=%based%\src
-SET svnd=%based%\subversion\bin
-
-:: OPTIONAL FOR ENABLE / DISABLE of QT 5.5 / GCC 4.9
-:: *DO NOT EDIT MANYALLY*
-IF EXIST qt55-enabled.txt (
-SET gccd=%based%\qt55\Tools\mingw492_32\bin
-SET qt5d=%based%\qt55\5.5\mingw492_32\bin
-SET qt5a=%based%\qt55\5.5\mingw492_32\plugins\accessible
-SET qt5p=%based%\qt55\5.5\mingw492_32\plugins\platforms
-SET hl3=%based%\hamlib3-qt55\bin
-SET tchain=%based%\scripts\wsjtx-toolchain-qt55.cmake
-SET buildd=%based%\%app_name%-qt55\build
-SET installdir=%based%\%app_name%-qt55\install
-SET packagedir=%based%\%app_name%-qt55\package
-SET ugdir=%based%\%app_name%-qt55\userguide
+:TOOL-CHAIN
+IF EXIST %cfgd%\qt55-enabled.txt ( 
+SET tchain=c:/JTSDK/scripts/wsjtx-toolchain-qt55.cmake
 ) ELSE (
-:: DEFAULT TOOL-CHAIN FOR QT 5.2 / GCC 4.8
-:: *DO NOT EDIT MANYALLY*
-SET gccd=%based%\qt5\Tools\mingw48_32\bin
-SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
-SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
-SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
-SET hl3=%based%\hamlib3\bin
-SET tchain=%based%\scripts\wsjtx-toolchain.cmake
-SET buildd=%based%\%app_name%\build
-SET installdir=%based%\%app_name%\install
-SET packagedir=%based%\%app_name%\package
-SET ugdir=%based%\%app_name%\userguide
+SET tchain=c:/JTSDK/scripts/wsjtx-toolchain.cmake
 )
+GOTO CHECK-OPTIONS
 
-SET LIBRARY_PATH=""
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%srcd%;%scr%;%svnd%;%WINDIR%;%WINDIR%\System32
-CD /D %based%
+:CHECK-OPTIONS
+IF EXIST %cfgd%\separate.txt (
+SET separate=Yes
+)
+IF EXIST %cfgd%\qt55.txt (
+SET qt55=Yes
+SET qtv=qt55
+) ELSE (
+SET qtv=qt52
+)
+IF EXIST %cfgd%\quiet.txt (
+SET quiet-mode=Yes
+)
+GOTO START
 
+:START
+IF /I [%1]==[help] (
+GOTO HELP-OPTIONS
+) ELSE IF /I [%1]==[-h] (
+GOTO HELP-OPTIONS
+) ELSE IF /I [%1]==[-o] (
+GOTO GLOBAL-OPTIONS
+) ELSE IF /I [%1]==[rconfig] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Release
+SET topt=config
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE IF /I [%1]==[dconfig] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Debug
+SET topt=config
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE IF /I [%1]==[rinstall] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Release
+SET topt=install
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE IF /I [%1]==[dinstall] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Debug
+SET topt=install
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE IF /I [%1]==[package] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Release
+SET topt=package
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE IF /I [%1]==[docs] (
+SET bopt=dev
+SET nopt=wsjtx
+SET copt=Release
+SET topt=docs
+SET folder=devel
+SET burl=%baseurl%/branches
+GOTO SVN-CHECKOUT
+) ELSE ( GOTO LIST-CHECK )
 
-:: SET RELEASE, DEBUG, and TARGET BASED ON USER INPUT
-IF /I [%1]==[rconfig] (SET option=Release
-SET btree=true
-) ELSE IF /I [%1]==[rinstall] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[wsjtx] (SET option=Release
-SET binstall=true
-) ELSE IF /I [%1]==[package] (SET option=Release
-SET bpkg=true
-) ELSE IF /I [%1]==[dconfig] (SET option=Debug
-SET btree=true
-) ELSE IF /I [%1]==[dinstall] (SET option=Debug
-SET binstall=true
-) ELSE IF /I [%1]==[doc] (SET option=Release
-SET rdoc=true
-) ELSE ( GOTO BADTYPE )
+:LIST-CHECK
+IF NOT EXIST %devlist% (
+SET missing=devlist.txt
+GOTO MISSING-LIST
+)
+IF NOT EXIST %garlist% (
+SET missing=garlist.txt
+GOTO MISSING-LIST
+)
+IF NOT EXIST %timestamp% (
+SET missing=Update Time Stamp
+GOTO MISSING-LIST
+)
+GOTO ARG-CHECK
 
-REM ----------------------------------------------------------------------------
-REM  START MAIN SCRIPT
-REM ----------------------------------------------------------------------------
+:ARG-CHECK
+SET /A argcount = 0
+FOR %%A IN (%*) DO SET /A argcount += 1
+IF %argcount%==8 (
+GOTO CUSTOM-PROCSSING
+) ELSE (
+GOTO MISSING-OPTIONS
+)
+GOTO EOF
 
-CLS
-CD /D %based%
-IF NOT EXIST %buildd%\%option%\NUL mkdir %buildd%\%option%
-IF NOT EXIST %installdir%\%option%\NUL mkdir %installdir%\%option%
-IF NOT EXIST %packagedir%\NUL mkdir %packagedir%
-IF NOT EXIST %ugdir%\NUL mkdir %ugdir%
-
-ECHO -----------------------------------------------------------------
-ECHO  ^( %display_name% ^) CMake Build Script
-ECHO -----------------------------------------------------------------
+:CUSTOM-PROCSSING
+ECHO --------------------------------------------
+ECHO  CUSTOM BUILD REQUESTED
+ECHO --------------------------------------------
 ECHO.
-IF NOT EXIST %srcd%\%app_name%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO SVNASK )
+ECHO  Command ..^: build-wsjtx %*
+GOTO BOPT
 
-:: ASK USER UPDATE FROM SVN
-:SVNASK
-CLS
+:BOPT
+IF /I "%1"=="-b" (
+SET bopt=%2
+IF /I "%2"=="dev" (
+SET burl=%baseurl%/branches
+SET checklist=%devlist%
+SET folder=devel
+) ELSE IF /I "%2"=="gar" (
+SET burl=%baseurl%/tags
+SET checklist=%garlist%
+SET folder=garc
+) ELSE ( GOTO CLI-INVALID-OPTION )
+SHIFT & SHIFT
+)
+GOTO NOPT
+
+:NOPT
+IF /I "%1"=="-n" (
+SET nopt=%2
+SHIFT & SHIFT
+)
+IF /I [%bopt%]==[dev] (
+IF /I [%nopt%]==[wsjtx] ( GOTO COPT )
+IF /I [%nopt%]==[wsjtx_exp] ( GOTO COPT )
+)
+grep -Fx "%nopt%" < %checklist% >NUL
+IF ERRORLEVEL 1 ( GOTO CLI-BRANCH-NAME-ERROR )
+GOTO COPT
+
+:COPT
+IF /I "%1"=="-c" (
+IF /I "%2"=="release" (
+SET copt=Release
+) ELSE IF /I "%2"=="debug" (
+SET copt=Debug
+) ELSE ( GOTO CLI-INVALID-OPTION )
+SHIFT & SHIFT
+)
+GOTO TOPT
+
+:TOPT
+IF /I "%1"=="-t" (
+IF "%2"=="rconfig" (
+SET topt=config
+SHIFT & SHIFT
+GOTO OPTION-RESULTS
+)
+IF "%2"=="dconfig" (
+SET topt=config
+SHIFT & SHIFT
+GOTO OPTION-RESULTS
+)
+IF "%2"=="rinstall" (
+SET topt=install
+SHIFT & SHIFT
+GOTO OPTION-RESULTS
+)
+IF "%2"=="dinstall" (
+SET topt=install
+SHIFT & SHIFT
+GOTO OPTION-RESULTS
+) ELSE (
+SET topt=%2
+SHIFT & SHIFT
+)
+) ELSE ( GOTO CLI-INVALID-OPTION )
+GOTO OPTION-RESULTS
+
+:OPTION-RESULTS
+ECHO  URL ......^: %burl%/%nopt%
+ECHO  Name .....^: %nopt%
+ECHO  Type .....^: %copt%
+ECHO  Target ...^: %topt%
+ECHO.
+GOTO SVN-CHECKOUT
+
+:SVN-CHECKOUT
+ECHO.
+ECHO --------------------------------------------
+ECHO  SVN Check
+ECHO --------------------------------------------
+ECHO.
+IF NOT EXIST %srcd%\%nopt%\.svn\NUL (
+CD /D %srcd%
+ECHO  Checking Out New Version ^( %nopt% ^) from SVN
+ECHO.
+start /wait svn co %burl%/%nopt%
+IF ERRORLEVEL 1 ( GOTO SVN_CHECKOUT-ERROR )
+GOTO GET-SVER
+) ELSE ( GOTO ASK-SVN-UPDATE )
+
+:ASK-SVN-UPDATE
 ECHO Update from SVN Before Building? ^( y/n ^)
 SET answer=
 ECHO.
 SET /P answer=Type Response: %=%
-If /I [%answer%]==[n] GOTO BUILD
+If /I [%answer%]==[n] (
+ECHO.
+GOTO GET-SVER )
 If /I [%answer%]==[y] (
-GOTO SVNUP
+ECHO.
+GOTO SVN-UPDATE
 ) ELSE (
-CLS
 ECHO.
-ECHO Please Answer With: ^( y or n ^)
+ECHO  Please Answer With: ^( y or n ^)
 ECHO.
-GOTO SVNASK
+GOTO ASK-SVN-UPDATE
 )
 
-:: UPDATE IF USER SAID YES TO UPDATE
-:SVNUP
-ECHO.
-ECHO Updating %srcd%\%app_name%
-ECHO.
-CD /D %srcd%\%app_name%
+:SVN-UPDATE
+CD /D %srcd%\%nopt%
 start /wait svn update
-ECHO.
+IF ERRORLEVEL 1 ( GOTO SVN-UPDATE-ERROR )
+GOTO GET-SVER
 
-REM ----------------------------------------------------------------------------
-REM  CONFIGURE BUILD TREE ( btree ) or Build User Guide
-REM ----------------------------------------------------------------------------
+:GET-SVER
+svn info %srcd%\%nopt% |grep "Rev:" |awk "{print $4}" >s.v & SET /p sver=<s.v & rm s.v
+GOTO GET-AVER
 
-:BUILD
-IF /I [%rdoc%]==[true] (
-cls
-ECHO -----------------------------------------------------------------
-ECHO Building User Guide for: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
+:GET-AVER
+SET vfile="%srcd%\%nopt%\Versions.cmake"
+cat %vfile% |grep "_MAJOR" |awk "{print $3}" |cut "-c1" >ma.v & SET /p mav=<ma.v & rm ma.v
+cat %vfile% |grep "_MINOR" |awk "{print $3}" |cut "-c1" >mi.v & SET /p miv=<mi.v & rm mi.v
+cat %vfile% |grep "_PATCH" |awk "{print $3}" |cut "-c1" >pa.v & SET /p pav=<pa.v & rm pa.v
+cat %vfile% |grep "_RC" |awk "{print $3}" |cut "-c1" >rcx.v & SET /p rcx=<rcx.v & rm rcx.v
+cat %vfile% |grep "_RELEASE" |awk "{print $3}" |cut "-c1" >rel.v & SET /p relx=<rel.v & rm rel.v
+IF [%relx%]==[1] (
+SET aver=%mav%.%miv%.%pav%
+SET desc=GA Release
+)
+IF %rcx% GTR 0 (
+IF [%relx%]==[1] (
+SET aver=%mav%.%miv%.%pav%
+SET desc=GA Release
+)
+)
+IF [%rcx%]==[0] (
+IF [%relx%]==[0] (
+SET aver=%mav%.%miv%.%pav%
+SET desc=devel
+)
+)
+IF %rcx% GTR 0 (
+IF [%relx%]==[0] (
+SET aver=%mav%.%miv%.%pav%
+SET desc=Release Candidate
+)
+)
+GOTO SETUP-DIRS
+
+
+:SETUP-DIRS
+ECHO --------------------------------------------
+ECHO  Folder Locations
+ECHO --------------------------------------------
 ECHO.
-IF NOT EXIST %ugdir%\build\NUL mkdir %ugdir%\build
-CD /D %ugdir%\build
+IF /I [%separate%]==[No] (
+ECHO  JTSDK Option^: - Folder Separation Disabled
+SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\build
+SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\install
+SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\package
+IF /I [%qt55%]==[Yes] (
+ECHO  JTSDK Option^: - QT55 Enabled
+SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\build
+SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\install
+SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\package
+) ELSE (
+ECHO  JTSDK Option^: - QT55 Disabled
+)
+GOTO CREATE-DIRS
+)
+IF /I [%separate%]==[Yes] (
+ECHO  JTSDK Option^: - Folder Separation Enabled
+SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\build
+SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\install
+SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\package
+IF /I [%qt55%]==[Yes] (
+ECHO  JTSDK Option^: - QT55 Enabled
+SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\build
+SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\install
+SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\package
+) ELSE (
+ECHO  JTSDK Option^: - QT55 Disabled
+)
+GOTO CREATE-DIRS
+)
+GOTO EOF
+
+:CREATE-DIRS
+ECHO.
+ECHO  Build .......^: %buildd%
+ECHO  Install .....^: %installd%
+ECHO  Package .....^: %pkgd%
+ECHO.
+SET appsrc=%srcd%\%nopt%
+mkdir %buildd% >NUL 2>&1
+mkdir %installd% >NUL 2>&1
+mkdir %pkgd% >NUL 2>&1
+GOTO START-MAIN
+
+:START-MAIN
+ECHO --------------------------------------------
+ECHO  Build Information
+ECHO --------------------------------------------
+ECHO.
+ECHO  Name ........^: %nopt% %desc%
+ECHO  Version .....^: %aver%
+ECHO  SVN .........^: r%sver%
+ECHO  Type ........^: %copt%
+ECHO  Target ......^: %topt%
+ECHO  Tool Chain ..^: %qtv%
+ECHO  SRC .........^: %srcd%\%nopt%
+ECHO  Build .......^: %buildd%
+ECHO  Install .....^: %installd%
+ECHO  Package .....^: %pkgd%
+ECHO  SVN URL .....^: %burl%/%nopt%
+ECHO  Tool Chain ..^: %tchain%
+ECHO.
+GOTO BUILD-SELECT
+
+:BUILD-SELECT
+IF /I [%topt%]==[config] ( GOTO CONFIG-ONLY )
+IF /I [%topt%]==[install] ( GOTO INSTALL-TARGET )
+IF /I [%topt%]==[package] ( GOTO PKG-TARGET )
+IF /I [%topt%]==[docs] (
+GOTO DOCS-TARGET
+) ELSE (
+GOTO UD-TARGET
+)
+GOTO EOF
+
+REM  --------------------------------------------------------------- CONFIG-ONLY
+:CONFIG-ONLY
+CD /D %buildd%
+ECHO.
+ECHO --------------------------------------------
+ECHO  Configuring Build Tree
+ECHO --------------------------------------------
+ECHO.
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_INCLUDE_KVASD=OFF ^
+-D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO FINISH-CONFIG
+GOTO EOF
+
+
+REM  ---------------------------------------------------------------- USER GUIDE
+:DOCS-TARGET
+CD /D %buildd%
+ECHO.
+ECHO --------------------------------------------
+ECHO  Building User Guide
+ECHO --------------------------------------------
+ECHO.
 IF NOT EXIST Makefile (
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D CMAKE_BUILD_TYPE=Release ^
--D CMAKE_INSTALL_PREFIX=%ugdir%/install %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-ECHO.
+-D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 )
-cmake --build . --target docs -- -j %JJ%
-CD /D %ugdir%\build\doc
-mingw32-make install > NUL 2>&1
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-DIR /B %ugdir%\install\bin\doc\*-*.html >p.k & SET /P docname=<p.k & rm p.k
-CD /D %based%
-GOTO USER_GUIDE_MSG
-)
+cmake --build . --target docs
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+DIR /B %buildd%\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
+GOTO FINISH-UG
 
-IF [%btree%]==[true] (
-CLS
-ECHO -----------------------------------------------------------------
-ECHO Configuring %option% Build For: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
+REM  ------------------------------------------------------------ INSTALL-TARGET
+:INSTALL-TARGET
+CD /D %buildd%
 ECHO.
-IF EXIST %buildd%\%option%\NUL (
-ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-)
-CD /D %buildd%\%option%
-ECHO -- Generating New ^( %display_name% ^) Makefiles
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D WSJT_INCLUDE_KVASD=ON ^
--D CMAKE_COLOR_MAKEFILE=OFF ^
--D CMAKE_BUILD_TYPE=%option% ^
--D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished %option% Configuration for: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO BASE BUILD CONFIGURATION
-ECHO  Package ............: %app_name%
-ECHO  Type ...............: %option%
-ECHO  Build Directory ....: %buildd%\%option%
-ECHO  Build Option List ..: %buildd%\%option%\CmakeCache.txt
-ECHO  Target Directory ...: %installdir%\%option%
-ECHO.
-ECHO LIST ALL BUILD CONFIG OPTIONS
-ECHO  cat %buildd%\%option%\CmakeCache.txt ^| less
-ECHO  :: Arrow Up / Down to dcroll through the list
-ECHO  :: Type ^(H^) for help with search commands
-ECHO  :: Type ^(Ctrl+C then Q^) to exit
-ECHO.
-ECHO TO BUILD INSTALL TARGET
-ECHO  cd /d %buildd%\%option%
-ECHO  cmake --build . --target install -- -j %JJ%
-ECHO.
-GOTO EOF
-
-REM ----------------------------------------------------------------------------
-REM  BUILD INSTALL TARGET ( binstall )
-REM ----------------------------------------------------------------------------
-) ELSE IF [%binstall%]==[true] (
-CLS
-ECHO -----------------------------------------------------------------
-ECHO Building %option% Install Target For: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-IF EXIST %buildd%\%option%\NUL (
-ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-)
-CD /D %buildd%\%option%
-ECHO -- Generating New Makefiles
-IF /I [%option%]==[Debug] (
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D CMAKE_COLOR_MAKEFILE=OFF ^
--D WSJT_INCLUDE_KVASD=ON ^
--D WSJT_CREATE_WINMAIN=ON ^
--D CMAKE_BUILD_TYPE=%option% ^
--D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-)
-IF /I [%option%]==[Release] (
-cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D CMAKE_COLOR_MAKEFILE=OFF ^
--D WSJT_INCLUDE_KVASD=ON ^
--D CMAKE_BUILD_TYPE=%option% ^
--D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-)
-ECHO.
-ECHO -- Building %option% Install Target
-ECHO.
-cmake --build . --target install -- -j %JJ%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-
-:: CHECK IF DEBUG
-IF /I [%OPTION%]==[Debug] ( GOTO DEBUG_MAKEBAT ) ELSE ( GOTO FINISH )
-GOTO FINISH
-
-REM ----------------------------------------------------------------------------
-REM  BUILD INSTALLER ( bpkg )
-REM ----------------------------------------------------------------------------
-) ELSE IF [%bpkg%]==[true] (
-CLS
-ECHO -----------------------------------------------------------------
-ECHO Building Win32 Installer For: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO.
-IF EXIST %buildd%\%option%\NUL (
-ECHO -- Cleaning previous build tree
-RD /S /Q %buildd%\%option% >NUL 2>&1
-mkdir %buildd%\%option%
-)
-CD /D %buildd%\%option%
-ECHO -- Generating New Makefiles
+ECHO --------------------------------------------
+ECHO  Building Install Target
+ECHO --------------------------------------------
 ECHO.
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
--D CMAKE_COLOR_MAKEFILE=OFF ^
--D WSJT_INCLUDE_KVASD=ON ^
--D CMAKE_BUILD_TYPE=%option% ^
--D CMAKE_INSTALL_PREFIX=%installdir%/%option% %srcd%/%app_name%
-IF ERRORLEVEL 1 ( GOTO CMAKE_ERROR )
-GOTO NSIS_PKG
+-D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+cmake --build . --target %topt% -- -j %JJ%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO FINISH-INSTALL
 
-:: NSIS PACKAGE ( WSJT-X / Win32 ONLY)
-:NSIS_PKG
-ECHO.
-ECHO -- Building Win32 Installer
-ECHO.
-cmake --build . --target package -- -j %JJ%
-IF ERRORLEVEL 1 ( GOTO NSIS_BUILD_ERROR )
-DIR /B %buildd%\%option%\*-win32.exe >p.k & SET /P wsjtxpkg=<p.k & rm p.k
-CD /D %buildd%\%option%
-ECHO JTSDK: - Copying package to: %packagedir%
-COPY /Y %wsjtxpkg% %packagedir% > nul
-CD /D %based%
-GOTO FINISH_PKG
 
-:: DEBUG MAKE BATCH FILE
-:DEBUG_MAKEBAT
-ECHO -- Generating Debug Batch File for ^( %display_name% ^)
-CD /D %installdir%\%option%\bin
-IF EXIST %app_name%.cmd (DEL /Q %app_name%.cmd)
->%app_name%.cmd (
-ECHO @ECHO OFF
-ECHO REM -- Debug Batch File
-ECHO REM -- Part of the JTSDK v2.0 Project
-ECHO TITLE WSJT-X Debug Terminal
-ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
-ECHO CALL wsjtx.exe
+REM  ------------------------------------------------------------------- PACKAGE
+:PKG-TARGET
+CD /D %buildd%
 ECHO.
-)
-GOTO DEBUG_MAKEBAT_UTIL
+ECHO --------------------------------------------
+ECHO  Building Win32 Installer
+ECHO --------------------------------------------
+ECHO.
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_INSTALL_PREFIX=%pkgd% %appsrc%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+cmake --build . --target %topt% -- -j %JJ%
+IF ERRORLEVEL 1 ( GOTO NSIS-ERROR )
+DIR /B %buildd%\*-win32.exe >p.k & SET /P wsjtxpkg=<p.k & rm p.k
+ECHO JTSDK^: ^- Copying package to^: %pkgd%
+COPY /Y %buildd%\%wsjtxpkg% %pkgd% > NUL
+GOTO FINISH-PKG
 
-:: UTIL BATCH FILES
-:DEBUG_MAKEBAT_UTIL
-ECHO -- Generating Debug Utils Batch File for ^( %display_name% ^)
-CD /D %installdir%\%option%\bin
-IF EXIST %app_name%-debug-util.cmd (DEL /Q %app_name%-debug-util.cmd)
->%app_name%-debug-util.cmd (
-ECHO @ECHO OFF
-ECHO REM -- WSJTX Debug Utilities Batch File
-ECHO REM -- Part of the JTSDK v2.0 Project
+REM  --------------------------------------------------------USER-DEFINED-TARGET
+:UD-TARGET
+CD /D %buildd%
 ECHO.
-ECHO TITLE WSJTX Debug Utilities Batch File
-ECHO SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-ECHO COLOR 0B
+ECHO --------------------------------------------
+ECHO  Building User Defined Target ^ [ %topt% ^]
+ECHO --------------------------------------------
 ECHO.
-ECHO ^:: SET PATHS
-ECHO SET PATH=.;.\bin;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
-ECHO.
-ECHO CLS
-ECHO ECHO --------------------------------------------------------------
-ECHO ECHO  Welcome to WSJT-X Testing Utilities
-ECHO ECHO --------------------------------------------------------------
-ECHO ECHO.
-ECHO ECHO  App Names ...: jt9code, jt65code, jt4code or kvasd
-ECHO ECHO  Help, type ..: [ app-name ] then ENTER
-ECHO ECHO.
-ECHO ECHO  Type ..: jt65code "message"  or  jt65code -t
-ECHO ECHO  Type ..: jt9code "message"  or  jt9code -t
-ECHO ECHO  Type ..: jt4code "message"  or  jt4code -t
-ECHO ECHO  Tpye ..: kvasd -v  or just  kvasd
-ECHO ECHO.
-ECHO.
-ECHO ^:: OPEN CMD WINDOW
-ECHO ^%COMSPEC% /A /Q /K
-)
-GOTO DEBUG_FINISH
+cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
+-D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+cmake --build . --target %topt% -- -j %JJ%
+IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO FINISH-UD
 
-:: DISPLAY DEBUG_FINISHED MESSAGE
-:DEBUG_FINISH
+REM  ***************************************************************************
+REM   FINISH MESSAGES
+REM  ***************************************************************************
+:FINISH-INSTALL
 ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
+ECHO --------------------------------------------
+ECHO  Build Summary
+ECHO --------------------------------------------
 ECHO.
-ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\%app_name%.cmd
+ECHO   Name ........^: %nopt% %desc%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Type ........^: %copt%
+ECHO   Target ......^: %topt%
+ECHO   Tool Chain ..^: %qtv%
+ECHO   SRC .........^: %srcd%\%nopt%
+ECHO   Location ....^: %buildd%\%topt%
+ECHO   SVN URL .....^: %burl%/%nopt%
 ECHO.
-ECHO   When Running ^( %display_name% ^) Debug versions, please use
-ECHO   the provided  ^( %app_name%.cmd ^) file as this sets up
-ECHO   environment variables and support file paths.
-ECHO.
-GOTO ASK_DEBUG_RUN
-
-:: ASK USER IF THEY WANT TO RUN THE APP, DEBUG MODE
-:ASK_DEBUG_RUN
-ECHO.
-ECHO   Would You Like To Run ^( %display_name% ^) Now? ^( y/n ^)
-ECHO.
-SET answer=
-SET /P answer=Type Response: %=%
-ECHO.
-If /I [%answer%]==[y] ( GOTO RUN_DEBUG )
-If /I [%answer%]==[n] (
 GOTO EOF
-) ELSE (
+
+:FINISH-CONFIG
+ECHO.
+ECHO --------------------------------------------
+ECHO  Configure Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ........^: %nopt% %desc%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Type ........^: %copt%
+ECHO   Target ......^: %topt%
+ECHO   Tool Chain ..^: %qtv%
+ECHO   SRC .........^: %srcd%\%nopt%
+ECHO   Location ....^: %buildd%
+ECHO   SVN URL .....^: %burl%/%nopt%
+ECHO.
+ECHO   Config Only builds simply configure the build tree with
+ECHO   default options. To further configure or re-configure this build,
+ECHO   run the following commands:
+ECHO.
+ECHO   cd %buildd%
+ECHO   cmake-gui .
+ECHO   Once the CMake-GUI opens, click on Generate, then Configure
+ECHO.
+ECHO   You now have have a fully configured build tree. If you make 
+ECHO   changes be sure click on Generate and Configure again.
+ECHO.
+ECHO   To return to the main menu, type: main-menu
+ECHO.
+GOTO EOF
+
+:FINISH-UG
+ECHO.
+ECHO --------------------------------------------
+ECHO  User Guide Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ........^: %docname%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Type ........^: %copt%
+ECHO   Target ......^: %topt%
+ECHO   Tool Chain ..^: %qtv%
+ECHO   SRC .........^: %srcd%\%nopt%
+ECHO   Build .......^: %buildd%
+ECHO   Location ....^: %buildd%\doc\%docname%
+ECHO   SVN URL .....^: %burl%/%nopt%
+ECHO.
+ECHO   The user guide does ^*not^* get installed like normal install
+ECHO   builds, it remains in the build folder to aid in browser
+ECHO   shortcuts for quicker refresh during development iterations. 
+ECHO.
+ECHO   The name ^[ %docname% ^] also remains constant rather
+ECHO   than including the version infomation.
+ECHO.
+GOTO EOF
+
+:FINISH-PKG
+ECHO.
+ECHO --------------------------------------------
+ECHO  Win32 Installer Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ........^: %wsjtxpkg%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Type ........^: %copt%
+ECHO   Target ......^: %topt%
+ECHO   Tool Chain ..^: %qtv%
+ECHO   SRC .........^: %srcd%\%nopt%
+ECHO   Build .......^: %buildd%
+ECHO   Location ....^: %pkgd%\%wsjtxpkg%
+ECHO   SVN URL .....^: %burl%/%nopt%
+ECHO.
+ECHO   To Install the package, browse to Location and
+ECHO   run as you normally do to install Windows applications.
+ECHO.
+GOTO EOF
+
+:FINISH-UD
+ECHO.
+ECHO -----------------------------------------------------------------
+ECHO  User Defined Target Summary
+ECHO -----------------------------------------------------------------
+ECHO.
+ECHO   Name ........^: %nopt%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Type ........^: %copt%
+ECHO   Target ......^: %topt%
+ECHO   Tool Chain ..^: %qtv%
+ECHO   SRC .........^: %srcd%\%nopt%
+ECHO   Location ....^: %buildd%\%topt%
+ECHO   SVN URL .....^: %burl%/%nopt%
+ECHO.
+ECHO   Custom Targets do ^*not^* get installed like normal install
+ECHO   builds, they remain in the build folder. 
+ECHO.
+ECHO   See Location above for build target ^[ %topt% ^]
+ECHO.
+GOTO EOF
+
+REM  ***************************************************************************
+REM   HELP MESSAGES
+REM  ***************************************************************************
+:HELP-OPTIONS
 CLS
+ECHO --------------------------------------------
+ECHO  DEFAULT BUILD COMMANDS
+ECHO --------------------------------------------
 ECHO.
-ECHO Please Answer With: ^( y or n ^)
+ECHO  Usage .....^: build-wsjtx ^[ OPTION ^]
+ECHO  Example....^: build-wsjtx rinstall
 ECHO.
-GOTO ASK_DEBUG_RUN
-)
-
-:: RUN APP, DEBUG MODE
-:RUN_DEBUG
+ECHO  OPTIONS:
+ECHO     rconfig    WSJTX Devel, Release, Config Only
+ECHO     dconfig    WSJTX Devel, Debug, Config Only
+ECHO     rinstall   WSJTX Devel, Release, Install
+ECHO     dinstall   WSJTX Devel, Debug, Install
+ECHO     package    WSJTX Devel, Release, Package
+ECHO     docs       WSJTX Devel, Release, User Guide
 ECHO.
-CD /D %installdir%\%option%\bin
-ECHO .. Starting: ^( %display_name% ^) in %option% Mode
-CALL %app_name%.cmd
-GOTO EOF
-
-:: FINISHED PACKAGE MESSAGE
-:FINISH_PKG
+ECHO --------------------------------------------
+ECHO  COMMAND LINE OPTIONS
+ECHO --------------------------------------------
 ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished Installer Build For: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
+ECHO  Usage .....^: build-wsjtx ^[-h^] ^[-b^] ^[-n^] ^[-c^] ^[-t^]  
+ECHO  Example....^: build-wsjtx ^-b dev ^-n wsjtx ^-c release ^-t install
 ECHO.
-ECHO  Installer Name ......: %wsjtxpkg%
-ECHO  Installer Location ..: %packagedir%\%wsjtxpkg%
+ECHO  OPTIONS:
+ECHO     ^-h   Displays this message
+ECHO     ^-b   ^( dev ^| gar ^)
+ECHO          dev ^= development branches ^^/branches
+ECHO          gar ^= GA and RC branches ^^/tags
+ECHO     ^-n   Branch Name^: wsjtx, wsjtx-1.6, wsjtx-1.6.0-rc1, etc
+ECHO     ^-c   Cmake Build Type^: ^( release ^| debug ^)
+ECHO     ^-t  install package docs ^| user-defined
 ECHO.
-ECHO  To Install the package, browse to Installer Location, and
-ECHO  run as you normally do to install Windows applications.
-ECHO.
-GOTO EOF
-
-:: DISPLAY FINISH MESSAGE
-:FINISH
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished %option% Build: ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO   Build Tree Location .. %buildd%\%option%
-ECHO   Install Location ..... %installdir%\%option%\bin\wsjtx.exe
-GOTO ASK_FINISH_RUN
-
-:: ASK USER IF THEY WANT TO RUN THE APP
-:ASK_FINISH_RUN
-ECHO.
-ECHO   Would You Like To Run ^( %display_name% ^) Now? ^( y/n ^)
-ECHO.
-SET answer=
-SET /P answer=Type Response: %=%
-ECHO.
-If /I [%answer%]==[y] GOTO RUN_INSTALL
-If /I [%answer%]==[n] (
-GOTO EOF
-) ELSE (
-CLS
-ECHO.
-ECHO Please Answer With: ^( Y or N ^)
-ECHO.
-GOTO ASK_FINISH_RUN
-)
-
-:: RUN APP
-:RUN_INSTALL
-ECHO.
-CD /D %installdir%\%option%\bin
-ECHO Starting: ^( %display_name% ^) in %option% Mode
-CALL wsjtx.exe
-)
-GOTO EOF
-
-:: DISPLAY USER GUIDE MESSAGE
-:USER_GUIDE_MSG
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO Finished User Guide Build for: : ^( %display_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO   Document Name ..: %docname%
-ECHO   Location .......: %ugdir%\install\bin\doc\%docname%
-ECHO.
+ECHO  Use ^: wsjtx-list ^-a  to list available branch names
 ECHO.
 GOTO EOF
 
-REM ----------------------------------------------------------------------------
-REM  POST BUILD
-REM ----------------------------------------------------------------------------
-
-:: DOUBLE-CLICK ERROR MESSAGE
-:DOUBLE_CLICK_ERROR
-CLS
-@ECHO OFF
-ECHO -------------------------------
-ECHO       Execution Error
-ECHO -------------------------------
+:GLOBAL-OPTIONS
+ECHO --------------------------------------------
+ECHO  GLOBAL OPTION STATUS
+ECHO --------------------------------------------
 ECHO.
-ECHO Please Run from JTSDK Enviroment
+ECHO  Separate ....^: %separate%
+ECHO  Use QT5.5 ...^: %qt55%
+ECHO  Quiet Mode ..^: %quiet-mode%
 ECHO.
-ECHO          qtenv.cmd
+ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
+ECHO  NAME ...^: separate qt55 quiet
 ECHO.
-PAUSE
+ECHO  DESCRIPTION
+ECHO   separate ...^: Separate by App Version ^+ SVN Version
+ECHO   qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
+ECHO   quiet ......^: Enable or Disable Additional on Screen messages
+ECHO.
+ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
+ECHO  before the change can take affect.
+ECHO.
+ECHO  To disply this message, type:  build-wsjtx ^-o
+ECHO.
 GOTO EOF
 
-:: DISPLAY SRC DIRECTORY WAS NOT FOUND, e.g. NO CHECKOUT FOUND
-:COMSG
-CLS
-ECHO ----------------------------------------
-ECHO  %srcd%\%app_name% Not Found
-ECHO ----------------------------------------
+REM  ***************************************************************************
+REM   ERROR MESSAGES
+REM  ***************************************************************************
+:ERROR-CMAKE
 ECHO.
-ECHO  In order to build ^( %display_name% ^) you
-ECHO  must first perform a checkout from
-ECHO  SourceForge:
+ECHO --------------------------------------------
+ECHO  CMAKE BUILD ERROR
+ECHO --------------------------------------------
 ECHO.
-ECHO  Type ..: checkout-wsjtx
-ECHO.
-ECHO  After the pause, the checkout help menu
-ECHO  will be displayed.
-ECHO.
-PAUSE
-CALL %based%\scripts\help\qtenv-help-checkout.cmd
-GOTO EOF
-
-:: UNSUPPORTED BUILD TYPE
-:BADTYPE
-CLS
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO   ^( %1 ^) IS AN INVALID TARGET
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO  After the pause, a build help menu
-ECHO  will be displayed. Please use the syntax
-ECHO  as outlined and choose the correct
-ECHO  target to build.
-ECHO.
-ECHO  Example: build-%app_name% rinstall
-ECHO.
-PAUSE
-CALL %scr%\help\qtenv-help-%app_name%.cmd
-GOTO EOF
-
-:: GENERAL CMAKE ERROR MESSAGE
-:CMAKE_ERROR
-ECHO.
-ECHO -----------------------------------------------------------------
-ECHO                    CMAKE BUILD ERROR
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO  There was a problem building ^( %display_name% ^)
+ECHO  There was a problem building ^( %nopt% %desc% ^)
 ECHO.
 ECHO  Check the screen for error messages, correct, then try to
-ECHO  re-build ^( %display_name% ^)
+ECHO  re-build ^( %nopt%  %desc% %copt% %topt% ^)
 ECHO.
 ECHO.
 GOTO EOF
 
-:: UNSUPPORTED INSTALLER TYPE
-:NSIS_BUILD_ERROR
+:NSIS-ERROR
 ECHO.
-ECHO -----------------------------------------------------------------
-ECHO                    INSTALLER BUILD ERROR
-ECHO -----------------------------------------------------------------
+ECHO --------------------------------------------
+ECHO  Win32 INSTALLER BUILD ERROR
+ECHO --------------------------------------------
 ECHO.
 ECHO  There was a problem building the package, or the script
 ECHO  could not find:
 ECHO.
-ECHO  %buildd%\%option%\%WSJTXPKG%
+ECHO  %buildd%\%WSJTXPKG%
 ECHO.
 ECHO  Check the Cmake logs for any errors, or correct any build
 ECHO  script issues that were obverved and try to rebuild the package.
 ECHO.
+GOTO EOF
+
+:MISSING-LIST
+CLS
+ECHO --------------------------------------------
+ECHO  Missing [ %missing% ]
+ECHO --------------------------------------------
+ECHO.
+ECHO  ^[ %missing% ^] is either missing or could
+ECHO  not be opened.
+ECHO.
+ECHO  To correct this, run the following command^:
+ECHO.
+ECHO  wsjtx-list ^-u
+ECHO.
+ECHO  If the problem presists after updating,
+ECHO  contact the development list.
 ECHO.
 GOTO EOF
 
-:: END QTENV-WSJTXRC.CMD
+:MISSING-OPTIONS
+CLS
+ECHO --------------------------------------------
+ECHO  MISSING COMMAND LINE OPTION
+ECHO --------------------------------------------
+ECHO.
+ECHO  Option Count Error ^- ^[ %argcount% ^]
+ECHO.
+ECHO  The WSJTX build script requires at least ^[ 1 ^]
+ECHO  argument for defualt builds and ^[ 8 ^] for
+ECHO  custom command line builds, you supplied ^[ %argcount% ^]
+ECHO.
+ECHO  Press any key to display the help message ... 
+ECHO.
+PAUSE>NUL
+GOTO HELP-OPTIONS
+
+:CLI-INVALID-OPTION
+ECHO.
+ECHO  Invalid Option ^- ^[ %1 %2 ^]
+ECHO.
+ECHO  Please correct the command line options
+ECHO  and try again.
+ECHO.
+ECHO  Press any key to display the help message ... 
+PAUSE>NUL
+GOTO HELP-OPTIONS
+
+:CLI-BRANCH-NAME-ERROR
+ECHO.
+ECHO  Invalid Branch Name ^- ^[ %nopt% ^]
+ECHO.
+ECHO  %nopt% was not found in the the wsjtx
+ECHO  build lists.
+ECHO.
+ECHO  If you believe the brach is valid, try updating
+ECHO  the lists with: wsjtx-list ^-u
+ECHO.
+ECHO  Press any key to view the branch list for ^[ ^-n %bopt% ^]
+PAUSE>NUL
+IF /I [%bopt%]==[dev] (
+call %scr%\qtenv-build-list.cmd -d
+) ELSE (
+call %scr%\qtenv-build-list.cmd -g
+)
+GOTO EOF
+
+:SVN-CO-ERROR
+ECHO --------------------------------------------
+ECHO  Sourceforge Checkout Error
+ECHO --------------------------------------------
+ECHO.
+ECHO  ^build-wsjtx was unable to checkout the
+ECHO  branch form Sourceforge. The service
+ECHO  may be down or undergoing maintenance.
+ECHO  Check the following link for current site
+ECHO  status reports^:
+ECHO.
+ECHO  http://sourceforge.net/blog/category/sitestatus/
+ECHO.
+ECHO  Other types of errors such as non-existan branchs
+ECHO  or tags may alos be the casue.
+ECHO.
+ECHO  Verify your entry and try again later. If the
+ECHO  peoblem presists, contact the wsjt-devel list.
+ECHO
+GOTO EOF
+
+:SVN-UPDATE-ERROR
+ECHO --------------------------------------------
+ECHO  Sourceforge Update Error
+ECHO --------------------------------------------
+ECHO.
+ECHO  ^build-wsjtx was unable to update ^[ %nopt% ^]
+ECHO  Sourceforge. The service may be down or
+ECHO  undergoing maintenance. Check the following
+ECHO  link for current site status reports^:
+ECHO.
+ECHO  http://sourceforge.net/blog/category/sitestatus/
+ECHO.
+ECHO  If your sure the entry is correct and you suspect
+ECHO  a problem with the build script, contact the
+ECHO  wsjt-devel list for assistance.
+ECHO.
+GOTO EOF
+
+REM  ***************************************************************************
+REM  END QTENV-BUILD-WSJTX.CMD
+REM  ***************************************************************************
 :EOF
 CD /D %based%
 COLOR 0B
-ENDLOCAL
 
 EXIT /B 0

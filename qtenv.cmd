@@ -1,13 +1,13 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: qtenv.cmd
 :: Function .....: JTSDK QT5 Environment for Win32
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Sets the Environment for building WSJT-X, WSPR-X and MAP65
 :: Project URL ..: http://sourceforge.net/projects/jtsdk 
 :: Usage ........: Windows Start, run C:\JTSDK\qtenv.cmd
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv.cmd is free software: you can redistribute it and/or modify it under the
@@ -30,30 +30,29 @@
 @ECHO OFF
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 COLOR 0B
-MODE con:cols=100 lines=40
 SET LANG=en_US
 
-SET version=2.0.3
+SET /P version=<version.jtsdk
 SET based=C:\JTSDK
 SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
 %svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
 SET version=%version%-%rev%
-ECHO\
-IF EXIST qt55-enabled.txt (
+ECHO.
+IF EXIST %based%\config\qt55.txt (
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
-SET title-string=JTSDK QT 5.5 Development Environment %version%
+SET title-string=JTSDK QT 5.5 Development Environment - %version%
 ) ELSE (
 SET PROMPT=$CJTSDK-QT 5.2 $F $P$F
-SET title-string=JTSDK QT 5.2 Development Environment %version%
+SET title-string=JTSDK QT 5.2 Development Environment - %version%
 )
 TITLE %title-string%
 
 
 :: PATH VARIABLES
+SET cfgd=%based%\config
 SET cmk=%based%\cmake\bin
-SET hl3=%based%\hamlib3\bin
 SET fft=%based%\fftw3f
 SET nsi=%based%\nsis
 SET ino=%based%\inno5
@@ -63,7 +62,7 @@ SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
 :: Optional enable / Disable use of QT55 for testing
 :: *DO NOT EDIT MANYALLY*
-IF EXIST qt55-enabled.txt (
+IF EXIST %based%\config\qt55.txt (
 SET gccd=%based%\qt55\Tools\mingw492_32\bin
 SET qt5d=%based%\qt55\5.5\mingw492_32\bin
 SET qt5p=%based%\qt55\5.5\mingw492_32\plugins\platforms
@@ -75,9 +74,9 @@ SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
 SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
 SET LIBRARY_PATH=
-
+SET hl3=%based%\hamlib3\bin;%based%\hamlib3\include\hamlib;%based%\hamlib3\lib
 )
-SET PATH=%based%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cfgd%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
 
 ::----------------------------------------------------------------------------::
@@ -106,6 +105,7 @@ CD /D %based%
 
 :: MAKE SURE SRCD IS PRESENT
 IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
+IF NOT EXIST %cfgd%\NUL ( mkdir %based%\config )
 
 :: CHECKOUT COMMANDS ( users *should not* edit these )
 DOSKEY checkout-wsprx="%scr%\qtenv-checkout.cmd" $* wsprx
@@ -125,30 +125,26 @@ DOSKEY help-map65=CALL %based%\scripts\help\qtenv-help-map65.cmd
 :: WSJTX DEVEL BRANCH ( users *should not* edit these )
 DOSKEY help-wsjtx=CALL %based%\scripts\help\qtenv-help-wsjtx.cmd
 DOSKEY checkout-wsjtx="%scr%\qtenv-checkout.cmd" $* wsjtx
-DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* wsjtx
-
-:: WSJT-X RC BRANCH ( users *should not* edit these )
-DOSKEY help-wsjtxrc=CALL %based%\scripts\help\qtenv-help-wsjtxrc.cmd
-DOSKEY checkout-wsjtxrc="%scr%\qtenv-checkout.cmd" $* wsjtxrc
-DOSKEY build-wsjtxrc="%scr%\qtenv-build-wsjtxrc.cmd" $* wsjtxrc
-:: DOSKEY help-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-:: DOSKEY build-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-:: DOSKEY checkout-wsjtxrc="%scr%\qtenv-rc-message.cmd"
-
-:: WSJT-X EXP BRANCH ( users *should not* edit these )
-DOSKEY checkout-wsjtxexp="%scr%\qtenv-exp-message.cmd"
-DOSKEY build-wsjtxexp="%scr%\qtenv-exp-message.cmd"
-DOSKEY help-wsjtxexp="%scr%\qtenv-exp-message.cmd"
-
-:: DOSKEY checkout-wsjtxexp="%scr%\qtenv-checkout.cmd" $* wsjtxexp
-:: DOSKEY build-wsjtxexp="%scr%\qtenv-exp-message.cmd"
-:: DOSKEY help-wsjtxexp=CALL %based%\scripts\help\qtenv-help-wsjtxexp.cmd
-:: DOSKEY build-wsjtxexp="%scr%\qtenv-build-wsjtxexp.cmd" $* wsjtxexp
-
+DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
+DOSKEY wsjtx-list="%based%\scripts\qtenv-build-list.cmd" $*
 
 :: ENABLE / DISABLE Qt5.5 ( users *should not* edit these )
-DOSKEY qt55-enable="touch.exe" C:\JTSDK\qt55-enabled.txt
-DOSKEY qt55-disable="rm.exe" -f C:\JTSDK\qt55-enabled.txt
+DOSKEY enable-qt55="touch.exe" C:\JTSDK\config\qt55.txt
+DOSKEY disable-qt55="rm.exe" -f C:\JTSDK\config\qt55.txt
+
+:: ENABLE / DISABLE Separation 
+DOSKEY enable-separate="touch.exe" C:\JTSDK\config\separate.txt
+DOSKEY disable-separate="rm.exe" -f C:\JTSDK\config\separate.txt
+
+:: ENABLE / DISABLE Extra Screen Messages ( Quiet Mode ) ( users *should not* edit these )
+DOSKEY enable-quiet="rm.exe" -f C:\JTSDK\config\quiet.txt
+DOSKEY disable-quiet="touch.exe" C:\JTSDK\config\quiet.txt
+
+REM CHECK FOR ORIGINAL QT55 ENABLE FILE ( users *should not* edit these )
+IF EXIST .\qt55-enabled.txt (
+touch C:\JTSDK\config\qt55.txt
+)
+
 
 CALL %scr%\qtenv-info.cmd
 IF NOT EXIST %based%\src\NUL ( mkdir %based%\src )
@@ -157,3 +153,4 @@ GOTO EOF
 :: LAUNCH CMD WINDOW
 :EOF
 %WINDIR%\System32\cmd.exe /A /Q /K
+
