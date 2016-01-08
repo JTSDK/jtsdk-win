@@ -36,6 +36,8 @@ SET qt55=No
 SET quiet-mode=No
 SET autosvn=No
 SET skipsvn=No
+SET clean-first=No
+SET rcfg=No
 SET JJ=%NUMBER_OF_PROCESSORS%
 GOTO CHECK-OPTIONS
 
@@ -63,6 +65,12 @@ SET autosvn=Yes
 IF EXIST %cfgd%\skipsvn.txt (
 SET skipsvn=Yes
 )
+IF EXIST %cfgd%\clean.txt (
+SET clean-first=Yes
+)
+IF EXIST %cfgd%\rcfg.txt (
+SET rcfg=Yes
+)
 GOTO START
 
 :START
@@ -71,7 +79,7 @@ GOTO HELP-OPTIONS
 ) ELSE IF /I [%1]==[-h] (
 GOTO HELP-OPTIONS
 ) ELSE IF /I [%1]==[-o] (
-GOTO GLOBAL-OPTIONS
+GOTO OPTION-STATUS
 ) ELSE IF /I [%1]==[rconfig] (
 SET bopt=dev
 SET nopt=wsjtx
@@ -434,12 +442,31 @@ ECHO --------------------------------------------
 ECHO  Building User Guide
 ECHO --------------------------------------------
 ECHO.
-IF NOT EXIST Makefile (
+IF /I [%clean-first%]==[Yes] (
+ECHO  JTSDK Option: - Clean Build Tree Enabled
+)
+IF /I [%rcfg%]==[Yes] (
+ECHO  JTSDK Option: - Reconfigure Enabled
+)
+IF NOT EXIST Makefile ( GOTO DT1 )
+IF /I [%rcfg%]==[Yes] (
+GOTO DT1
+) ELSE (
+GOTO DT2
+)
+
+:DT1
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
 -D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO DT2
+
+:DT2
+IF /I [%clean-first%]==[Yes] (
+mingw32-make -f Makefile clean >NUL 2>&1
 )
+ECHO.
 cmake --build . --target docs
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 DIR /B %buildd%\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
@@ -453,10 +480,31 @@ ECHO --------------------------------------------
 ECHO  Building Install Target
 ECHO --------------------------------------------
 ECHO.
+IF /I [%clean-first%]==[Yes] (
+ECHO  JTSDK Option: - Clean Build Tree Enabled
+)
+IF /I [%rcfg%]==[Yes] (
+ECHO  JTSDK Option: - Reconfigure Enabled
+)
+IF NOT EXIST Makefile ( GOTO IT1 )
+IF /I [%rcfg%]==[Yes] (
+GOTO IT1
+) ELSE (
+GOTO IT2
+)
+
+:IT1
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
 -D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO IT2
+
+:IT2
+IF /I [%clean-first%]==[Yes] (
+mingw32-make -f Makefile clean >NUL 2>&1
+)
+ECHO.
 cmake --build . --target %topt% -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 GOTO FINISH-INSTALL
@@ -470,10 +518,31 @@ ECHO --------------------------------------------
 ECHO  Building Win32 Installer
 ECHO --------------------------------------------
 ECHO.
+IF /I [%clean-first%]==[Yes] (
+ECHO  JTSDK Option: - Clean Build Tree Enabled
+)
+IF /I [%rcfg%]==[Yes] (
+ECHO  JTSDK Option: - Reconfigure Enabled
+)
+IF NOT EXIST Makefile ( GOTO PT1 )
+IF /I [%rcfg%]==[Yes] (
+GOTO PT1
+) ELSE (
+GOTO PT2
+)
+
+:PT1
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
 -D CMAKE_INSTALL_PREFIX=%pkgd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO PT2
+
+:PT2
+IF /I [%clean-first%]==[Yes] (
+mingw32-make -f Makefile clean >NUL 2>&1
+)
+ECHO.
 cmake --build . --target %topt% -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO NSIS-ERROR )
 DIR /B %buildd%\*-win32.exe >p.k & SET /P wsjtxpkg=<p.k & rm p.k
@@ -489,10 +558,31 @@ ECHO --------------------------------------------
 ECHO  Building User Defined Target ^ [ %topt% ^]
 ECHO --------------------------------------------
 ECHO.
+IF /I [%clean-first%]==[Yes] (
+ECHO  JTSDK Option: - Clean Build Tree Enabled
+)
+IF /I [%rcfg%]==[Yes] (
+ECHO  JTSDK Option: - Reconfigure Enabled
+)
+IF NOT EXIST Makefile ( GOTO UDT1 )
+IF /I [%rcfg%]==[Yes] (
+GOTO UDT1
+) ELSE (
+GOTO UDT2
+)
+
+:UDT1
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
 -D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+GOTO UDT2
+
+:UDT2
+IF /I [%clean-first%]==[Yes] (
+mingw32-make -f Makefile clean >NUL 2>&1
+)
+ECHO.
 cmake --build . --target %topt% -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 GOTO FINISH-UD
@@ -660,26 +750,30 @@ ECHO  Use ^: wsjtx-list ^-a  to list available branch names
 ECHO.
 GOTO EOF
 
-:GLOBAL-OPTIONS
+:OPTION-STATUS
 ECHO --------------------------------------------
-ECHO  GLOBAL OPTION STATUS
+ECHO  OPTION STATUS
 ECHO --------------------------------------------
 ECHO.
-ECHO  Separate ....^: %separate%
-ECHO  Quiet Mode ..^: %quiet-mode%
-ECHO  Skip SVN ....^: %skipsvn%
-ECHO  Auto SVN ....^: %autosvn%
-ECHO  Use QT5.5 ...^: %qt55%
+ECHO  Separate .....^: %separate%
+ECHO  Quiet Mode ...^: %quiet-mode%
+ECHO  Skip SVN .....^: %skipsvn%
+ECHO  Auto SVN .....^: %autosvn%
+ECHO  Use QT5.5 ....^: %qt55%
+ECHO  Clean First ..^: %clean-first%
+ECHO  Reconfigure ..^: %rcfg%
 ECHO.
 ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
-ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn
+ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg
 ECHO.
 ECHO  DESCRIPTION
-ECHO   separate ...^: Separate by App Version ^+ SVN Version
-ECHO   quiet ......^: Enable or Disable Additional on Screen messages
-ECHO   skipsvn ....^: If Enabled, dont ask and dont update from SVN
-ECHO   autosvn ....^: If Enabled, perform the SVN update without asking
-ECHO   qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
+ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
+ECHO   ^quiet ......^: Enable or Disable Additional on Screen messages
+ECHO   ^skipsvn ....^: If Enabled, dont ask and dont update from SVN
+ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
+ECHO   ^qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
+ECHO   ^clean ......^: Clean the build tree before cmake --build .
+ECHO   ^rcfg .......^: Re-run cmake configure
 ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.

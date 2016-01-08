@@ -39,7 +39,7 @@ SET PATH=%based%;%svnd%;%tools%;%rubyd%;%WINDIR%\System32
 :: Full paths are needed for some versions of Windows
 :: Why some are and others are not, is still unknown.
 %svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
-SET version=%version%-%rev%
+SET version=%version% %rev%
 TITLE JTSDK General Maintenance and Upgrades - %version%
 
 :: Power-User Commands, add as many as you like

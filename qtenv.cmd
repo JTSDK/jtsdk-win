@@ -38,7 +38,7 @@ SET tools=%based%\tools\bin
 SET svnd=%based%\subversion\bin
 SET PATH=%based%;%tools%;%svnd%;%WINDIR%\System32
 %svnd%\svn.exe info |%tools%\grep.exe "Rev:" |%tools%\awk.exe "{print $4}" >r.v & set /p rev=<r.v & %tools%\rm.exe r.v
-SET version=%version%-%rev%
+SET version=%version% %rev%
 ECHO.
 IF EXIST %based%\config\qt55.txt (
 SET PROMPT=$CJTSDK-QT 5.5 $F $P$F
@@ -140,19 +140,26 @@ DOSKEY disable-separate="rm.exe" -f C:\JTSDK\config\separate.txt
 DOSKEY enable-quiet="touch.exe" C:\JTSDK\config\quiet.txt
 DOSKEY disable-quiet="rm.exe" -f C:\JTSDK\config\quiet.txt
 
-:: ENABLE / DISABLE Auto Yes to SVN Update
+:: ENABLE / DISABLE Auto Yes to SVN Update ( users *should not* edit these )
 DOSKEY enable-autosvn="touch.exe" C:\JTSDK\config\autosvn.txt
 DOSKEY disable-autosvn="rm.exe" -f C:\JTSDK\config\autosvn.txt
 
-:: ENABLE / DISABLE Skip SAsk to update From SVN
+:: ENABLE / DISABLE Skip Ask to update from SVN ( users *should not* edit these )
 DOSKEY enable-skipsvn="touch.exe" C:\JTSDK\config\skipsvn.txt
 DOSKEY disable-skipsvn="rm.exe" -f C:\JTSDK\config\skipsvn.txt
+
+:: ENABLE / DISABLE Clean Build Tree ( users *should not* edit these )
+DOSKEY enable-clean="touch.exe" C:\JTSDK\config\clean.txt
+DOSKEY disable-clean="rm.exe" -f C:\JTSDK\config\clean.txt
+
+:: ENABLE / DISABLE Reconfiguring the build tree ( users *should not* edit these )
+DOSKEY enable-rcfg="touch.exe" C:\JTSDK\config\rcfg.txt
+DOSKEY disable-rcfg="rm.exe" -f C:\JTSDK\config\rcfg.txt
 
 REM CHECK FOR ORIGINAL QT55 ENABLE FILE ( users *should not* edit these )
 IF EXIST .\qt55-enabled.txt (
 touch C:\JTSDK\config\qt55.txt
 )
-
 
 CALL %scr%\qtenv-info.cmd
 IF NOT EXIST %based%\src\NUL ( mkdir %based%\src )
