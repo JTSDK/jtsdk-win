@@ -748,7 +748,9 @@ ECHO     ^-n   Branch Name^: wsjtx, wsjtx-1.6, wsjtx-1.6.0-rc1, etc
 ECHO     ^-c   Cmake Build Type^: ^( release ^| debug ^)
 ECHO     ^-t  install package docs ^| user-defined
 ECHO.
-ECHO  Use ^: wsjtx-list ^-a  to list available branch names
+ECHO  ^* To Display this message, type .....^:  build-wsjtx ^-h
+ECHO  ^* To List available branches, type ..^:  wsjtx-list ^-a
+ECHO  ^* Return to Main Menu, Type .........^:  main-menu 
 ECHO.
 GOTO EOF
 
@@ -780,7 +782,8 @@ ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.
 ECHO.
-ECHO  To disply this message, type:  build-wsjtx ^-o
+ECHO  ^* To Display this message, type ..^:  build-wsjtx ^-o
+ECHO  ^* Return to Main Menu, Type ......^:  main-menu 
 ECHO.
 GOTO EOF
 
