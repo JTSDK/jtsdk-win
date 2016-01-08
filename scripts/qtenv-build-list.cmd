@@ -33,6 +33,7 @@ SET garlist=%cfgd%\garlist.txt
 SET timestamp=%cfgd%\list-update-time-stamp
 SET sed=C:\JTSDK\msys\bin\sed.exe
 mkdir %cfgd% >NUL 2>&1
+touch %timestamp%
 
 :OPTIONS
 IF [%1]==[] GOTO MISSING-OPTION
