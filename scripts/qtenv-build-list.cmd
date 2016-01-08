@@ -33,7 +33,6 @@ SET garlist=%cfgd%\garlist.txt
 SET timestamp=%cfgd%\list-update-time-stamp
 SET sed=C:\JTSDK\msys\bin\sed.exe
 mkdir %cfgd% >NUL 2>&1
-touch %timestamp%
 
 :OPTIONS
 IF [%1]==[] GOTO MISSING-OPTION
@@ -137,10 +136,6 @@ ECHO wsjtx_exp >> %devlist%
 
 ECHO ^* Updating GA and RC List
 svn list %garurl% |grep ^wsjtx-[1-9]\.[5-9] |%sed% "s:/*$::" |sort |uniq > %garlist%
-ls -al %timestamp% |awk "{print $6, $7}" >t.k & SET /P modtime=<t.k & rm t.k
-ECHO.
-ECHO Repository ...^: %repo%
-ECHO Last Update ..^: %modtime%
 ECHO.
 ECHO Development List ^( ^^/wsjt/branches^/ ^)^:
 cat %devlist%
