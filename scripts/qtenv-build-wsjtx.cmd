@@ -603,7 +603,8 @@ ECHO   Type ........^: %copt%
 ECHO   Target ......^: %topt%
 ECHO   Tool Chain ..^: %qtv%
 ECHO   SRC .........^: %srcd%\%nopt%
-ECHO   Location ....^: %buildd%\%topt%
+ECHO   Build .......^: %buildd%
+ECHO   Install .....^: %installd%
 ECHO   SVN URL .....^: %burl%/%nopt%
 ECHO.
 GOTO EOF
@@ -621,7 +622,8 @@ ECHO   Type ........^: %copt%
 ECHO   Target ......^: %topt%
 ECHO   Tool Chain ..^: %qtv%
 ECHO   SRC .........^: %srcd%\%nopt%
-ECHO   Location ....^: %buildd%
+ECHO   Build .......^: %buildd%
+ECHO   Install .....^: %installd%
 ECHO   SVN URL .....^: %burl%/%nopt%
 ECHO.
 ECHO   Config Only builds simply configure the build tree with
