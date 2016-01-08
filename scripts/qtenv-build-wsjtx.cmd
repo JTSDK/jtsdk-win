@@ -34,6 +34,7 @@ SET timestamp=%cfgd%\list-update-time-stamp
 SET separate=No
 SET qt55=No
 SET quiet-mode=No
+SET JJ=%NUMBER_OF_PROCESSORS%
 GOTO TOOL-CHAIN
 
 :TOOL-CHAIN
@@ -365,7 +366,7 @@ ECHO  Build .......^: %buildd%
 ECHO  Install .....^: %installd%
 ECHO  Package .....^: %pkgd%
 ECHO  SVN URL .....^: %burl%/%nopt%
-ECHO  Tool Chain ..^: %tchain%
+ECHO  TC File .....^: %tchain%
 ECHO.
 GOTO BUILD-SELECT
 
