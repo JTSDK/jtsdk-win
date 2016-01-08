@@ -667,7 +667,7 @@ ECHO --------------------------------------------
 ECHO.
 ECHO  Separate ....^: %separate%
 ECHO  Quiet Mode ..^: %quiet-mode%
-ECHO  Auto SVN ....^: %skipsvn%
+ECHO  Skip SVN ....^: %skipsvn%
 ECHO  Auto SVN ....^: %autosvn%
 ECHO  Use QT5.5 ...^: %qt55%
 ECHO.
