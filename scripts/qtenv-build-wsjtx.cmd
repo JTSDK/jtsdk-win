@@ -34,18 +34,17 @@ SET timestamp=%cfgd%\list-update-time-stamp
 SET separate=No
 SET qt55=No
 SET quiet-mode=No
+SET autosvn=No
+SET skipsvn=No
 SET JJ=%NUMBER_OF_PROCESSORS%
-GOTO TOOL-CHAIN
+GOTO CHECK-OPTIONS
 
-:TOOL-CHAIN
+:CHECK-OPTIONS
 IF EXIST %cfgd%\qt55-enabled.txt ( 
 SET tchain=c:/JTSDK/scripts/wsjtx-toolchain-qt55.cmake
 ) ELSE (
 SET tchain=c:/JTSDK/scripts/wsjtx-toolchain.cmake
 )
-GOTO CHECK-OPTIONS
-
-:CHECK-OPTIONS
 IF EXIST %cfgd%\separate.txt (
 SET separate=Yes
 )
@@ -57,6 +56,12 @@ SET qtv=qt52
 )
 IF EXIST %cfgd%\quiet.txt (
 SET quiet-mode=Yes
+)
+IF EXIST %cfgd%\autosvn.txt (
+SET autosvn=Yes
+)
+IF EXIST %cfgd%\skipsvn.txt (
+SET skipsvn=Yes
 )
 GOTO START
 
@@ -242,6 +247,16 @@ GOTO GET-SVER
 ) ELSE ( GOTO ASK-SVN-UPDATE )
 
 :ASK-SVN-UPDATE
+IF /I [%skipsvn%]==[Yes] (
+ECHO JTSDK Option: - Skip SVN Update Enabled
+ECHO.
+GOTO GET-SVER
+)
+IF /I [%autosvn%]==[Yes] (
+ECHO JTSDK Option: - Auto SVN Update Enabled
+ECHO.
+GOTO SVN-UPDATE
+)
 ECHO Update from SVN Before Building? ^( y/n ^)
 SET answer=
 ECHO.
@@ -339,11 +354,18 @@ GOTO CREATE-DIRS
 GOTO EOF
 
 :CREATE-DIRS
+IF /I [%quiet-mode%]==[Yes] (
+ECHO  JTSDK Option: - Quit Mode Enabled
+ECHO.
+GOTO CREATE-DIRS-1
+)
 ECHO.
 ECHO  Build .......^: %buildd%
 ECHO  Install .....^: %installd%
 ECHO  Package .....^: %pkgd%
 ECHO.
+
+:CREATE-DIRS-1
 SET appsrc=%srcd%\%nopt%
 mkdir %buildd% >NUL 2>&1
 mkdir %installd% >NUL 2>&1
@@ -351,10 +373,15 @@ mkdir %pkgd% >NUL 2>&1
 GOTO START-MAIN
 
 :START-MAIN
+
 ECHO --------------------------------------------
 ECHO  Build Information
 ECHO --------------------------------------------
 ECHO.
+IF /I [%quiet-mode%]==[Yes] (
+ECHO  JTSDK Option: - Quit Mode Enabled
+GOTO BUILD-SELECT
+)
 ECHO  Name ........^: %nopt% %desc%
 ECHO  Version .....^: %aver%
 ECHO  SVN .........^: r%sver%
@@ -639,16 +666,20 @@ ECHO  GLOBAL OPTION STATUS
 ECHO --------------------------------------------
 ECHO.
 ECHO  Separate ....^: %separate%
-ECHO  Use QT5.5 ...^: %qt55%
 ECHO  Quiet Mode ..^: %quiet-mode%
+ECHO  Auto SVN ....^: %skipsvn%
+ECHO  Auto SVN ....^: %autosvn%
+ECHO  Use QT5.5 ...^: %qt55%
 ECHO.
 ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
-ECHO  NAME ...^: separate qt55 quiet
+ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn
 ECHO.
 ECHO  DESCRIPTION
 ECHO   separate ...^: Separate by App Version ^+ SVN Version
-ECHO   qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
 ECHO   quiet ......^: Enable or Disable Additional on Screen messages
+ECHO   skipsvn ....^: If Enabled, dont ask and dont update from SVN
+ECHO   autosvn ....^: If Enabled, perform the SVN update without asking
+ECHO   qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
 ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.

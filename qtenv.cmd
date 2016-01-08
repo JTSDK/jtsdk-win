@@ -137,8 +137,16 @@ DOSKEY enable-separate="touch.exe" C:\JTSDK\config\separate.txt
 DOSKEY disable-separate="rm.exe" -f C:\JTSDK\config\separate.txt
 
 :: ENABLE / DISABLE Extra Screen Messages ( Quiet Mode ) ( users *should not* edit these )
-DOSKEY enable-quiet="rm.exe" -f C:\JTSDK\config\quiet.txt
-DOSKEY disable-quiet="touch.exe" C:\JTSDK\config\quiet.txt
+DOSKEY enable-quiet="touch.exe" C:\JTSDK\config\quiet.txt
+DOSKEY disable-quiet="rm.exe" -f C:\JTSDK\config\quiet.txt
+
+:: ENABLE / DISABLE Auto Yes to SVN Update
+DOSKEY enable-autosvn="touch.exe" C:\JTSDK\config\autosvn.txt
+DOSKEY disable-autosvn="rm.exe" -f C:\JTSDK\config\autosvn.txt
+
+:: ENABLE / DISABLE Skip SAsk to update From SVN
+DOSKEY enable-skipsvn="touch.exe" C:\JTSDK\config\skipsvn.txt
+DOSKEY disable-skipsvn="rm.exe" -f C:\JTSDK\config\skipsvn.txt
 
 REM CHECK FOR ORIGINAL QT55 ENABLE FILE ( users *should not* edit these )
 IF EXIST .\qt55-enabled.txt (
