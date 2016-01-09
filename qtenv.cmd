@@ -94,12 +94,6 @@ DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
 
-REM  Load variables / create commands from an external files, like DOSKEY
-REM  Add your custom DOSKSY commands ( shortcusts ) to C:\JTSDK\doskey.txt
-REM
-REM  IMPORTANT: Make sure the shortcuts you set to not conflict with
-REM  any other DOSKT in this file. else your ENV commands will eb broken.
-IF EXIST doskey.txt FOR /F "delims=" %%A IN (dosksy.txt) DO DOSKEY "%%A"
 
 REM  ***************************************************************************
 REM                    DO NOT EDIT BELOW THIS LINE
