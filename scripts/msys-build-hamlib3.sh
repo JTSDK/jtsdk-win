@@ -66,7 +66,7 @@ builder=$(whoami)
 
 # Tool-Chain Variables - Adjust to suit your QT5 Tool-Chain Locations
 # $ Updated to allow for QT5.5 Testing
-if [ -f C:/JTSDK/qt55-enabled.txt ] ;
+if [ -f C:/JTSDK/config/qt55.txt ] ;
 then
 	export PATH="/c/JTSDK/qt55/Tools/mingw492_32/bin:$PATH"
 	TC='C:/JTSDK/qt55/Tools/mingw492_32/bin'
