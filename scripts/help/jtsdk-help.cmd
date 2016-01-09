@@ -319,7 +319,7 @@ ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.
 ECHO.
-ECHO  ^* To Display this message, type ..^:  build-wsjtx ^-o
+ECHO  ^* To Display this message, type ..^:  list-options
 ECHO  ^* Return to Main Menu, Type ......^:  main-menu 
 ECHO.
 GOTO EOF
