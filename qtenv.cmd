@@ -79,16 +79,6 @@ SET hl3=%based%\hamlib3\bin;%based%\hamlib3\include\hamlib;%based%\hamlib3\lib
 )
 SET PATH=%based%;%cfgd%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
-CD /D %based%
-IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
-IF NOT EXIST %cfgd%\NUL ( mkdir %based%\config )
-
-REM CHECK FOR ORIGINAL QT55 ENABLE FILE
-IF EXIST qt55-enabled.txt (
-touch C:\JTSDK\config\qt55.txt
-rm qt55-enabled.txt
-)
-
 REM  ---------------------------------------------------------------------------
 REM   USER DEFINABLE ALIAS COMMANDS ( add what you like here )
 REM  ---------------------------------------------------------------------------
@@ -104,13 +94,34 @@ DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
 
+REM  Load variables / create commands from an external files, like DOSKEY
+REM  Add your custom DOSKSY commands ( shortcusts ) to C:\JTSDK\doskey.txt
+REM
+REM  IMPORTANT: Make sure the shortcuts you set to not conflict with
+REM  any other DOSKT in this file. else your ENV commands will eb broken.
+IF EXIST doskey.txt FOR /F "delims=" %%A IN (dosksy.txt) DO DOSKEY "%%A"
 
 REM  ***************************************************************************
 REM                    DO NOT EDIT BELOW THIS LINE
 REM  ***************************************************************************
 
 REM  ---------------------------------------------------------------------------
-REM   CHECKOUT COPMMANDS  ( users *should not* edit these )
+REM   SETUP DIRECTORIES
+REM  ---------------------------------------------------------------------------
+CD /D %based%
+IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
+IF NOT EXIST %cfgd%\NUL ( mkdir %based%\config )
+
+REM  ---------------------------------------------------------------------------
+REM   CHECK FOR ORIGINAL QT55 ENABLE FILE
+REM  ---------------------------------------------------------------------------
+IF EXIST qt55-enabled.txt (
+touch C:\JTSDK\config\qt55.txt
+rm qt55-enabled.txt
+)
+
+REM  ---------------------------------------------------------------------------
+REM   CHECKOUT COPMMANDS
 REM  ---------------------------------------------------------------------------
 DOSKEY checkout-wsprx="%scr%\svn-checkout.cmd" $* wsprx
 DOSKEY checkout-map65="%scr%\svn-checkout.cmd" $* map65
@@ -119,7 +130,7 @@ DOSKEY checkout-wsjtxexp="%scr%\svn-checkout.cmd" $* wsjtxexp
 DOSKEY checkout-wsjtxrc="%scr%\svn-checkout.cmd" $* wsjtxrc
 
 REM  ---------------------------------------------------------------------------
-REM   BUILD COMMANDS - ( users *should not* edit these )
+REM   BUILD COMMANDS
 REM  ---------------------------------------------------------------------------
 DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
 DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
@@ -127,17 +138,21 @@ DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
 DOSKEY wsjtx-list="%based%\scripts\qtenv-build-list.cmd" $*
 
 REM  ---------------------------------------------------------------------------
-REM   HELP PAGES - ( users *should not* edit these )
+REM   HELP PAGES
 REM  ---------------------------------------------------------------------------
 DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
+DOSKEY list-options="%scr%\help\jtsdk-help.cmd" $* listoptions
 DOSKEY help-list="%scr%\help\jtsdk-help.cmd" $* helplist
 DOSKEY help-qtenv="%scr%\help\jtsdk-help.cmd" $* qtmain
 DOSKEY help-wsprx="%scr%\help\jtsdk-help.cmd" $* wsprxhelp
 DOSKEY help-map65="%scr%\help\jtsdk-help.cmd" $* map65help
 DOSKEY help-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* help
 DOSKEY help-checkout="%scr%\svn-checkout.cmd" $* qtcohelp
+
+
+
 REM  ---------------------------------------------------------------------------
-REM   USER CONFIGURABLE OPTIONS - ( users *should not* edit these )
+REM   USER CONFIGURABLE OPTIONS
 REM  ---------------------------------------------------------------------------
 :: ENABLE / DISABLE Qt5.5
 DOSKEY enable-qt55="touch.exe" C:\JTSDK\config\qt55.txt
@@ -167,8 +182,14 @@ DOSKEY disable-clean="rm.exe" -f C:\JTSDK\config\clean.txt
 DOSKEY enable-rcfg="touch.exe" C:\JTSDK\config\rcfg.txt
 DOSKEY disable-rcfg="rm.exe" -f C:\JTSDK\config\rcfg.txt
 
+:: ENABLE / DISABLE Auto run the build when asked
+DOSKEY enable-autorun="touch.exe" C:\JTSDK\config\autorun.txt
+DOSKEY disable-autorun="rm.exe" -f C:\JTSDK\config\autorun.txt
+
+REM  ---------------------------------------------------------------------------
+REM   CALL MAIN SCREEN SCRIPT
+REM  ---------------------------------------------------------------------------
 CALL %scr%\qtenv-info.cmd
-IF NOT EXIST %based%\src\NUL ( mkdir %based%\src )
 GOTO EOF
 
 :: LAUNCH CMD WINDOW

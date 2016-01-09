@@ -44,10 +44,11 @@ ECHO.
 ECHO.
 ECHO BUILD APPLICATIONS: ^( WSJT WSPR ^)
 ECHO ---------------------------------------------------------
-ECHO  JTSDK-PY Help, Type ......: help-pyenv
-ECHO  Checkout Help, Type ......: help-checkout
-ECHO  Build Help, Type .........: help-(wsjt or wspr)
-ECHO  Build and Install, Type ..: build-(wsjt or wspr)
+ECHO  JTSDK-PY Help, Type ......^: help-pyenv
+ECHO  Checkout Help, Type ......^: help-checkout
+ECHO  Build Help, Type .........^: help-(wsjt or wspr)
+ECHO  Build and Install, Type ..^: build-(wsjt or wspr)
+ECHO  List Options, Type .......^: list-options
 ECHO.
 ECHO COMPILER ENV ( Mingw 48_32 )
 ECHO ---------------------------------------------------------

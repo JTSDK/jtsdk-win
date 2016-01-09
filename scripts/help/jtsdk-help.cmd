@@ -24,6 +24,7 @@ REM  You should have received a copy of the GNU General Public License
 REM  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 REM  ---------------------------------------------------------------------------
 
+IF /I [%1]==[listoptions] ( GOTO LIST-OPTIONS )
 IF /I [%1]==[helplist] ( GOTO HELP-LIST )
 IF /I [%1]==[pymain] ( GOTO PY-MAIN-HELP )
 IF /I [%1]==[wsjthelp] ( GOTO WSJT-HELP )
@@ -48,9 +49,11 @@ ECHO.  help-checkout ..^: Help with package checkout
 ECHO.  help-wsjt ......^: Help with building WSJT
 ECHO.  help-wspr ......^: Help with building WSPR
 ECHO.  main-menu ......^: Returns user to main menu
+ECHO   list-options ...^: Lists all user defined options
 ECHO. 
-ECHO.  ^* At the prompt, type ........: ^( command ^)
-ECHO   ^* Return to Main-Menu, type ..: main-menu 
+ECHO   ^* Relist Help-Menu, type .....^: help-pyenv
+ECHO   ^* Help List, type ............^: help-list
+ECHO   ^* Return to Main-Menu, type ..^: main-menu 
 ECHO.
 GOTO EOF
 
@@ -77,7 +80,7 @@ ECHO   package ....^: Build Win32 Installer
 ECHO   clean ......^: Clean SRC directory
 ECHO   distclean ..^: Clean SRC, Install and Package Directories
 ECHO. 
-ECHO   ^* Relist Help-Menu, type .....^: help-pyenv
+ECHO   ^* Relist Help-Menu, type .....^: help-wsjt
 ECHO   ^* Help List, type ............^: help-list
 ECHO   ^* Return to Main-Menu, type ..^: main-menu
 GOTO EOF
@@ -111,7 +114,7 @@ ECHO   package ....^: Build Win32 Installer
 ECHO   clean ......^: Clean SRC directory
 ECHO   distclean ..^: Clean SRC, Install and Package Directories
 ECHO. 
-ECHO   ^* Relist Help-Menu, type .....^: help-pyenv
+ECHO   ^* Relist Help-Menu, type .....^: help-wspr
 ECHO   ^* Return to Main-Menu, type ..^: main-menu
 GOTO EOF
 
@@ -130,8 +133,9 @@ ECHO.  help-checkout ..^: Help with branch checkouts
 ECHO.  help-wsprx .....^: Help with building WSPR-X
 ECHO.  help-map65 .....^: Help with building MAP65
 ECHO.  help-wsjtx .....^: Help with building WSJTX
+ECHO   list-options ...^: Lists all user defines options
 ECHO. 
-ECHO   ^* Relist Help-Menu, type .....^: help-pyenv
+ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
 ECHO   ^* Help List, type ............^: help-list
 ECHO   ^* Return to Main-Menu, type ..^: main-menu 
 ECHO.
@@ -161,7 +165,7 @@ ECHO.
 ECHO.  NOTES
 ECHO   ^[1^] Debug targets ^*do not^* have a package targets
 ECHO.
-ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
+ECHO   ^* Relist Help-Menu, type .....^: help-map65
 ECHO   ^* Return to Main-Menu, type ..^: main-menu
 GOTO EOF
 
@@ -189,7 +193,7 @@ ECHO.
 ECHO.  NOTES
 ECHO   ^[1^] Debug targets ^*do not^* have a package targets
 ECHO.
-ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
+ECHO   ^* Relist Help-Menu, type .....^: help-wsprx
 ECHO   ^* Return to Main-Menu, type ..^: main-menu 
 GOTO EOF
 
@@ -227,10 +231,97 @@ ECHO  WSPR-X .........^: help-wsprx
 ECHO  MAP65 ..........^: help-map65
 )
 ECHO.
-ECHO  Checkout Help ..^: help-checkout
-ECHO.
-ECHO  ^* All Help Lists .............^: help-list
+ECHO  ^* Checkout Help, Type.........^: help-checkout
+ECHO  ^* List Options , Type ........^: list-options
+ECHO  ^* All Help Lists, Type .......^: help-list
 ECHO  ^* Return to Main-Menu, type ..^: main-menu
+GOTO EOF
+
+
+:LIST-OPTIONS
+IF EXIST %cfgd%\qt55.txt (
+SET qt55=Yes
+SET qtv=qt55
+) ELSE (
+SET qtv=qt52
+SET qt55=No
+)
+
+IF EXIST %cfgd%\separate.txt ( 
+SET separate=Yes
+) ELSE (
+SET separate=No
+)
+
+IF EXIST %cfgd%\quiet.txt (
+SET quiet-mode=Yes
+) ELSE (
+SET quiet-mode=No
+)
+
+IF EXIST %cfgd%\autosvn.txt (
+SET autosvn=Yes
+) ELSE (
+SET autosvn=No
+)
+
+IF EXIST %cfgd%\skipsvn.txt (
+SET skipsvn=Yes
+) ELSE (
+SET skipsvn=No
+)
+
+IF EXIST %cfgd%\clean.txt (
+SET clean-first=Yes
+) ELSE (
+SET clean-first=No
+)
+
+IF EXIST %cfgd%\rcfg.txt (
+SET rcfg=Yes
+) ELSE (
+SET rcfg=No
+)
+
+IF EXIST %cfgd%\autorun.txt (
+SET autorun=Yes
+) ELSE (
+SET autorun=No
+)
+
+CLS
+ECHO --------------------------------------------
+ECHO  OPTION STATUS
+ECHO --------------------------------------------
+ECHO.
+ECHO  Separate .....^: %separate%
+ECHO  Quiet Mode ...^: %quiet-mode%
+ECHO  Skip SVN .....^: %skipsvn%
+ECHO  Auto SVN .....^: %autosvn%
+ECHO  Use QT5.5 ....^: %qt55%
+ECHO  Clean First ..^: %clean-first%
+ECHO  Reconfigure ..^: %rcfg%
+ECHO  Auto run .....^: %autorun%
+ECHO.
+ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
+ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg autorun
+ECHO.
+ECHO  DESCRIPTION
+ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
+ECHO   ^quiet ......^: Enable or Disable Additional on Screen messages
+ECHO   ^skipsvn ....^: If Enabled, dont ask and dont update from SVN
+ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
+ECHO   ^qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
+ECHO   ^clean ......^: Clean the build tree before cmake --build .
+ECHO   ^rcfg .......^: Re-run cmake configure
+ECHO   ^autorun ....^: Run the build without asking
+ECHO.
+ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
+ECHO  before the change can take affect.
+ECHO.
+ECHO  ^* To Display this message, type ..^:  build-wsjtx ^-o
+ECHO  ^* Return to Main Menu, Type ......^:  main-menu 
+ECHO.
 GOTO EOF
 
 :EOF

@@ -45,6 +45,7 @@ TITLE %title-string%
 SET PROMPT=$CJTSDK-PY 3.3 $F $P$F
 
 :: PATH VARIABLES
+SET cfgd=%based%\config
 SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET ruby=%based%\Ruby\bin
@@ -54,15 +55,7 @@ SET python3path=%based%\Python33;%based%\python33\Scripts;%based%\python33\DLLs
 SET svnd=%based%\subversion\bin
 SET srcd=%based%\src
 SET LIBRARY_PATH=
-SET PATH=%based%;%python2path%;%python3path%;%MGW%;%tools%;%innno%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
-CD /D %based%
-
-:: MAKE SURE SRCD IS PRESENT
-IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
-
-:: RE-SET FILE ASSOCIATIONS
-SET PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
-
+SET PATH=%based%;%python2path%;%python3path%;%MGW%;%cfgd%;%tools%;%innno%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
 
 REM  ---------------------------------------------------------------------------
 REM   USER DEFINABLE ALIAS COMMANDS ( add what you like here )
@@ -85,6 +78,14 @@ REM  ***************************************************************************
 REM                    DO NOT EDIT BELOW THIS LINE
 REM  ***************************************************************************
 
+CD /D %based%
+
+:: MAKE SURE SRCD IS PRESENT
+IF NOT EXIST %srcd%\NUL ( mkdir %based%\src )
+
+:: RE-SET FILE ASSOCIATIONS
+SET PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+
 REM  ---------------------------------------------------------------------------
 REM   CHECKOUT and BUILD COMMANDS - ( users *should not* edit these )
 REM  ---------------------------------------------------------------------------
@@ -98,6 +99,7 @@ REM  ---------------------------------------------------------------------------
 REM   HELP PAGES  - ( users *should not* edit these )
 REM  ---------------------------------------------------------------------------
 DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\pyenv-info.cmd
+DOSKEY list-options="%scr%\help\jtsdk-help.cmd" $* listoptions
 DOSKEY help-list="%based%\scripts\help\jtsdk-help.cmd" $* helplist
 DOSKEY help-pyenv="%based%\scripts\help\jtsdk-help.cmd" $* pymain
 DOSKEY help-wsjt="%based%\scripts\help\jtsdk-help.cmd" $* wsjthelp
@@ -134,6 +136,10 @@ DOSKEY disable-clean="rm.exe" -f C:\JTSDK\config\clean.txt
 :: ENABLE / DISABLE Reconfiguring the build tree
 DOSKEY enable-rcfg="touch.exe" C:\JTSDK\config\rcfg.txt
 DOSKEY disable-rcfg="rm.exe" -f C:\JTSDK\config\rcfg.txt
+
+:: ENABLE / DISABLE Auto run the build when asked
+DOSKEY enable-autorun="touch.exe" C:\JTSDK\config\autorun.txt
+DOSKEY disable-autorun="rm.exe" -f C:\JTSDK\config\autorun.txt
 
 :: RUN VERSION INFORMATION SCRIPT
 CALL %scr%\pyenv-info.cmd

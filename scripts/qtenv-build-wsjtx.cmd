@@ -37,6 +37,7 @@ SET quiet-mode=No
 SET autosvn=No
 SET skipsvn=No
 SET clean-first=No
+SET autorun=No
 SET rcfg=No
 SET JJ=%NUMBER_OF_PROCESSORS%
 GOTO CHECK-OPTIONS
@@ -47,14 +48,14 @@ SET tchain=c:/JTSDK/scripts/wsjtx-toolchain-qt55.cmake
 ) ELSE (
 SET tchain=c:/JTSDK/scripts/wsjtx-toolchain.cmake
 )
-IF EXIST %cfgd%\separate.txt (
-SET separate=Yes
-)
 IF EXIST %cfgd%\qt55.txt (
 SET qt55=Yes
 SET qtv=qt55
 ) ELSE (
 SET qtv=qt52
+)
+IF EXIST %cfgd%\separate.txt (
+SET separate=Yes
 )
 IF EXIST %cfgd%\quiet.txt (
 SET quiet-mode=Yes
@@ -63,13 +64,15 @@ IF EXIST %cfgd%\autosvn.txt (
 SET autosvn=Yes
 )
 IF EXIST %cfgd%\skipsvn.txt (
-SET skipsvn=Yes
-)
+SET skipsvn=Yes )
 IF EXIST %cfgd%\clean.txt (
 SET clean-first=Yes
 )
 IF EXIST %cfgd%\rcfg.txt (
 SET rcfg=Yes
+)
+IF EXIST %cfgd%\autorun.txt (
+SET autorun=Yes
 )
 GOTO START
 
@@ -256,12 +259,12 @@ GOTO GET-SVER
 
 :ASK-SVN-UPDATE
 IF /I [%skipsvn%]==[Yes] (
-ECHO JTSDK Option: - Skip SVN Update Enabled
+ECHO JTSDK Option^: Skip SVN Update Enabled
 ECHO.
 GOTO GET-SVER
 )
 IF /I [%autosvn%]==[Yes] (
-ECHO JTSDK Option: - Auto SVN Update Enabled
+ECHO JTSDK Option^: Auto SVN Update Enabled
 ECHO.
 GOTO SVN-UPDATE
 )
@@ -330,17 +333,17 @@ ECHO  Folder Locations
 ECHO --------------------------------------------
 ECHO.
 IF /I [%separate%]==[No] (
-ECHO  JTSDK Option^: - Folder Separation Disabled
+ECHO  JTSDK Option^: Folder Separation Disabled
 SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\build
 SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\install
 SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\package
 IF /I [%qt55%]==[Yes] (
-ECHO  JTSDK Option^: - QT55 Enabled
+ECHO  JTSDK Option^: QT55 Enabled
 SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\build
 SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\install
 SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%copt%\package
 ) ELSE (
-ECHO  JTSDK Option^: - QT55 Disabled
+ECHO  JTSDK Option^: QT55 Disabled
 )
 GOTO CREATE-DIRS
 )
@@ -355,7 +358,7 @@ SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\build
 SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\install
 SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\package
 ) ELSE (
-ECHO  JTSDK Option^: - QT55 Disabled
+ECHO  JTSDK Option^: QT55 Disabled
 )
 GOTO CREATE-DIRS
 )
@@ -363,7 +366,7 @@ GOTO EOF
 
 :CREATE-DIRS
 IF /I [%quiet-mode%]==[Yes] (
-ECHO  JTSDK Option: - Quit Mode Enabled
+ECHO  JTSDK Option^: Quit Mode Enabled
 ECHO.
 GOTO CREATE-DIRS-1
 )
@@ -387,7 +390,7 @@ ECHO  Build Information
 ECHO --------------------------------------------
 ECHO.
 IF /I [%quiet-mode%]==[Yes] (
-ECHO  JTSDK Option: - Quit Mode Enabled
+ECHO  JTSDK Option^: Quit Mode Enabled
 GOTO BUILD-SELECT
 )
 ECHO  Name ........^: %nopt% %desc%
@@ -443,10 +446,10 @@ ECHO  Building User Guide
 ECHO --------------------------------------------
 ECHO.
 IF /I [%clean-first%]==[Yes] (
-ECHO  JTSDK Option: - Clean Build Tree Enabled
+ECHO  JTSDK Option^: Clean Build Tree Enabled
 )
 IF /I [%rcfg%]==[Yes] (
-ECHO  JTSDK Option: - Reconfigure Enabled
+ECHO  JTSDK Option^: Reconfigure Enabled
 )
 IF NOT EXIST Makefile ( GOTO DT1 )
 IF /I [%rcfg%]==[Yes] (
@@ -481,10 +484,10 @@ ECHO  Building Install Target
 ECHO --------------------------------------------
 ECHO.
 IF /I [%clean-first%]==[Yes] (
-ECHO  JTSDK Option: - Clean Build Tree Enabled
+ECHO  JTSDK Option^: Clean Build Tree Enabled
 )
 IF /I [%rcfg%]==[Yes] (
-ECHO  JTSDK Option: - Reconfigure Enabled
+ECHO  JTSDK Option^: Reconfigure Enabled
 )
 IF NOT EXIST Makefile ( GOTO IT1 )
 IF /I [%rcfg%]==[Yes] (
@@ -494,8 +497,14 @@ GOTO IT2
 )
 
 :IT1
+SET WM=OFF
+IF /I [%copt%]==[Debug] (
+SET WM=ON
+)
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
+-D CMAKE_COLOR_MAKEFILE=OFF ^
+-D WSJT_CREATE_WINMAIN=%WM% ^
 -D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 GOTO IT2
@@ -507,8 +516,30 @@ mingw32-make -f Makefile clean >NUL 2>&1
 ECHO.
 cmake --build . --target %topt% -- -j %JJ%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
+IF /I [%copt%]==[Debug] ( GOTO IT3 )
 GOTO FINISH-INSTALL
 
+:: DEBUG MAKE BATCH FILE
+:IT3
+ECHO -- Generating Debug Batch File for ^( %nopt% ^)
+CD /D %installd%\bin
+IF EXIST wsjtx.cmd (
+DEL /Q wsjtx.cmd
+)
+>wsjtx.cmd (
+ECHO @ECHO OFF
+ECHO REM -- Debug Batch File
+ECHO REM -- Part of the JTSDK v2.0 Project
+ECHO SETLOCAL
+ECHO TITLE WSJT-X Debug Terminal
+ECHO SET PATH=.;.\data;.\doc;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%hl3%
+ECHO CALL wsjtx.exe
+ECHO CD /D %based%
+ECHO ENDLOCAL
+ECHO COLOR 0B
+ECHO EXIT /B 0
+)
+GOTO FINISH-INSTALL
 
 REM  ------------------------------------------------------------------- PACKAGE
 :PKG-TARGET
@@ -519,10 +550,10 @@ ECHO  Building Win32 Installer
 ECHO --------------------------------------------
 ECHO.
 IF /I [%clean-first%]==[Yes] (
-ECHO  JTSDK Option: - Clean Build Tree Enabled
+ECHO  JTSDK Option^: Clean Build Tree Enabled
 )
 IF /I [%rcfg%]==[Yes] (
-ECHO  JTSDK Option: - Reconfigure Enabled
+ECHO  JTSDK Option^: Reconfigure Enabled
 )
 IF NOT EXIST Makefile ( GOTO PT1 )
 IF /I [%rcfg%]==[Yes] (
@@ -559,10 +590,10 @@ ECHO  Building User Defined Target ^ [ %topt% ^]
 ECHO --------------------------------------------
 ECHO.
 IF /I [%clean-first%]==[Yes] (
-ECHO  JTSDK Option: - Clean Build Tree Enabled
+ECHO  JTSDK Option^: - Clean Build Tree Enabled
 )
 IF /I [%rcfg%]==[Yes] (
-ECHO  JTSDK Option: - Reconfigure Enabled
+ECHO  JTSDK Option^: - Reconfigure Enabled
 )
 IF NOT EXIST Makefile ( GOTO UDT1 )
 IF /I [%rcfg%]==[Yes] (
@@ -596,17 +627,37 @@ ECHO --------------------------------------------
 ECHO  Build Summary
 ECHO --------------------------------------------
 ECHO.
-ECHO   Name ........^: %nopt% %desc%
-ECHO   Version .....^: %aver%
-ECHO   SVN .........^: r%sver%
-ECHO   Type ........^: %copt%
-ECHO   Target ......^: %topt%
-ECHO   Tool Chain ..^: %qtv%
-ECHO   SRC .........^: %srcd%\%nopt%
-ECHO   Build .......^: %buildd%
-ECHO   Install .....^: %installd%
-ECHO   SVN URL .....^: %burl%/%nopt%
+ECHO   Name ..........^: %nopt% %desc%
+ECHO   Version .......^: %aver%
+ECHO   SVN ...........^: r%sver%
+ECHO   Type ..........^: %copt%
+ECHO   Target ........^: %topt%
+ECHO   Tool Chain ....^: %qtv%
+ECHO   SRC ...........^: %srcd%\%nopt%
+ECHO   Build .........^: %buildd%
+ECHO   Install .......^: %installd%
+ECHO   SVN URL .......^: %burl%/%nopt%
 ECHO.
+GOTO FRUN
+
+:FRUN
+IF /I [%autorun%]==[Yes] (
+ECHO   JTSDK Option^ ..: Autorun Enabled
+ECHO   Starting ......: wsjtx %aver% r%sver% %desc% in %copt% mode
+GOTO FRUN1
+) ELSE (
+GOTO EOF
+)
+
+:FRUN1
+IF /I [%copt%]==[Debug] (
+CD /D %installd%\bin
+CALL wsjtx.cmd
+GOTO EOF
+) ELSE (
+CALL wsjtx.exe
+GOTO EOF
+)
 GOTO EOF
 
 :FINISH-CONFIG
@@ -766,9 +817,10 @@ ECHO  Auto SVN .....^: %autosvn%
 ECHO  Use QT5.5 ....^: %qt55%
 ECHO  Clean First ..^: %clean-first%
 ECHO  Reconfigure ..^: %rcfg%
+ECHO  Auto run .....^: %autorun%
 ECHO.
 ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
-ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg
+ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg autorun
 ECHO.
 ECHO  DESCRIPTION
 ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
@@ -778,6 +830,7 @@ ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
 ECHO   ^qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
 ECHO   ^clean ......^: Clean the build tree before cmake --build .
 ECHO   ^rcfg .......^: Re-run cmake configure
+ECHO   ^autorun ....^: Run the build without asking
 ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.

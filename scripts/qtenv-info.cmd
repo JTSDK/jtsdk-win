@@ -54,6 +54,7 @@ ECHO -------------------------------------------------------------
 ECHO  JTSDK-QT Help, Type ..^: help-qtenv
 ECHO  Checkout Help, Type ..^: help-checkout
 ECHO  Build Help, Type .....^: help-(app_name)
+ECHO  List Options, Type ...^: list-options
 ECHO.
 ECHO COMPILER INFO ^( %gccinfo% ^)
 ECHO -------------------------------------------------------------
