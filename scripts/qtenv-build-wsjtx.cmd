@@ -177,7 +177,9 @@ SET folder=devel
 SET burl=%baseurl%/tags
 SET checklist=%garlist%
 SET folder=garc
-) ELSE ( GOTO CLI-INVALID-OPTION )
+) ELSE (
+GOTO CLI-INVALID-OPTION
+)
 SHIFT & SHIFT
 )
 GOTO NOPT
@@ -188,10 +190,14 @@ SET nopt=%2
 SHIFT & SHIFT
 )
 IF /I [%bopt%]==[dev] (
-IF /I [%nopt%]==[wsjtx] ( GOTO COPT )
-IF /I [%nopt%]==[wsjtx_exp] ( GOTO COPT )
+IF /I [%nopt%]==[wsjtx] (
+GOTO COPT
 )
-grep -Fx "%nopt%" < %checklist% >NUL
+IF /I [%nopt%]==[wsjtx_exp] (
+GOTO COPT
+)
+)
+grep -Fx "%nopt%" <%checklist% >NUL
 IF ERRORLEVEL 1 ( GOTO CLI-BRANCH-NAME-ERROR )
 GOTO COPT
 
@@ -231,7 +237,9 @@ GOTO OPTION-RESULTS
 SET topt=%2
 SHIFT & SHIFT
 )
-) ELSE ( GOTO CLI-INVALID-OPTION )
+) ELSE (
+GOTO CLI-INVALID-OPTION
+)
 GOTO OPTION-RESULTS
 
 :OPTION-RESULTS
