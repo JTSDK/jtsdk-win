@@ -25,7 +25,7 @@
 ::-----------------------------------------------------------------------------::
 
 :: Check if Qt5.5 is enabled
-IF EXIST C:\JTSDK\qt55-enabled.txt (
+IF EXIST C:\JTSDK\config\qt55.txt (
 SET gccinfo=Mingw 49_32
 ) ELSE (
 SET gccinfo=Mingw 48_32

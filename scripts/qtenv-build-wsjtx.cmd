@@ -43,7 +43,7 @@ SET JJ=%NUMBER_OF_PROCESSORS%
 GOTO CHECK-OPTIONS
 
 :CHECK-OPTIONS
-IF EXIST %cfgd%\qt55-enabled.txt ( 
+IF EXIST %cfgd%\qt55.txt ( 
 SET tchain=c:/JTSDK/scripts/wsjtx-toolchain-qt55.cmake
 ) ELSE (
 SET tchain=c:/JTSDK/scripts/wsjtx-toolchain.cmake
@@ -64,7 +64,8 @@ IF EXIST %cfgd%\autosvn.txt (
 SET autosvn=Yes
 )
 IF EXIST %cfgd%\skipsvn.txt (
-SET skipsvn=Yes )
+SET skipsvn=Yes
+)
 IF EXIST %cfgd%\clean.txt (
 SET clean-first=Yes
 )
