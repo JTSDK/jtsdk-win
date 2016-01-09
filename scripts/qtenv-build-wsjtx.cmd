@@ -806,38 +806,7 @@ ECHO.
 GOTO EOF
 
 :OPTION-STATUS
-ECHO --------------------------------------------
-ECHO  OPTION STATUS
-ECHO --------------------------------------------
-ECHO.
-ECHO  Separate .....^: %separate%
-ECHO  Quiet Mode ...^: %quiet-mode%
-ECHO  Skip SVN .....^: %skipsvn%
-ECHO  Auto SVN .....^: %autosvn%
-ECHO  Use QT5.5 ....^: %qt55%
-ECHO  Clean First ..^: %clean-first%
-ECHO  Reconfigure ..^: %rcfg%
-ECHO  Auto run .....^: %autorun%
-ECHO.
-ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
-ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg autorun
-ECHO.
-ECHO  DESCRIPTION
-ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
-ECHO   ^quiet ......^: Enable or Disable Additional on Screen messages
-ECHO   ^skipsvn ....^: If Enabled, dont ask and dont update from SVN
-ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
-ECHO   ^qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
-ECHO   ^clean ......^: Clean the build tree before cmake --build .
-ECHO   ^rcfg .......^: Re-run cmake configure
-ECHO   ^autorun ....^: Run the build without asking
-ECHO.
-ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
-ECHO  before the change can take affect.
-ECHO.
-ECHO  ^* To Display this message, type ..^:  build-wsjtx ^-o
-ECHO  ^* Return to Main Menu, Type ......^:  main-menu 
-ECHO.
+CALL %scr%\help\jtsdk-help.cmd listoptions
 GOTO EOF
 
 REM  ***************************************************************************
