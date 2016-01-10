@@ -53,6 +53,7 @@ SET app_name=wsjt
 SET app_src=%srcd%\trunk
 SET installdir=%based%\wsjt\install
 SET packagedir=%based%\wsjt\package
+SET logbookdir=%based%\wsjt\install\Logbook
 
 :: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
 CLS
@@ -65,7 +66,7 @@ ECHO Update from SVN Before Building? ^( y/n ^)
 SET ANSWER=
 ECHO.
 SET /P answer=Type Response: %=%
-If /I "%answer%"=="N" GOTO WSJT_OPTIONS
+If /I "%answer%"=="N" GOTO SETUP-DIRS
 If /I "%answer%"=="Y" (
 GOTO SVN_UPDATE
 ) ELSE (
@@ -80,6 +81,12 @@ ECHO.
 ECHO UPDATING ^( %app_src% ^ )
 CD /D %app_src%
 start /wait svn update
+GOTO SETUP-DIRS
+
+:SETUP-DIRS
+mkdir %installdir% >NUL 2>&1
+mkdir %packagedir% >NUL 2>&1
+mkdir %logbookdir% >NUL 2>&1
 GOTO WSJT_OPTIONS
 
 :: WSJT TARGETS
@@ -182,7 +189,6 @@ IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
 GOTO MAKEBAT
 
 :: BEGIN WSJT MAIN BUILD
-:BUILD_TARGET
 :BUILD_TARGET
 CD /D %app_src%
 CLS

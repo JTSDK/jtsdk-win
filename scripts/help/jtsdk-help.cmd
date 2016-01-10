@@ -311,7 +311,7 @@ ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
 ECHO   ^quiet ......^: Enable or Disable Additional on Screen messages
 ECHO   ^skipsvn ....^: If Enabled, dont ask and dont update from SVN
 ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
-ECHO   ^qt55 .......^: Enable or Disable using QT5.5 as the Tool Chain
+ECHO   ^qt55 .......^: Enable or Disable using QT5.5 Tool Chain
 ECHO   ^clean ......^: Clean the build tree before cmake --build .
 ECHO   ^rcfg .......^: Re-run cmake configure
 ECHO   ^autorun ....^: Run the build without asking
