@@ -130,6 +130,7 @@ DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
 DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
 DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
 DOSKEY wsjtx-list="%based%\scripts\qtenv-build-list.cmd" $*
+DOSKEY build-hamlib3="%based%\scripts\build-hamlib3.cmd"
 
 REM  ---------------------------------------------------------------------------
 REM   HELP PAGES
