@@ -249,9 +249,7 @@ GOTO UG1
 GOTO UG1
 
 :UG1
-CALL :MAKE-DOCS
-DIR /B %srcd%\trunk\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
-CALL :FINISH-UG
+CALL :MAKE-DOCS && CALL :FINISH-UG
 GOTO EOF
 
 
@@ -402,11 +400,12 @@ EXIT /B 0
 
 :MAKE-DOCS
 CD /D %srcd%\trunk
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% user-guide
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% docs
 IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
 )
+DIR /B %srcd%\trunk\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
 EXIT /B 0
 
 :LIST-OPTIONS
