@@ -163,7 +163,7 @@ SET logd=%based%\wsjt\%aver%\%sver%\install\Logbook
 SET pkgd=%based%\wsjt\%aver%\%sver%\package
 GOTO MAKE-DIRS
 ) ELSE (
-SET buildd=%based%\%srcd%\trunk
+SET buildd=%srcd%\trunk
 SET installd=%based%\wsjt\install
 SET logd=%based%\wsjt\install\Logbook
 SET pkgd=%based%\wsjt\package
@@ -321,7 +321,7 @@ ECHO Name: "{group}\{#MyAppName}\Documentation\{cm:ProgramOnTheWeb,{#MyAppName}}
 ECHO Name: "{group}\{#MyAppName}\Resources\{cm:ProgramOnTheWeb,WSJT Group}"; Filename: "{#WsjtGroupURL}"
 ECHO Name: "{group}\{#MyAppName}\Uninstall\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; Comment: "Uninstall WSJT";
 ECHO Name: "{group}\{#MyAppName}\WSJT v10"; Filename: "{app}\wsjt.cmd"; WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
-ECHO Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\wsjt.cd";    WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
+ECHO Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\wsjt.cmd";    WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
 ECHO.
 ECHO [Run]
 ECHO Filename: "{app}\wsjt.cmd"; Description: "Launch WSJT v10"; Flags: postinstall nowait unchecked

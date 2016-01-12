@@ -94,8 +94,7 @@ ECHO.
 ECHO   Usage: build-wspr ^( target ^)
 ECHO.
 ECHO   There are several targets available for WSPR, the main being
-ECHO   ^[ install ^] or ^[ package ^]. After checkout-wspr, use one of the
-ECHO   following:
+ECHO   ^[ install ^] or ^[ package ^]. Use one of the following:
 ECHO.
 ECHO.  Target        Description
 ECHO. -----------------------------------------------------------------
@@ -135,7 +134,7 @@ ECHO.  help-map65 .....^: Help with building MAP65
 ECHO.  help-wsjtx .....^: Help with building WSJTX
 ECHO   list-options ...^: Lists all user defines options
 ECHO. 
-ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
+ECHO   ^* Relist Help-Menu, type .....^: help-wspr
 ECHO   ^* Help List, type ............^: help-list
 ECHO   ^* Return to Main-Menu, type ..^: main-menu 
 ECHO.
