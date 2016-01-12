@@ -50,7 +50,7 @@ SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET ruby=%based%\Ruby\bin
 SET scr=%based%\scripts
-SET python2path=%based%\python27;%based%\python27\Scripts;%based%\python27\DLLs
+REM  SET python2path=%based%\python27;%based%\python27\Scripts;%based%\python27\DLLs
 SET python3path=%based%\Python33;%based%\python33\Scripts;%based%\python33\DLLs
 SET svnd=%based%\subversion\bin
 SET srcd=%based%\src
@@ -71,7 +71,7 @@ DOSKEY logr="svn.exe" log -r $*
 DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
-DOSKEY python2="C:\JTSDK\python27\python.exe" $*
+REM  DOSKEY python2="C:\JTSDK\python27\python.exe" $*
 DOSKEY python3="C:\JTSDK\python33\python.exe" $*
 
 REM  ***************************************************************************

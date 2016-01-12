@@ -66,17 +66,17 @@ ECHO.
 ECHO   Usage: build-wsjt ^( target ^)
 ECHO.
 ECHO   There are several targets available for WSJT, the main being
-ECHO   [ install ] or [ package]. After checkout-wsjt, use one of the
-ECHO   following:
+ECHO   [ install ] or [ package]. Use one of the following:
 ECHO.
 ECHO.  Target        Description
 ECHO. -----------------------------------------------------------------
-ECHO   libjt ......^: WSJT Library
+ECHO   libjt.a ....^: WSJT Library
 ECHO   jt65code ...^: JT65 code test app
 ECHO   jt4code ....^: JT4 code test app
 ECHO   Audio.pyd ..^: Audio Library for WSJT
 ECHO   install ....^: Build and Install WSJT
 ECHO   package ....^: Build Win32 Installer
+ECHO   docs .......^: Build User Guide
 ECHO   clean ......^: Clean SRC directory
 ECHO   distclean ..^: Clean SRC, Install and Package Directories
 ECHO. 
@@ -294,30 +294,43 @@ ECHO --------------------------------------------
 ECHO  OPTION STATUS
 ECHO --------------------------------------------
 ECHO.
-ECHO  Separate .....^: %separate%
-ECHO  Quiet Mode ...^: %quiet-mode%
-ECHO  Skip SVN .....^: %skipsvn%
-ECHO  Auto SVN .....^: %autosvn%
-ECHO  Use QT5.5 ....^: %qt55%
-ECHO  Clean First ..^: %clean-first%
-ECHO  Reconfigure ..^: %rcfg%
-ECHO  Auto run .....^: %autorun%
-ECHO.
 ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
+IF /I [%env-name%]==[JTSDK-QT] (
 ECHO  NAME ...^: separate qt55 quiet skipsvn autosvn clean rcfg autorun
+) ELSE (
+ECHO  NAME ...^: separate quiet skipsvn autosvn clean autorun
+)
+ECHO.
+ECHO  CURRENT STATUS
+ECHO   Separate .....^: %separate%
+ECHO   Quiet Mode ...^: %quiet-mode%
+ECHO   Skip SVN .....^: %skipsvn%
+ECHO   Auto SVN .....^: %autosvn%
+ECHO   Clean First ..^: %clean-first%
+ECHO   Auto run .....^: %autorun%
+IF /I [%env-name%]==[JTSDK-QT] (
+ECHO   Reconfigure ..^: %rcfg%
+ECHO   Use QT5.5 ....^: %qt55%
+)
 ECHO.
 ECHO  DESCRIPTION
-ECHO   ^separate ...^: Separate by App Version ^+ SVN Version
-ECHO   ^quiet ......^: Enable or Disable Additional on Screen messages
-ECHO   ^skipsvn ....^: If Enabled, dont ask and dont update from SVN
-ECHO   ^autosvn ....^: If Enabled, perform the SVN update without asking
-ECHO   ^qt55 .......^: Enable or Disable using QT5.5 Tool Chain
-ECHO   ^clean ......^: Clean the build tree before cmake --build .
-ECHO   ^rcfg .......^: Re-run cmake configure
-ECHO   ^autorun ....^: Run the build without asking
+ECHO   ^separate .....^: Separate by App Version ^+ SVN Version
+ECHO   ^quiet ........^: Enable or Disable additional on screen messages
+ECHO   ^skipsvn ......^: If Enabled, dont ask and dont update from SVN
+ECHO   ^autosvn ......^: If Enabled, perform the SVN update without asking
+IF /I [%env-name%]==[JTSDK-QT] (
+ECHO   ^clean ........^: Clean the build tree before cmake --build .
+) ELSE (
+ECHO   ^clean ........^: Clean the build tree before mingw32-make ^$*
+)
+ECHO   ^autorun ......^: Run the build without asking
+IF /I [%env-name%]==[JTSDK-QT] (
+ECHO   ^rcfg .........^: Re-run cmake configure
+ECHO   ^qt55 .........^: Enable or Disable using QT5.5 Tool Chain
 ECHO.
 ECHO  When QT55 is enabled or disabled, you ^*Must^* restart JTSDK-QT
 ECHO  before the change can take affect.
+)
 ECHO.
 ECHO  ^* To Display this message, type ..^:  list-options
 ECHO  ^* Return to Main Menu, Type ......^:  main-menu 

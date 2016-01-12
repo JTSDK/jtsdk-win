@@ -262,7 +262,7 @@ CD /D %srcd%
 ECHO  Checking Out New Version ^( %nopt% ^) from SVN
 ECHO.
 start /wait svn co %burl%/%nopt%
-IF ERRORLEVEL 1 ( GOTO SVN_CHECKOUT-ERROR )
+IF ERRORLEVEL 1 ( GOTO SVN-CO-ERROR )
 GOTO GET-SVER
 ) ELSE ( GOTO ASK-SVN-UPDATE )
 
