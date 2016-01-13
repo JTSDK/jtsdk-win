@@ -26,7 +26,7 @@ REM  ---------------------------------------------------------------------------
 
 CLS
 CD /D %based%
-SET burl=http://svn.code.sf.net/p/wsjt/wsjt/wspr
+SET burl=http://svn.code.sf.net/p/wsjt/wsjt/branches/wspr
 SET nopt=wspr
 SET separate=No
 SET qt55=No
@@ -552,7 +552,7 @@ ECHO --------------------------------------------
 ECHO  Sourceforge Checkout Error
 ECHO --------------------------------------------
 ECHO.
-ECHO  ^build-wsjtx was unable to checkout the
+ECHO  ^build-wspr was unable to checkout the
 ECHO  branch form Sourceforge. The service
 ECHO  may be down or undergoing maintenance.
 ECHO  Check the following link for current site
@@ -574,7 +574,7 @@ ECHO --------------------------------------------
 ECHO  Sourceforge Update Error
 ECHO --------------------------------------------
 ECHO.
-ECHO  ^build-wsjtx was unable to update ^[ %nopt% ^]
+ECHO  ^build-wspr was unable to update ^[ %nopt% ^]
 ECHO  Sourceforge. The service may be down or
 ECHO  undergoing maintenance. Check the following
 ECHO  link for current site status reports^:
