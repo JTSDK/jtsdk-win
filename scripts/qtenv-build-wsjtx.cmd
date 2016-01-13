@@ -506,14 +506,9 @@ GOTO IT2
 )
 
 :IT1
-SET WM=OFF
-IF /I [%copt%]==[Debug] (
-SET WM=ON
-)
 cmake -G "MinGW Makefiles" -Wno-dev -D CMAKE_TOOLCHAIN_FILE=%tchain% ^
 -D CMAKE_BUILD_TYPE=%copt% ^
 -D CMAKE_COLOR_MAKEFILE=OFF ^
--D WSJT_CREATE_WINMAIN=%WM% ^
 -D CMAKE_INSTALL_PREFIX=%installd% %appsrc%
 IF ERRORLEVEL 1 ( GOTO ERROR-CMAKE )
 GOTO IT2
