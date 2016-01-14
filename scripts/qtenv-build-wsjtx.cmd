@@ -305,6 +305,11 @@ svn info %srcd%\%nopt% |grep "Rev:" |awk "{print $4}" >s.v & SET /p sver=<s.v & 
 GOTO GET-AVER
 
 :GET-AVER
+IF /I [%nopt%]==[wsjtx_exp] (
+SET aver=wsjtx_exp
+SET desc=exp
+GOTO SETUp-DIRS
+)
 SET vfile="%srcd%\%nopt%\Versions.cmake"
 cat %vfile% |grep "_MAJOR" |awk "{print $3}" |cut "-c1" >ma.v & SET /p mav=<ma.v & rm ma.v
 cat %vfile% |grep "_MINOR" |awk "{print $3}" |cut "-c1" >mi.v & SET /p miv=<mi.v & rm mi.v
