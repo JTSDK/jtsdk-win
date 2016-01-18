@@ -1,13 +1,13 @@
 #!/bin/bash.exe
 #
 # Title ........: docenv-help-co.sh
-# Project ......: Part of the JTSDK v2.0.0 Project
+# Project ......: Part of the JTSDK v2.0 Project
 # Description ..: Help File For Checking Out WSJT Documentation
 # Project URL ..: http://sourceforge.net/projects/wsjt/
 # Usage ........: From Within JTSDK-DOC, type: co-help
 #
 # Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-# Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+# Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 # License ......: GPL-3
 #
 # docenv-help-co.sh is free software: you can redistribute it

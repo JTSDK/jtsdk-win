@@ -1,13 +1,13 @@
 @ECHO OFF
 ::-----------------------------------------------------------------------------::
 :: Name .........: qtenv-info.bat
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Batch file to check version informaiton
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-info.bat is free software: you can redistribute it and/or modify it

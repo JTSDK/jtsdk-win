@@ -1,5 +1,5 @@
 # JTSDK QT5 Tool-Chain File for MAP65
-# Part of the JTSDK v2.0.0 Project
+# Part of the JTSDK v2.0 Project
 
 # System Type and Base Paths
 SET (CMAKE_SYSTEM_NAME Windows)

@@ -1,12 +1,12 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: jtsdk-cyg32-install.cmd
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Unattended Installation of C:\JTSDK\cyg32
 :: Project URL ..: http://sourceforge.net/projects/wsjt/ 
 :: Usage ........: This file is called from postinstall-update.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: jtsdk-cyg32-install.cmd is free software: you can redistribute it and/or modify it
@@ -37,7 +37,7 @@ SET cypkgd=%based%\scripts\cyg32\downloads
 SET cysite=http://mirrors.kernel.org/sourceware/cygwin/
 REM SET cysite=http://cygwin.mirrors.pair.com/   <-- ALternate DL Site
 SET cyopt=-B -q -D -L -X -g -N -d -o
-SET cypkgs=mintty,python,subversion,dialog,ncurses,source-highlight,python-pygments,most,rsync,wget,openssh,sqlite3,libsqlite3_0
+SET cypkgs=mintty,python,subversion,source-highlight,python-pygments,most,rsync,wget,openssh,sqlite3,libsqlite3_0
 SET PATH=%based%;%WINDIR%\System32
 
 :: START INSTALL
