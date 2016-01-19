@@ -134,7 +134,7 @@ ECHO.  help-map65 .....^: Help with building MAP65
 ECHO.  help-wsjtx .....^: Help with building WSJTX
 ECHO   list-options ...^: Lists all user defines options
 ECHO. 
-ECHO   ^* Relist Help-Menu, type .....^: help-wspr
+ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
 ECHO   ^* Help List, type ............^: help-list
 ECHO   ^* Return to Main-Menu, type ..^: main-menu 
 ECHO.
