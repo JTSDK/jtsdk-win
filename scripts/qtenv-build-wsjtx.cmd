@@ -362,12 +362,12 @@ ECHO  JTSDK Option^: QT55 Disabled
 GOTO CREATE-DIRS
 )
 IF /I [%separate%]==[Yes] (
-ECHO  JTSDK Option^: - Folder Separation Enabled
+ECHO  JTSDK Option^: Folder Separation Enabled
 SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\build
 SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\install
 SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\package
 IF /I [%qt55%]==[Yes] (
-ECHO  JTSDK Option^: - QT55 Enabled
+ECHO  JTSDK Option^: QT55 Enabled
 SET buildd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\build
 SET installd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\install
 SET pkgd=%based%\wsjtx\%folder%\%qtv%\%aver%\%sver%\%copt%\package
