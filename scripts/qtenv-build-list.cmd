@@ -72,7 +72,7 @@ ECHO GA and RC List ^( ^^/wsjt/tags^/ ^)^:
 cat %garlist%
 ECHO.
 ECHO To update the lists to the latest available, issue the
-ECHO follwing command^:  ^wsjtx-list ^-u
+ECHO following command ..^:  ^wsjtx-list ^-u
 ECHO.
 GOTO EOF
 
