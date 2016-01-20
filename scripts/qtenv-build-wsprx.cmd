@@ -1,12 +1,12 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: qtenv-build-wsprx.cmd
-:: Project ......: Part of the JTSDK v2.0.0 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Build script for WSPRX
 :: Project URL ..: http://sourceforge.net/projects/wsjt/
 :: Usage ........: This file is run from within qtenv.cmd
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: qtenv-build-wsprx.cmd is free software: you can redistribute it and/or modify it

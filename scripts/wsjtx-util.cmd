@@ -1,12 +1,12 @@
 ::-----------------------------------------------------------------------------::
 :: Name .........: wsjtx-util.bat
-:: Project ......: Part of the JTSDK v2 Project
+:: Project ......: Part of the JTSDK v2.0 Project
 :: Description ..: Maintenance Shell for Testing jt9code jt65code
 :: Project URL ..: http://sourceforge.net/projects/jtsdk
 :: Usage ........: Run this file directly, or from the Windows Start Menu
 ::
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: wsjtx-util.bat is free software: you can redistribute it and/or modify it under
