@@ -1,351 +1,604 @@
-::-----------------------------------------------------------------------------::
-:: Name .........: pyenv-build-wspr.cmd
-:: Project ......: Part of the JTSDK v2.0.0 Project
-:: Description ..: Build WSPR from source
-:: Project URL ..: http://sourceforge.net/projects/wsjt/ 
-:: Usage ........: This file is run from within pyenv.bat
-::
-:: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
-:: License ......: GPL-3
-::
-:: pyenv-build-wspr.cmd is free software: you can redistribute it and/or modify it
-:: under the terms of the GNU General Public License as published by the Free
-:: Software Foundation either version 3 of the License, or (at your option) any
-:: later version. 
-::
-:: pyenv-build-wspr.cmd is distributed in the hope that it will be useful, but WITHOUT
-:: ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-:: FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-:: details.
-::
-:: You should have received a copy of the GNU General Public License
-:: along with this program.  If not, see <http://www.gnu.org/licenses/>.
-::-----------------------------------------------------------------------------::
-
-:: ENVIRONMENT
 @ECHO OFF
-SET LANG=en_US
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-COLOR 0A
+REM  ---------------------------------------------------------------------------
+REM  Name .........: pyenv-build-wsjt.cmd
+REM  Project ......: Part of the JTSDK v2.0 Project
+REM  Description ..: Build WSJT from source
+REM  Project URL ..: http://sourceforge.net/projects/wsjt/ 
+REM  Usage ........: This file is run from within pyenv.cmd
+REM  
+REM  Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
+REM  Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
+REM  License ......: GPL-3
+REM
+REM  pyenv-build-wsjt.cmd is free software: you can redistribute it and/or modify it
+REM  under the terms of the GNU General Public License as published by the Free
+REM  Software Foundation either version 3 of the License, or (at your option) any
+REM  later version. 
+REM
+REM  pyenv-build-wsjt.cmd is distributed in the hope that it will be useful, but WITHOUT
+REM  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+REM  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+REM  details.
+REM
+REM  You should have received a copy of the GNU General Public License
+REM  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+REM  ---------------------------------------------------------------------------
 
-:: TEST DOUBLE CLICK, if YES, GOTO ERROR MESSAGE
-FOR %%x IN (%cmdcmdline%) DO IF /I "%%~x"=="/c" SET GUI=1
-IF DEFINED GUI CALL GOTO DCLICK
-
-:: PATH VARIABLES
-SET LANG=en_US
-SET LIBRARY_PATH=
-SET based=C:\JTSDK
-SET srcd=%based%\src
-SET tools=%based%\tools\bin
-SET mgw=%based%\mingw32\bin
-SET inno=%based%\inno5
-SET scr=%based%\scripts
-SET svnd=%based%\subversion\bin
-SET PATH=%based%;%mgw%;%tools%;%srcd%;%inno%;%scr%;%svnd%;%WINDIR%\System32
-
-:: VARS USED IN PROCESS
-SET JJ=%NUMBER_OF_PROCESSORS%
-SET CP=%tools%\cp.exe
-SET MV=%tools%\mv.exe
-SET app_name=wspr
-SET app_src=%srcd%\wspr
-SET installdir=%based%\wspr\install
-SET packagedir=%based%\wspr\package
-
-:: IF SRCD EXISTS, CHECK FOR PREVIOUS CO
 CLS
-IF NOT EXIST %app_src%\.svn\NUL ( GOTO COMSG ) ELSE ( GOTO ASK_SVN )
+CD /D %based%
+SET burl=http://svn.code.sf.net/p/wsjt/wsjt/branches/wspr
+SET nopt=wspr
+SET separate=No
+SET qt55=No
+SET quiet-mode=No
+SET autosvn=No
+SET skipsvn=No
+SET clean-first=No
+SET autorun=No
+SET rcfg=No
+SET iss=jtsdk.iss
+SET makefile=Makefile.tmp
+GOTO CHECK-OPTIONS
 
-:: START WSPR BUILD
-:ASK_SVN
-CLS
-ECHO Update from SVN Before Building? ^( y/n ^)
-SET ANSWER=
-ECHO.
-SET /P answer=Type Response: %=%
-If /I "%answer%"=="N" GOTO WSPR_OPTIONS
-If /I "%answer%"=="Y" (
-GOTO SVN_UPDATE
-) ELSE (
-ECHO.
-ECHO Please Answer With: ^( Y or N ^)
-GOTO ASK_SVN
+:CHECK-OPTIONS
+IF EXIST %cfgd%\separate.txt (
+SET separate=Yes
 )
+IF EXIST %cfgd%\quiet.txt (
+SET quiet-mode=Yes
+)
+IF EXIST %cfgd%\autosvn.txt (
+SET autosvn=Yes
+)
+IF EXIST %cfgd%\skipsvn.txt (
+SET skipsvn=Yes
+)
+IF EXIST %cfgd%\clean.txt (
+SET clean-first=Yes
+)
+IF EXIST %cfgd%\rcfg.txt (
+SET rcfg=Yes
+)
+IF EXIST %cfgd%\autorun.txt (
+SET autorun=Yes
+)
+GOTO TARGETS
 
-:: UPDATE WSPR FROM SVN
-:SVN_UPDATE
-ECHO.
-ECHO UPDATING ^( %APP_SRC% ^ )
-CD /D %app_src%
-start /wait svn update
-GOTO WSPR_OPTIONS
-
-:: WSPR TARGETS
-:WSPR_OPTIONS
+:TARGETS
 IF /I [%1]==[] (
-SET all-target=1
-SET target=install
-GOTO BUILD_INSTALL
+SET topt=install
+GOTO OPTION-STATUS
+) ELSE IF /I [%1]==[help] (
+CALL %based%\scripts\help\jtsdk-help.cmd wsprhelp
+GOTO EOF
+) ELSE IF /I [%1]==[-h] (
+CALL %based%\scripts\help\jtsdk-help.cmd wsprhelp
+GOTO EOF
+) ELSE IF /I [%1]==[-o] (
+CALL %based%\scripts\help\jtsdk-help.cmd listoptions
+GOTO EOF
 ) ELSE IF /I [%1]==[install] (
-SET all-target=1
-SET target=install
-GOTO BUILD_INSTALL
+SET topt=install
+GOTO OPTION-STATUS
 ) ELSE IF /I [%1]==[package] (
-SET pkg-target=1
-SET target=package
-GOTO BUILD_PACKAGE
-) ELSE IF /I [%1]==[clean] (
-GOTO BUILD_CLEAN
-) ELSE IF /I [%1]==[distclean] (
-GOTO BUILD_DISTCLEAN
-) ELSE IF /I [%1]==[wspr0] (
-SET target=wspr0.exe
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[WSPRcode] (
-SET target=WSPRcode.exe
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[libwspr] (
-SET target=libwspr.a
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[fmtest] (
-SET target=fmtest.exe
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[fmtave] (
-SET target=fmtave.exe
-GOTO BUILD_TARGET
-)  ELSE IF /I [%1]==[fcal] (
-SET target=fcal.exe
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[fmeasure] (
-SET target=fmeasure.exe
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[sound] (
-SET target=sound.o
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[gmtime2] (
-SET target=sound.o
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[w.pyd] (
-SET target=WsprMod/w.pyd
-GOTO BUILD_TARGET
-) ELSE IF /I [%1]==[doc] (
-SET target=user-guide
-GOTO BUILD_TARGET
-) ELSE ( GOTO UNSUPPORTED_TARGET )
-
-:: ------------------------------------------------------------------------------
-:: -- START MAIN SCRIPT --
-:: ------------------------------------------------------------------------------
-
-::BUILD_CLEAN
-:BUILD_CLEAN
-CD /D %app_src%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Clean Targets for ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO ..Running mingw32-make clean
-mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
-ECHO ..Finished
+SET topt=package
+GOTO OPTION-STATUS
+) ELSE IF /I [%1]==[docs] (
+SET topt=docs
+GOTO OPTION-STATUS
+) ELSE IF /I [%1]==[list-targets] (
+CALL :LIST-TARGETS
 GOTO EOF
-
-::BUILD_DISTCLEAN
-:BUILD_DISTCLEAN
-CD /D %app_src%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Distclean Targets for ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO ..Running mingw32-make distclean
-mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
-ECHO ..Finished
-GOTO EOF
-
-:BUILD_INSTALL
-CD /D %app_src%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Starting Install Build for ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO ..Running mingw32-make clean
-mingw32-make -f Makefile.jtsdk2 clean > NUL 2>&1
-ECHO ..Running mingw32-make all
-ECHO.
-mingw32-make -f Makefile.jtsdk2
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-mingw32-make -f Makefile.jtsdk2 install
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO MAKEBAT
-
-:BUILD_PACKAGE
-CD /D %app_src%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Starting Package Build for ^( %app_name% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-ECHO ..Running mingw32-make distclean
-mingw32-make -f Makefile.jtsdk2 distclean > NUL 2>&1
-ECHO ..Running mingw32-make all
-ECHO.
-mingw32-make -f Makefile.jtsdk2
-
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-mingw32-make -f Makefile.jtsdk2 install
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO MAKEBAT
-
-:: BEGIN WSJT MAIN BUILD
-:BUILD_TARGET
-CD /D %app_src%
-CLS
-ECHO -----------------------------------------------------------------
-ECHO   Starting Build for Target^( %target% ^)
-ECHO -----------------------------------------------------------------
-ECHO.
-IF [%target%]==[user-guide] (
-mingw32-make -f Makefile.jtsdk2 user-guide
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO EOF
+) ELSE (
+SET topt=%1
+GOTO OPTION-STATUS
 )
-mingw32-make -f Makefile.jtsdk2 %target%
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-GOTO SINGLE_FINISH
 
-:: GENERATE RUNTIME BATCH FILE
-:MAKEBAT
-CD /D %installdir%
-IF EXIST %app_name%.bat (DEL /Q %app_name%.bat)
->%app_name%.bat (
+:OPTION-STATUS
+ECHO --------------------------------------------
+ECHO  Option Status
+ECHO --------------------------------------------
+IF /I [%quiet-mode%]==[Yes] (
+ECHO  ^* JTSDK Option^: Quiet Mode Enabled
+ECHO.
+GOTO SVN-CHECKOUT
+) ELSE (
+CALL :LIST-OPTIONS
+GOTO SVN-CHECKOUT
+)
+
+:SVN-CHECKOUT
+IF NOT EXIST %srcd%\wspr\.svn\NUL (
+CD /D %srcd%
+ECHO.
+ECHO --------------------------------------------
+ECHO  SVN Checkout
+ECHO --------------------------------------------
+ECHO.
+ECHO  Checking Out New Version of ^( WSPR ^) from SVN
+ECHO.
+start /wait svn co %burl%
+IF ERRORLEVEL 1 ( GOTO SVN-CO-ERROR )
+GOTO GET-SVER
+) ELSE (
+GOTO SVC1
+)
+
+:SVC1
+IF /I [%skipsvn%]==[Yes] (
+GOTO GET-SVER
+)
+IF /I [%autosvn%]==[Yes] (
+GOTO SVN-UPDATE
+) ELSE (
+GOTO GET-SVER
+)
+
+:SVN-UPDATE
+CD /D %srcd%\wspr
+ECHO.
+ECHO --------------------------------------------
+ECHO  SVN Update
+ECHO --------------------------------------------
+ECHO.
+ECHO  Updating WSPR from SVN
+ECHO.
+start /wait svn update
+IF ERRORLEVEL 1 ( GOTO SVN-UPDATE-ERROR )
+GOTO GET-SVER
+
+:GET-SVER
+svn info %srcd%\wspr |grep "Rev:" |awk "{print $4}" >s.v & SET /p sver=<s.v & rm s.v
+GOTO GET-AVER
+
+:GET-AVER
+cat %srcd%\wspr\wspr.py |grep "Version=" |awk "{print $1}" |tail -c5 >a.v & SET /p aver=<a.v & rm a.v
+GOTO SETUP-DIRS
+
+:SETUP-DIRS
+IF /I [%separate%]==[Yes] (
+SET buildd=%srcd%\wspr
+SET installd=%based%\wspr\%aver%\%sver%\install
+SET logd=%based%\wspr\%aver%\%sver%\install\Logbook
+SET pkgd=%based%\wspr\%aver%\%sver%\package
+GOTO MAKE-DIRS
+) ELSE (
+SET buildd=%srcd%\wspr
+SET installd=%based%\wspr\install
+SET logd=%based%\wspr\install\Logbook
+SET pkgd=%based%\wspr\package
+GOTO MAKE-DIRS
+)
+
+:MAKE-DIRS
+IF /I [%quiet-mode%]==[Yes] (
+GOTO MD1
+)
+CALL :FOLDER-LOCATIONS
+
+:MD1
+mkdir %installd% >NUL 2>&1
+mkdir %pkgd% >NUL 2>&1
+mkdir %logd% >NUL 2>&1
+GOTO START-MAIN
+
+:START-MAIN
+IF /I [%quiet-mode%]==[Yes] (
+GOTO BUILD-SELECT
+)
+CALL :BUILD-INFORMATION
+GOTO BUILD-SELECT
+
+:BUILD-SELECT
+IF /I [%topt%]==[install] ( GOTO BUILD-INSTALL )
+IF /I [%topt%]==[package] ( GOTO BUILD-PKG )
+IF /I [%topt%]==[docs] (
+GOTO BUILD-DOCS
+) ELSE (
+GOTO BUILD-UDT
+)
+
+REM  ***************************************************************************
+REM  START MAIN SCRIPT --
+REM  ***************************************************************************
+
+REM  ------------------------------------------------------------ INSTALL TARGET
+:BUILD-INSTALL
+CD /D %srcd%\wspr
+ECHO --------------------------------------------
+ECHO  Build Install Target
+ECHO --------------------------------------------
+IF /I [%clean-first%]==[Yes] (
+CALL :MAKE-CLEAN
+GOTO BI1
+)
+GOTO BI1
+
+:BI1
+CALL :MAKE-ALL && CALL :MAKE-INSTALL && CALL :MAKE-CMD && CALL :FINISH-INSTALL
+GOTO EOF
+
+
+REM  ------------------------------------------------------------ PACKAGE TARGET
+:BUILD-PKG
+CD /D %srcd%\wspr
+ECHO --------------------------------------------
+ECHO  Build Win32 Installer
+ECHO --------------------------------------------
+ECHO.
+IF /I [%clean-first%]==[Yes] (
+CALL :MAKE-CLEAN
+GOTO BP1
+)
+GOTO BP1
+
+:BP1
+CALL :MAKE-ISS && CALL :MAKE-ALL && CALL :MAKE-INSTALL && CALL :MAKE-INSTALLER && CALL :FINISH-PKG
+GOTO EOF
+
+REM  ---------------------------------------------------------------- USER GUIDE
+:BUILD-DOCS
+CD /D %srcd%\wspr
+ECHO --------------------------------------------
+ECHO  Build User Guide
+ECHO --------------------------------------------
+IF /I [%clean-first%]==[Yes] (
+CALL :MAKE-CLEAN
+GOTO UG1
+)
+GOTO UG1
+
+:UG1
+CALL :MAKE-DOCS && CALL :FINISH-UG
+GOTO EOF
+
+
+REM  ------------------------------------------------------- USER DEFINED TARGET
+:BUILD-UDT
+CD /D %srcd%\wspr
+ECHO --------------------------------------------
+ECHO  User Defined Target ^[ %topt% ^]
+ECHO --------------------------------------------
+ECHO.
+IF /I [%clean-first%]==[Yes] (
+CALL :MAKE-CLEAN
+GOTO UD1
+)
+GOTO UD1
+
+:UD1
+CALL :MAKE-UDT
+GOTO EOF
+
+REM  ***************************************************************************
+REM  END OF PYENV-BUILD>BAT
+REM  ***************************************************************************
+:EOF
+CD /D %based%
+EXIT /B 0
+
+
+REM  ***************************************************************************
+REM   PROCESS FUNCTIONS
+REM  ***************************************************************************
+:MAKE-ISS
+rm -f %srcd%\wspr\jtsdk.iss >NUL 2>&1
+>%srcd%\wspr\jtsdk.iss (
+ECHO ; For Use With JTSDK v2
+ECHO #define MyAppName "wspr"
+ECHO #define MyAppVersion "%aver%-%sver%"
+ECHO #define MyAppPublisher "Joe Taylor, K1JT"
+ECHO #define MyAppCopyright "Copyright (C) 2001-2016 by Joe Taylor, K1JT"
+ECHO #define MyAppURL "http://physics.princeton.edu/pulsar/k1jt/doc/wspr/"
+ECHO #define WsjtGroupURL "https://groups.yahoo.com/neo/groups/wsjtgroup/info"
+ECHO.
+ECHO [Setup]
+ECHO AppName={#MyAppName}
+ECHO AppVersion={#MyAppVersion}
+ECHO AppPublisher={#MyAppPublisher}
+ECHO AppPublisherURL={#MyAppURL}
+ECHO AppSupportURL={#MyAppURL}
+ECHO AppUpdatesURL={#MyAppURL}
+ECHO DisableReadyPage=yes
+ECHO DefaultDirName=C:\wspr\wspr-{#MyAppVersion}
+ECHO DefaultGroupName=wspr
+ECHO LicenseFile=C:\JTSDK\common-licenses\GPL-3
+ECHO OutputDir=%pkgd%
+ECHO OutputBaseFilename={#MyAppName}-{#MyAppVersion}-Win32
+ECHO SetupIconFile=C:\JTSDK\icons\wsjt.ico
+ECHO Compression=lzma
+ECHO SolidCompression=yes
+ECHO.
+ECHO [Languages]
+ECHO Name: "english"; MessagesFile: "compiler:Default.isl"
+ECHO.
+ECHO [Files]
+ECHO Source: "%installd%\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+ECHO.
+ECHO [Icons]
+ECHO Name: "{group}\{#MyAppName}\Documentation\wspr {#MyAppVersion} User Guide"; Filename: "{app}\wspr-main-{#MyAppVersion}.html"; WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
+ECHO Name: "{group}\{#MyAppName}\Documentation\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
+ECHO Name: "{group}\{#MyAppName}\Resources\{cm:ProgramOnTheWeb,wspr Group}"; Filename: "{#WsjtGroupURL}"
+ECHO Name: "{group}\{#MyAppName}\Uninstall\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; Comment: "Uninstall wspr";
+ECHO Name: "{group}\{#MyAppName}\wspr v10"; Filename: "{app}\wspr.cmd"; WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
+ECHO Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\wspr.cmd";    WorkingDir: {app}; IconFileName: "{app}\wsjt.ico"
+ECHO.
+ECHO [Run]
+ECHO Filename: "{app}\wspr.cmd"; Description: "Launch wspr v10"; Flags: postinstall nowait unchecked
+)
+EXIT /B 0
+
+:MAKE-CLEAN
+ECHO  ^* JTSDK Option^: Clean Build Tree Enabled
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% distclean >NUL 2>&1
+mkdir %installd% >NUL 2>&1
+mkdir %pkgd% >NUL 2>&1
+mkdir %logd% >NUL 2>&1
+ECHO.
+EXIT /B 0
+
+:MAKE-ALL
+REM  Build all the rargets
+CD /D %srcd%\wspr
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% all
+IF ERRORLEVEL 1 ( GOTO BUILD-ERROR )
+EXIT /B 0
+
+:MAKE-CMD
+REM  Create the runtime batch file
+CD /D %installd%
+rm -f wspr.bat >NUL 2>&1
+>wspr.bat (
 ECHO @ECHO OFF
-ECHO REM -- WSPR batch File
+ECHO REM -- wspr batch File
 ECHO REM -- Part of the JTSDK v2.0 Project
 ECHO COLOR 0A
-ECHO bin\%app_name%.exe
+ECHO bin\wspr.exe
 ECHO EXIT /B 0
 )
-IF DEFINED pkg-target (
-CD /D %app_src%
-mingw32-make -f Makefile.jtsdk2 package
-IF ERRORLEVEL 1 ( GOTO BUILD_ERROR )
-ECHO.
-GOTO FINISH
+EXIT /B 0
+
+:MAKE-INSTALL
+CD /D %srcd%\wspr
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% install
+IF ERRORLEVEL 1 (
+GOTO BUILD-ERROR
+GOTO EOF
 )
-GOTO FINISH
+EXIT /B 0
 
-:: FINISHED INSTALL OR PACKAGE TARGET BUILDS
-:SINGLE_FINISH
-ECHO.
-ECHO ..Finished building Target ^( %target% ^) 
-ECHO.
-GOTO EOF
-
-:: FINISHED INSTALL OR PACKAGE TARGET BUILDS
-:FINISH
-IF DEFINED all-target ( GOTO ASKRUN )
-GOTO EOF
-
-:: ASK USER IF THEY WANT TO RUN THE APP
-:ASKRUN
-ECHO.
-ECHO  Would You Like To Run %app_name% Now? ^( y/n ^)
-ECHO.
-SET answer=
-SET /P answer=Type Response: %=%
-ECHO.
-If /I "%ANSWER%"=="Y" GOTO RUN_APP
-If /I "%ANSWER%"=="N" (
+:MAKE-UDT
+CD /D %srcd%\wspr
+mingw32-make -f %makefile% %topt%
+IF ERRORLEVEL 1 (
+GOTO BUILD-ERROR
 GOTO EOF
 ) ELSE (
-ECHO.
-ECHO ..Please Answer With: ^( y or n ^) & ECHO. & GOTO ASKRUN
+GOTO FINISH-UDT
 )
+EXIT /B 0
+
+:LIST-TARGETS
+CD /D %srcd%\wspr
+mingw32-make -f %makefile% list-targets
+IF ERRORLEVEL 1 (
+GOTO BUILD-ERROR
 GOTO EOF
+)
+EXIT /B 0
 
-:: RUN THE APP IFF USER ANSWERED YES ABOVE
-:RUN_APP
+
+:MAKE-INSTALLER
+CD /D %srcd%\wspr
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% SRCD=%srcd%\wspr NAME=wspr VER=%aver% SVER=r%sver% OS=win32 ISS=jtsdk.iss -f %makefile% package
+IF ERRORLEVEL 1 (
+GOTO BUILD-ERROR
+GOTO EOF
+)
+DIR /B %pkgd%\wspr-%aver%-r%sver%*.exe >p.k & SET /P wsprpkg=<p.k & rm p.k
+EXIT /B 0
+
+:MAKE-DOCS
+CD /D %srcd%\wspr
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% docs
+IF ERRORLEVEL 1 (
+GOTO BUILD-ERROR
+GOTO EOF
+)
+DIR /B %srcd%\wspr\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
+EXIT /B 0
+
+:LIST-OPTIONS
+ECHO  Separate .....^: %separate%
+ECHO  Quiet Mode ...^: %quiet-mode%
+ECHO  Skip SVN .....^: %skipsvn%
+ECHO  Auto SVN .....^: %autosvn%
+ECHO  Clean First ..^: %clean-first%
+ECHO  Auto run .....^: %autorun%
 ECHO.
-ECHO ..Starting: ^( %app_name% ^)
-CD /D %installdir%
-START %app_name%.bat & GOTO EOF
+EXIT /B 0
 
-REM ----------------------------------------------------------------------------
-REM  MESSAGE SECTION
-REM ----------------------------------------------------------------------------
+:FOLDER-LOCATIONS
+ECHO --------------------------------------------
+ECHO  Folder Locations
+ECHO --------------------------------------------
+ECHO.
+ECHO  Build .......^: %buildd%
+ECHO  Install .....^: %installd%
+ECHO  Logbook .....^: %logd%
+ECHO  Package .....^: %pkgd%
+ECHO.
+EXIT /B 0
 
-:: USER INPUT INCORRECT BUILD TARGET
-:UNSUPPORTED_TARGET
-CLS
+:BUILD-INFORMATION
+ECHO --------------------------------------------
+ECHO  Build Information
+ECHO --------------------------------------------
+ECHO.
+ECHO  Name ........^: wspr
+ECHO  Version .....^: %aver%
+ECHO  SVN .........^: r%sver%
+ECHO  Target ......^: %topt%
+ECHO  SRC .........^: %srcd%\wspr
+ECHO  Install .....^: %installd%
+ECHO  Logbook .....^: %logd%
+ECHO  Package .....^: %pkgd%
+ECHO  SVN URL .....^: %burl%
+ECHO.
+EXIT /B 0
+
+
+REM  ***************************************************************************
+REM   FINISH MESSAGES
+REM  ***************************************************************************
+:FINISH-INSTALL
+ECHO.
+ECHO --------------------------------------------
+ECHO  Build Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ..........^: wspr
+ECHO   Version .......^: %aver%
+ECHO   SVN ...........^: r%sver%
+ECHO   Target ........^: %topt%
+ECHO   SRC ...........^: %srcd%\wspr
+ECHO   Install .......^: %installd%
+ECHO   Package .......^: %pkgd%
+ECHO   SVN URL .......^: %burl%
+GOTO FRUN
+
+:FRUN
+IF /I [%autorun%]==[Yes] (
+ECHO.
+ECHO  JTSDK Option ..: Autorun Enabled
+ECHO  Starting ......: wspr %aver% r%sver%
+ECHO.
+CD /D %installd%
+CALL wspr.bat
+EXIT /B 0
+) ELSE (
+EXIT /B 0
+)
+
+:FINISH-UG
+ECHO.
+ECHO --------------------------------------------
+ECHO  User Guide Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ........^: %docname%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Target ......^: %topt%
+ECHO   SRC .........^: %srcd%\wspr
+ECHO   Location ....^: %srcd%\wspr\doc\%docname%
+ECHO   SVN URL .....^: %burl%
+ECHO.
+ECHO   The user guide does ^*not^* get installed like normal install
+ECHO   builds, it remains in the build folder to aid in browser
+ECHO   shortcuts for quicker refresh during development iterations. 
+ECHO.
+ECHO   The name ^[ %docname% ^] also remains constant rather
+ECHO   than including the subversion revision number.
+ECHO.
+EXIT /B 0
+
+:FINISH-PKG
+ECHO.
+ECHO --------------------------------------------
+ECHO  Win32 Installer Summary
+ECHO --------------------------------------------
+ECHO.
+ECHO   Name ........^: %wsprpkg%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Target ......^: %topt%
+ECHO   SRC .........^: %srcd%\wspr
+ECHO   Location ....^: %pkgd%\%wsprpkg%
+ECHO   SVN URL .....^: %burl%
+ECHO.
+ECHO   To Install the package, browse to Location and
+ECHO   run as you normally do to install Windows applications.
+ECHO.
+EXIT /B 0
+
+:FINISH-UDT
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   ^( %1 ^) IS AN INVALID TARGET
+ECHO  User Defined Target Summary
 ECHO -----------------------------------------------------------------
-ECHO. 
-ECHO  After the pause, the build help menu
-ECHO  will be displayed. Please use the syntax
-ECHO  as outlined and choose the correct
-ECHO  target to build.
 ECHO.
-PAUSE
-CALL %scr%\help\pyenv-help-%app_name%.cmd
+ECHO   Name ........^: %nopt%
+ECHO   Version .....^: %aver%
+ECHO   SVN .........^: r%sver%
+ECHO   Target ......^: %topt%
+ECHO   SRC .........^: %srcd%\wspr
+ECHO   Location ....^: %srcd%\wspr\%topt%
+ECHO   SVN URL .....^: %burl%
+ECHO.
+ECHO   User Defined Targets do ^*not^* get installed like normal install
+ECHO   builds, they remain in the build folder. 
+ECHO.
+ECHO   See Location above for build target ^[ %topt% ^]
+ECHO.
+EXIT /B 0
+
+
+REM  ***************************************************************************
+REM   ERROR MESSAGES
+REM  ***************************************************************************
+:SVN-CO-ERROR
+ECHO --------------------------------------------
+ECHO  Sourceforge Checkout Error
+ECHO --------------------------------------------
+ECHO.
+ECHO  ^build-wspr was unable to checkout the
+ECHO  branch form Sourceforge. The service
+ECHO  may be down or undergoing maintenance.
+ECHO  Check the following link for current site
+ECHO  status reports^:
+ECHO.
+ECHO  http://sourceforge.net/blog/category/sitestatus/
+ECHO.
+ECHO  Other types of errors such as non-existan branchs
+ECHO  or tags may alos be the casue.
+ECHO.
+ECHO  Verify your entry and try again later. If the
+ECHO  peoblem presists, contact the wspr-devel list.
+ECHO
+EXIT /B 0
 GOTO EOF
 
-:: DISPLAY DOUBLE CLICK WARNING MESSAGE
-:DCLICK
-@ECHO OFF
-CLS
-ECHO -------------------------------
-ECHO     DOUBLE CLICK WARNING
-ECHO -------------------------------
+:SVN-UPDATE-ERROR
+ECHO --------------------------------------------
+ECHO  Sourceforge Update Error
+ECHO --------------------------------------------
 ECHO.
-ECHO  Please Use JTSDK Enviroment
+ECHO  ^build-wspr was unable to update ^[ %nopt% ^]
+ECHO  Sourceforge. The service may be down or
+ECHO  undergoing maintenance. Check the following
+ECHO  link for current site status reports^:
 ECHO.
-ECHO         pyenv.cmd
+ECHO  http://sourceforge.net/blog/category/sitestatus/
 ECHO.
-PAUSE
+ECHO  If your sure the entry is correct and you suspect
+ECHO  a problem with the build script, contact the
+ECHO  wspr-devel list for assistance.
+ECHO.
+EXIT /B 0
 GOTO EOF
 
-:: DISPLAY SRC DIRECTORY WAS NOT FOUND, e.g. NO CHECKOUT FOUND
-:COMSG
-CLS
-ECHO ----------------------------------------
-ECHO  %app_src% Was Not Found
-ECHO ----------------------------------------
-ECHO.
-ECHO  In order to build ^( %app_name% ^) you
-ECHO  must first perform a checkout from 
-ECHO  SourceForge
-ECHO.
-ECHO  After the pause, the checkout help menu
-ECHO  will be displayed.
-ECHO.
-PAUSE
-CALL %based%\scripts\help\pyenv-help-checkout.cmd
-GOTO EOF
-
-:: DISPLAY COMPILER BUILD WARNING MESSAGE
-:BUILD_ERROR
+:BUILD-ERROR
 ECHO.
 ECHO -----------------------------------------------------------------
-ECHO   Compiler Build Warning
+ECHO  Compiler Build Warning
 ECHO -----------------------------------------------------------------
 ECHO. 
 ECHO  mingw32-make exited with a non-(0) build status. Check and or 
 ECHO  correct the error, perform a clean, then re-make the target.
 ECHO.
+ECHO  If this was a target build error ^ ( not found ^), list the
+ECHO  available targets by typing^: build-wspr list-targets
 ECHO.
+
 EXIT /B %ERRORLEVEL%
-
-REM ----------------------------------------------------------------------------
-REM  END OF PYENV-BUILD>BAT
-REM ----------------------------------------------------------------------------
-:EOF
-CD /D %based%
-ENDLOCAL
-
-EXIT /B 0
