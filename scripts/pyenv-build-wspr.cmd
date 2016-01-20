@@ -159,13 +159,11 @@ GOTO SETUP-DIRS
 IF /I [%separate%]==[Yes] (
 SET buildd=%srcd%\wspr
 SET installd=%based%\wspr\%aver%\%sver%\install
-SET logd=%based%\wspr\%aver%\%sver%\install\Logbook
 SET pkgd=%based%\wspr\%aver%\%sver%\package
 GOTO MAKE-DIRS
 ) ELSE (
 SET buildd=%srcd%\wspr
 SET installd=%based%\wspr\install
-SET logd=%based%\wspr\install\Logbook
 SET pkgd=%based%\wspr\package
 GOTO MAKE-DIRS
 )
@@ -330,7 +328,7 @@ EXIT /B 0
 
 :MAKE-CLEAN
 ECHO  ^* JTSDK Option^: Clean Build Tree Enabled
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% distclean >NUL 2>&1
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% -f %makefile% distclean >NUL 2>&1
 mkdir %installd% >NUL 2>&1
 mkdir %pkgd% >NUL 2>&1
 mkdir %logd% >NUL 2>&1
@@ -340,7 +338,7 @@ EXIT /B 0
 :MAKE-ALL
 REM  Build all the rargets
 CD /D %srcd%\wspr
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% all
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% -f %makefile% all
 IF ERRORLEVEL 1 ( GOTO BUILD-ERROR )
 EXIT /B 0
 
@@ -360,7 +358,7 @@ EXIT /B 0
 
 :MAKE-INSTALL
 CD /D %srcd%\wspr
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% install
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% -f %makefile% install
 IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
@@ -390,7 +388,7 @@ EXIT /B 0
 
 :MAKE-INSTALLER
 CD /D %srcd%\wspr
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% SRCD=%srcd%\wspr NAME=wspr VER=%aver% SVER=r%sver% OS=win32 ISS=jtsdk.iss -f %makefile% package
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% SRCD=%srcd%\wspr NAME=wspr VER=%aver% SVER=r%sver% OS=win32 ISS=jtsdk.iss -f %makefile% package
 IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
@@ -400,7 +398,7 @@ EXIT /B 0
 
 :MAKE-DOCS
 CD /D %srcd%\wspr
-mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% docs
+mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% -f %makefile% docs
 IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
@@ -425,7 +423,6 @@ ECHO --------------------------------------------
 ECHO.
 ECHO  Build .......^: %buildd%
 ECHO  Install .....^: %installd%
-ECHO  Logbook .....^: %logd%
 ECHO  Package .....^: %pkgd%
 ECHO.
 EXIT /B 0
@@ -441,7 +438,6 @@ ECHO  SVN .........^: r%sver%
 ECHO  Target ......^: %topt%
 ECHO  SRC .........^: %srcd%\wspr
 ECHO  Install .....^: %installd%
-ECHO  Logbook .....^: %logd%
 ECHO  Package .....^: %pkgd%
 ECHO  SVN URL .....^: %burl%
 ECHO.
