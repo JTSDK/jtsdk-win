@@ -778,7 +778,7 @@ REM  ***************************************************************************
 :HELP-OPTIONS
 CLS
 ECHO --------------------------------------------
-ECHO  DEFAULT BUILD COMMANDS
+ECHO  WSJT-X DEFAULT BUILD COMMANDS
 ECHO --------------------------------------------
 ECHO.
 ECHO  Usage .....^: build-wsjtx ^[ OPTION ^]
@@ -793,7 +793,7 @@ ECHO     package    WSJTX Devel, Release, Package
 ECHO     docs       WSJTX Devel, Release, User Guide
 ECHO.
 ECHO --------------------------------------------
-ECHO  COMMAND LINE OPTIONS
+ECHO  WSJT-X COMMAND LINE OPTIONS
 ECHO --------------------------------------------
 ECHO.
 ECHO  Usage .....^: build-wsjtx ^[-h^] ^[-b^] ^[-n^] ^[-c^] ^[-t^]  
