@@ -60,7 +60,7 @@ GOTO EOF
 :WSJT-HELP
 CLS
 ECHO. -----------------------------------------------------------------
-ECHO.  Help Build WSJT
+ECHO.  WSJT Build Help
 ECHO. -----------------------------------------------------------------
 ECHO.
 ECHO   Usage: build-wsjt ^( target ^)
@@ -88,7 +88,7 @@ GOTO EOF
 :WSPR-HELP
 CLS
 ECHO. -----------------------------------------------------------------
-ECHO.  Help Build WSPR
+ECHO.  WSPR Build Help
 ECHO. -----------------------------------------------------------------
 ECHO.
 ECHO   Usage: build-wspr ^( target ^)
@@ -132,6 +132,7 @@ ECHO.  help-checkout ..^: Help with branch checkouts
 ECHO.  help-wsprx .....^: Help with building WSPR-X
 ECHO.  help-map65 .....^: Help with building MAP65
 ECHO.  help-wsjtx .....^: Help with building WSJTX
+ECHO   wsjtx-list .....^: Help with WSJT-X Menu Lists
 ECHO   list-options ...^: Lists all user defines options
 ECHO. 
 ECHO   ^* Relist Help-Menu, type .....^: help-qtenv
@@ -143,7 +144,7 @@ GOTO EOF
 :MAP65-HELP
 CLS
 ECHO. -----------------------------------------------------------------
-ECHO.  Help Build MAP65
+ECHO.  MAP65 Build Help
 ECHO. -----------------------------------------------------------------
 ECHO.
 ECHO   Usage: build-map65 ^( target ^)
@@ -171,7 +172,7 @@ GOTO EOF
 :WSPRX-HELP
 CLS
 ECHO. -----------------------------------------------------------------
-ECHO.  Help Build WSPRX
+ECHO.  WSPR-X Build Help
 ECHO. -----------------------------------------------------------------
 ECHO.
 ECHO   Usage: build-wsprx ^( target ^)
@@ -228,6 +229,7 @@ ECHO  JTSDK-QT Main ..^: help-qtenv
 ECHO  WSJT-X .........^: help-wsjtx
 ECHO  WSPR-X .........^: help-wsprx
 ECHO  MAP65 ..........^: help-map65
+ECHO  MAP65 ..........^: wsjtx-list ^-h
 )
 ECHO.
 ECHO  ^* Checkout Help, Type.........^: help-checkout
@@ -290,7 +292,7 @@ SET autorun=No
 
 CLS
 ECHO --------------------------------------------
-ECHO  OPTION STATUS
+ECHO  JTSDK OPTION STATUS
 ECHO --------------------------------------------
 ECHO.
 ECHO  USAGE ..^: enable-^[NAME^] or disable-^[NAME^]
