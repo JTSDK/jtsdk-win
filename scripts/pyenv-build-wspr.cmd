@@ -37,7 +37,7 @@ SET clean-first=No
 SET autorun=No
 SET rcfg=No
 SET iss=jtsdk.iss
-SET makefile=Makefile.tmp
+SET makefile=Makefile.204
 GOTO CHECK-OPTIONS
 
 :CHECK-OPTIONS
