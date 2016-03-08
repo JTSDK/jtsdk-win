@@ -1,7 +1,5 @@
-Current Development Version: JTSDK v2.0.0
+Current Release Version: JTSDK v2.0.4-1
 
-2014-12-12 Greg Beam <ki7mt@yahoo.com>
-
-* Move all Win32 related files to win32 folder
-* Add misc files to win32 directory
-
+* 08-MAR-2016
+- Fix type in build-hamlib3.cmd
+- Update version file to v2.0.4-1
