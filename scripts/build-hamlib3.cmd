@@ -143,7 +143,7 @@ ECHO  you cannot resolve the problem.
 ECHO.
 GOTO EOF
 
-:BUILD_ERROR
+:BUILD-ERROR
 ECHO.
 ECHO --------------------------------------------
 ECHO  HAMLIB3 BUILD ERROR
