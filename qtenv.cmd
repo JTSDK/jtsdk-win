@@ -61,6 +61,7 @@ SET ruby=%based%\Ruby\bin
 SET scr=%based%\scripts
 SET srcd=%based%\src
 SET svnd=%based%\subversion\bin
+
 :: Optional enable / Disable use of QT55 for testing
 :: *DO NOT EDIT MANYALLY*
 IF EXIST %based%\config\qt55.txt (
@@ -75,9 +76,8 @@ SET qt5d=%based%\qt5\5.2.1\mingw48_32\bin
 SET qt5a=%based%\qt5\5.2.1\mingw48_32\plugins\accessible
 SET qt5p=%based%\qt5\5.2.1\mingw48_32\plugins\platforms
 SET LIBRARY_PATH=
-SET hl3=%based%\hamlib3\bin;%based%\hamlib3\include\hamlib;%based%\hamlib3\lib
 )
-SET PATH=%based%;%cfgd%;%cmk%;%tools%;%hl3%;%py27%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
+SET PATH=%based%;%cfgd%;%cmk%;%tools%;%fft%;%gccd%;%qt5d%;%qt5a%;%qt5p%;%nsi%;%ino%;%ruby%;%srcd%;%scr%;%srcd%;%svnd%;%WINDIR%;%WINDIR%\System32
 
 REM  ---------------------------------------------------------------------------
 REM   USER DEFINABLE ALIAS COMMANDS ( add what you like here )
@@ -126,25 +126,23 @@ DOSKEY checkout-wsjtxrc="%scr%\svn-checkout.cmd" $* wsjtxrc
 REM  ---------------------------------------------------------------------------
 REM   BUILD COMMANDS
 REM  ---------------------------------------------------------------------------
-DOSKEY build-wsprx="%scr%\qtenv-build-wsprx.cmd" $* wsprx
-DOSKEY build-map65="%scr%\qtenv-build-map65.cmd" $* map65
-DOSKEY build-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $*
-DOSKEY wsjtx-list="%based%\scripts\qtenv-build-list.cmd" $*
+DOSKEY build-wsprx=pushd %cd% ^& %scr%\qtenv-build-wsprx.cmd $* wsprx
+DOSKEY build-map65=pushd %cd% ^& %scr%\qtenv-build-map65.cmd $* map65
+DOSKEY build-wsjtx=pushd %cd% ^& %scr%\qtenv-build-wsjtx.cmd $*
+DOSKEY wsjtx-list=pushd %cd% ^& %based%\scripts\qtenv-build-list.cmd $*
 DOSKEY build-hamlib3="%based%\scripts\build-hamlib3.cmd"
 
 REM  ---------------------------------------------------------------------------
 REM   HELP PAGES
 REM  ---------------------------------------------------------------------------
-DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\qtenv-info.cmd
-DOSKEY list-options="%scr%\help\jtsdk-help.cmd" $* listoptions
-DOSKEY help-list="%scr%\help\jtsdk-help.cmd" $* helplist
-DOSKEY help-qtenv="%scr%\help\jtsdk-help.cmd" $* qtmain
-DOSKEY help-wsprx="%scr%\help\jtsdk-help.cmd" $* wsprxhelp
-DOSKEY help-map65="%scr%\help\jtsdk-help.cmd" $* map65help
-DOSKEY help-wsjtx="%scr%\qtenv-build-wsjtx.cmd" $* help
-DOSKEY help-checkout="%scr%\svn-checkout.cmd" $* qtcohelp
-
-
+DOSKEY main-menu=CD ^/D %based% ^& CALL %scr%\qtenv-info.cmd
+DOSKEY list-options=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* listoptions
+DOSKEY help-list=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* helplist
+DOSKEY help-qtenv=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* qtmain
+DOSKEY help-wsprx=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* wsprxhelp
+DOSKEY help-map65=pushd %cd% ^& %scr%\help\jtsdk-help.cmd" $* map65help
+DOSKEY help-wsjtx=pushd %cd% ^& %scr%\qtenv-build-wsjtx.cmd" $* help
+DOSKEY help-checkout=pushd %cd% ^& %scr%\svn-checkout.cmd" $* qtcohelp
 
 REM  ---------------------------------------------------------------------------
 REM   USER CONFIGURABLE OPTIONS

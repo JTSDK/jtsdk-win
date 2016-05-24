@@ -7,7 +7,7 @@
 :: Usage ........: Windows Start, run C:\JTSDK\pyenv.cmd
 :: 
 :: Author .......: Greg, Beam, KI7MT, <ki7mt@yahoo.com>
-:: Copyright ....: Copyright (C) 2014-2015 Joe Taylor, K1JT
+:: Copyright ....: Copyright (C) 2014-2016 Joe Taylor, K1JT
 :: License ......: GPL-3
 ::
 :: pyenv.cmd is free software: you can redistribute it and/or modify it under the
@@ -50,12 +50,11 @@ SET mgw=%based%\mingw32\bin
 SET inno=%based%\inno5
 SET ruby=%based%\Ruby\bin
 SET scr=%based%\scripts
-REM  SET python2path=%based%\python27;%based%\python27\Scripts;%based%\python27\DLLs
 SET python3path=%based%\Python33;%based%\python33\Scripts;%based%\python33\DLLs
 SET svnd=%based%\subversion\bin
 SET srcd=%based%\src
 SET LIBRARY_PATH=
-SET PATH=%based%;%python2path%;%python3path%;%MGW%;%cfgd%;%tools%;%innno%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
+SET PATH=%based%;%python3path%;%MGW%;%cfgd%;%tools%;%inno%;%ruby%;%scr%;%srcd%;%svnd%;%WINDIR%\System32
 
 REM  ---------------------------------------------------------------------------
 REM   USER DEFINABLE ALIAS COMMANDS ( add what you like here )
@@ -71,7 +70,6 @@ DOSKEY logr="svn.exe" log -r $*
 DOSKEY logv="svn.exe" log -v -l $*
 DOSKEY logvr="svn.exe" log -v -r $*
 DOSKEY edit="%tools%\Sc351.exe" $1
-REM  DOSKEY python2="C:\JTSDK\python27\python.exe" $*
 DOSKEY python3="C:\JTSDK\python33\python.exe" $*
 
 REM  ***************************************************************************
@@ -89,22 +87,22 @@ SET PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
 REM  ---------------------------------------------------------------------------
 REM   CHECKOUT and BUILD COMMANDS - ( users *should not* edit these )
 REM  ---------------------------------------------------------------------------
-DOSKEY checkout-wspr="%based%\scripts\svn-checkout.cmd" $* wspr
-DOSKEY checkout-wsjt="%based%\scripts\svn-checkout.cmd" $* wsjt
-DOSKEY build-wspr="%scr%\pyenv-build-wspr.cmd" $*
-DOSKEY build-wsjt="%scr%\pyenv-build-wsjt.cmd" $*
+DOSKEY checkout-wspr=pushd %cd% ^& %based%\scripts\svn-checkout.cmd $* wspr
+DOSKEY checkout-wsjt=pushd %cd% ^& %based%\scripts\svn-checkout.cmd $* wsjt
+DOSKEY build-wspr=pushd %cd% ^& %scr%\pyenv-build-wspr.cmd $*
+DOSKEY build-wsjt=pushd %cd% ^& %scr%\pyenv-build-wsjt.cmd $*
 DOSKEY make=C:\JTSDK\mingw32\bin\mingw32-make $*
 
 REM  ---------------------------------------------------------------------------
 REM   HELP PAGES  - ( users *should not* edit these )
 REM  ---------------------------------------------------------------------------
 DOSKEY main-menu=CD ^/D %based% ^&CALL %scr%\pyenv-info.cmd
-DOSKEY list-options="%scr%\help\jtsdk-help.cmd" $* listoptions
-DOSKEY help-list="%based%\scripts\help\jtsdk-help.cmd" $* helplist
-DOSKEY help-pyenv="%based%\scripts\help\jtsdk-help.cmd" $* pymain
-DOSKEY help-wsjt="%based%\scripts\help\jtsdk-help.cmd" $* wsjthelp
-DOSKEY help-wspr="%based%\scripts\help\jtsdk-help.cmd" $* wsprhelp
-DOSKEY help-checkout="%based%\scripts\svn-checkout.cmd" $* pycohelp
+DOSKEY list-options=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* listoptions
+DOSKEY help-list=pushd %cd% ^& %based%\scripts\help\jtsdk-help.cmd $* helplist
+DOSKEY help-pyenv=pushd %cd% ^& %based%\scripts\help\jtsdk-help.cmd $* pymain
+DOSKEY help-wsjt=pushd %cd% ^& %based%\scripts\help\jtsdk-help.cmd $* wsjthelp
+DOSKEY help-wspr=pushd %cd% ^& %based%\scripts\help\jtsdk-help.cmd $* wsprhelp
+DOSKEY help-checkout=pushd %cd% ^& %based%\scripts\svn-checkout.cmd $* pycohelp
 
 REM  ---------------------------------------------------------------------------
 REM   USER CONFIGURABLE OPTIONS  ( users *should not* edit these )

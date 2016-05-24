@@ -501,7 +501,7 @@ GOTO EOF
 
 :: END QTENV-WSJTXRC.CMD
 :EOF
-CD /D %based%
+popd
 ENDLOCAL
 
 EXIT /B 0

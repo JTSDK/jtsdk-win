@@ -199,7 +199,7 @@ GOTO EOF
 
 :: END OF QTENV-CO.BAT
 :EOF
-CD /D %based%
 ENDLOCAL
+popd
 
 EXIT /B 0

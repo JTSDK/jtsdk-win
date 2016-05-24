@@ -271,10 +271,10 @@ CALL :MAKE-UDT
 GOTO EOF
 
 REM  ***************************************************************************
-REM  END OF PYENV-BUILD>BAT
+REM  END OF PYENV-BUILD
 REM  ***************************************************************************
 :EOF
-CD /D %based%
+popd
 EXIT /B 0
 
 
@@ -326,6 +326,7 @@ ECHO.
 ECHO [Run]
 ECHO Filename: "{app}\wsjt.cmd"; Description: "Launch WSJT v10"; Flags: postinstall nowait unchecked
 )
+popd
 EXIT /B 0
 
 :MAKE-CLEAN
@@ -335,6 +336,7 @@ mkdir %installd% >NUL 2>&1
 mkdir %pkgd% >NUL 2>&1
 mkdir %logd% >NUL 2>&1
 ECHO.
+popd
 EXIT /B 0
 
 :MAKE-ALL
@@ -342,6 +344,7 @@ REM  Build all the rargets
 CD /D %srcd%\trunk
 mingw32-make INSTALLDIR=%installd% PACKAGEDIR=%pkgd% LOGBOOKDIR=%logd% -f %makefile% all
 IF ERRORLEVEL 1 ( GOTO BUILD-ERROR )
+popd
 EXIT /B 0
 
 :MAKE-CMD
@@ -356,6 +359,7 @@ ECHO COLOR 0A
 ECHO bin\wsjt.exe
 ECHO EXIT /B 0
 )
+popd
 EXIT /B 0
 
 :MAKE-INSTALL
@@ -365,6 +369,7 @@ IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
 )
+popd
 EXIT /B 0
 
 :MAKE-UDT
@@ -376,6 +381,7 @@ GOTO EOF
 ) ELSE (
 GOTO FINISH-UDT
 )
+popd
 EXIT /B 0
 
 :LIST-TARGETS
@@ -385,6 +391,7 @@ IF ERRORLEVEL 1 (
 GOTO BUILD-ERROR
 GOTO EOF
 )
+popd
 EXIT /B 0
 
 
@@ -396,6 +403,7 @@ GOTO BUILD-ERROR
 GOTO EOF
 )
 DIR /B %pkgd%\wsjt-%aver%-r%sver%*.exe >p.k & SET /P wsjtpkg=<p.k & rm p.k
+popd
 EXIT /B 0
 
 :MAKE-DOCS
@@ -406,6 +414,7 @@ GOTO BUILD-ERROR
 GOTO EOF
 )
 DIR /B %srcd%\trunk\doc\*.html >d.n & SET /P docname=<d.n & rm d.n
+popd
 EXIT /B 0
 
 :LIST-OPTIONS
@@ -416,6 +425,7 @@ ECHO  Auto SVN .....^: %autosvn%
 ECHO  Clean First ..^: %clean-first%
 ECHO  Auto run .....^: %autorun%
 ECHO.
+popd
 EXIT /B 0
 
 :FOLDER-LOCATIONS
@@ -428,6 +438,7 @@ ECHO  Install .....^: %installd%
 ECHO  Logbook .....^: %logd%
 ECHO  Package .....^: %pkgd%
 ECHO.
+popd
 EXIT /B 0
 
 :BUILD-INFORMATION
@@ -445,6 +456,7 @@ ECHO  Logbook .....^: %logd%
 ECHO  Package .....^: %pkgd%
 ECHO  SVN URL .....^: %burl%
 ECHO.
+popd
 EXIT /B 0
 
 
@@ -477,6 +489,7 @@ CD /D %installd%
 CALL wsjt.bat
 EXIT /B 0
 ) ELSE (
+popd
 EXIT /B 0
 )
 
@@ -501,6 +514,7 @@ ECHO.
 ECHO   The name ^[ %docname% ^] also remains constant rather
 ECHO   than including the subversion revision number.
 ECHO.
+popd
 EXIT /B 0
 
 :FINISH-PKG
@@ -520,6 +534,7 @@ ECHO.
 ECHO   To Install the package, browse to Location and
 ECHO   run as you normally do to install Windows applications.
 ECHO.
+popd
 EXIT /B 0
 
 :FINISH-UDT
@@ -541,6 +556,7 @@ ECHO   builds, they remain in the build folder.
 ECHO.
 ECHO   See Location above for build target ^[ %topt% ^]
 ECHO.
+popd
 EXIT /B 0
 
 
@@ -565,7 +581,8 @@ ECHO  or tags may alos be the casue.
 ECHO.
 ECHO  Verify your entry and try again later. If the
 ECHO  peoblem presists, contact the wsjt-devel list.
-ECHO
+ECHO.
+popd
 EXIT /B 0
 GOTO EOF
 

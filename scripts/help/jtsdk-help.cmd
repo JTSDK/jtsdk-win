@@ -339,5 +339,5 @@ ECHO.
 GOTO EOF
 
 :EOF
-
+popd
 EXIT /B 0
