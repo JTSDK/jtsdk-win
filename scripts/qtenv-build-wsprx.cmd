@@ -440,7 +440,7 @@ ECHO  After the pause, the checkout help menu
 ECHO  will be displayed.
 ECHO.
 PAUSE
-CALL %based%\scripts\help\qtenv-help-checkout.cmd
+CALL %scr%\svn-checkout.cmd $* qtcohelp
 GOTO EOF
 
 :: UNSUPPORTED BUILD TYPE
