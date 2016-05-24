@@ -50,7 +50,7 @@ SET display_name=WSJT
 SET courl=https://svn.code.sf.net/p/wsjt/wsjt/trunk
 GOTO SVN-CO
 ) ELSE (
-GOTO UNDUPPORTED
+GOTO UNSUPPORTED
 )
 GOTO EOF
 

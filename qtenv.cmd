@@ -117,17 +117,17 @@ rm qt55-enabled.txt
 REM  ---------------------------------------------------------------------------
 REM   CHECKOUT COPMMANDS
 REM  ---------------------------------------------------------------------------
-DOSKEY checkout-wsprx="%scr%\svn-checkout.cmd" $* wsprx
-DOSKEY checkout-map65="%scr%\svn-checkout.cmd" $* map65
-DOSKEY checkout-wsjtx="%scr%\svn-checkout.cmd" $* wsjtx
-DOSKEY checkout-wsjtxexp="%scr%\svn-checkout.cmd" $* wsjtxexp
-DOSKEY checkout-wsjtxrc="%scr%\svn-checkout.cmd" $* wsjtxrc
+DOSKEY checkout-wsprx="%scr%\svn-checkout.cmd" wsprx
+DOSKEY checkout-map65="%scr%\svn-checkout.cmd" map65
+DOSKEY checkout-wsjtx="%scr%\svn-checkout.cmd" wsjtx
+DOSKEY checkout-wsjtxexp="%scr%\svn-checkout.cmd" wsjtxexp
+DOSKEY checkout-wsjtxrc="%scr%\svn-checkout.cmd" wsjtxrc
 
 REM  ---------------------------------------------------------------------------
 REM   BUILD COMMANDS
 REM  ---------------------------------------------------------------------------
-DOSKEY build-wsprx=pushd %cd% ^& %scr%\qtenv-build-wsprx.cmd $* wsprx
-DOSKEY build-map65=pushd %cd% ^& %scr%\qtenv-build-map65.cmd $* map65
+DOSKEY build-wsprx=pushd %cd% ^& %scr%\qtenv-build-wsprx.cmd $* 
+DOSKEY build-map65=pushd %cd% ^& %scr%\qtenv-build-map65.cmd $*
 DOSKEY build-wsjtx=pushd %cd% ^& %scr%\qtenv-build-wsjtx.cmd $*
 DOSKEY wsjtx-list=pushd %cd% ^& %based%\scripts\qtenv-build-list.cmd $*
 DOSKEY build-hamlib3="%based%\scripts\build-hamlib3.cmd"
@@ -136,13 +136,13 @@ REM  ---------------------------------------------------------------------------
 REM   HELP PAGES
 REM  ---------------------------------------------------------------------------
 DOSKEY main-menu=CD ^/D %based% ^& CALL %scr%\qtenv-info.cmd
-DOSKEY list-options=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* listoptions
-DOSKEY help-list=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* helplist
-DOSKEY help-qtenv=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* qtmain
-DOSKEY help-wsprx=pushd %cd% ^& %scr%\help\jtsdk-help.cmd $* wsprxhelp
-DOSKEY help-map65=pushd %cd% ^& %scr%\help\jtsdk-help.cmd" $* map65help
-DOSKEY help-wsjtx=pushd %cd% ^& %scr%\qtenv-build-wsjtx.cmd" $* help
-DOSKEY help-checkout=pushd %cd% ^& %scr%\svn-checkout.cmd" $* qtcohelp
+DOSKEY list-options=pushd %cd% ^& %scr%\help\jtsdk-help.cmd listoptions
+DOSKEY help-list=pushd %cd% ^& %scr%\help\jtsdk-help.cmd helplist
+DOSKEY help-qtenv=pushd %cd% ^& %scr%\help\jtsdk-help.cmd qtmain
+DOSKEY help-wsprx=pushd %cd% ^& %scr%\help\jtsdk-help.cmd wsprxhelp
+DOSKEY help-map65=pushd %cd% ^& %scr%\help\jtsdk-help.cmd map65help
+DOSKEY help-wsjtx=pushd %cd% ^& %scr%\qtenv-build-wsjtx.cmd help
+DOSKEY help-checkout=pushd %cd% ^& %scr%\svn-checkout.cmd qtcohelp
 
 REM  ---------------------------------------------------------------------------
 REM   USER CONFIGURABLE OPTIONS
