@@ -161,5 +161,3 @@ GOTO EOF
 cd /d %based%
 
 EXIT /B 0
-
-

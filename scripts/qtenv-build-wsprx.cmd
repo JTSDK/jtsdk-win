@@ -440,7 +440,7 @@ ECHO  After the pause, the checkout help menu
 ECHO  will be displayed.
 ECHO.
 PAUSE
-CALL %scr%\svn-checkout.cmd $* qtcohelp
+CALL %scr%\svn-checkout.cmd qtcohelp
 GOTO EOF
 
 :: UNSUPPORTED BUILD TYPE
@@ -459,7 +459,7 @@ ECHO.
 ECHO  Example: build-%app_name% rinstall
 ECHO.
 PAUSE
-CALL %scr%\help\qtenv-help-%app_name%.cmd
+CALL %scr%\help\jtsdk-help.cmd wsprxhelp
 GOTO EOF
 
 :: INNO SETUOP BUILD ERROR MESSAGE
