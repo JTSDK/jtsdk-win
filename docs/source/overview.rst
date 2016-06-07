@@ -31,13 +31,6 @@ applications and any of the same name or sype on the systems path.
 | JTSDK-DOC  | Cygwin Tools             | Cygwin    |
 +------------+--------------------------+-----------+
 
-.. Warning::
-    If you use a unicode character, you'll need to have an encoding at the top
-    of your settings.py file::
-
-        # -*- coding: UTF-8 -*-
-
-
 .. _WSJT Project: http://physics.princeton.edu/pulsar/k1jt/
 .. _Cygwin: https://cygwin.com/
 .. _MSYS: http://www.mingw.org/wiki/msys
