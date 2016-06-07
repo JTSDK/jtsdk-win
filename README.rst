@@ -1,23 +1,22 @@
-=================
-JTSDK for Windows
-=================
+Documentation
+~~~~~~~~~~~~~
 
 All documentation for  **JTSDK Win** can be found in the `User Guide`_
 
 Installation
-------------
+~~~~~~~~~~~~
 * See the `Installation Section`_
 
 Framework Packaging
--------------------
+~~~~~~~~~~~~~~~~~~~
 * All frameework packaging may be dowloaded from `Sourceforge`_
 
 Source Code
------------
+~~~~~~~~~~~
 * All the source code can be found on `GitHub Source`_
 
 Bug Reports and Issues
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 * All bugs, suggestions and issues are tracked using `GitHub Issues`_
 
 .. _User Guide: http://jtsdk-win.readthedocs.io
