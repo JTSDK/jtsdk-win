@@ -1,0 +1,14 @@
+Thank you for using JTSDK.
+
+BUILD INFORMATION
+* Build Date......: 12-APR-2015
+* Builder.........: Greg, Beam, KI7MT <ki7mt@yahoo.com>
+* Version.........: JTSDK-2.0.0-Win32.exe
+* Build Platform..: Windows x86-64
+* Install Time....: Approx. 15 Minutes
+* Disk Space......: Approx. 3GB
+
+If you have PROBLEMS with the JTSDK, please REPORT them
+to the WSJT-Devel List: < wsjt-devel@lists.sourceforge.net >
+
+WSJT Development Team

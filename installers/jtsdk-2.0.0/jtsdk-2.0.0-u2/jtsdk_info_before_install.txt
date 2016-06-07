@@ -1,0 +1,11 @@
+Thank you for using JTSDK.
+
+BUILD INFORMATION
+* Builder.........: Greg, Beam, KI7MT <ki7mt@yahoo.com>
+* Version.........: JTSDK-2.0.0-u3-Win32.exe
+* Build Platform..: Windows x86-64
+
+If you have PROBLEMS with the JTSDK, please REPORT them
+to the WSJT-Devel List: < wsjt-devel@lists.sourceforge.net >
+
+WSJT Development Team
