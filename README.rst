@@ -7,11 +7,11 @@ JTSDK Win
 .. _Github Issues: https://github.com/KI7MT/jtsdk-win/issues
 .. _Sourceforge Downloads: https://github.com/KI7MT/jtsdk-win/issues
 
-* Documentation ...........:, `RTD User Guide`_
-* Installation .................:, `RTD Installation`_
-* Framwork Packaging ..:, `Sourceforge Downloads`_
-* Source Code ...............:, `Github Source`_
-* Issue Reports ..............: `Github Issues`_
+* Documentation ..............:, `RTD User Guide`_
+* Installation ....................:, `RTD Installation`_
+* Framework Packaging ...:, `Sourceforge Downloads`_
+* Source Code ..................:, `Github Source`_
+* Issue Reports .................: `Github Issues`_
  
 
 
