@@ -1,15 +1,18 @@
 JTSDK Win
 *********
 
-.. _Read The Docs: http://jtsdk-win.readthedocs.io
+.. _RTD User Guide: http://jtsdk-win.readthedocs.io
+.. _RTD Installation: http://jtsdk-win.readthedocs.io
 .. _Github Source: https://github.com/KI7MT/jtsdk-win
 .. _Github Issues: https://github.com/KI7MT/jtsdk-win/issues
+.. _Sourceforge Downloads: https://github.com/KI7MT/jtsdk-win/issues
 
-* Documentation, `Read The Docs`_
-* Installation, `Read The Docs`_
-* Source Code.....: `Github Source`_
-* Issue Reports ..: `Github Issues`_
-
+* Documentation ...........:, `RTD User Guide`_
+* Installation .................:, `RTD Installation`_
+* Framwork Packaging ..:, `Sourceforge Downloads`_
+* Source Code ...............:, `Github Source`_
+* Issue Reports ..............: `Github Issues`_
+ 
 
 
 
