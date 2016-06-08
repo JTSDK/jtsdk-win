@@ -18,4 +18,4 @@
 .. _Yahoo Group: https://groups.yahoo.com/neo/groups/wsjtgroup/info
 .. WSJT-X: http://physics.princeton.edu/pulsar/k1jt/wsjtx.html
 .. WSJT: http://physics.princeton.edu/pulsar/k1jt/wsjt.html
-.. WSPT: http://physics.princeton.edu/pulsar/k1jt/wspr.html
+.. WSPR: http://physics.princeton.edu/pulsar/k1jt/wspr.html

@@ -14,11 +14,6 @@ Those that cannot be updated, will have comments to that affect on their
 respective page. Both on-line and off-line installers will be provided.
 
 
-- First item.
-
-  Another paragraph for the first item.
-- Second item.
-
 Environments
 ------------
 
