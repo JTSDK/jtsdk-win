@@ -23,11 +23,13 @@ Package / Wiki Page List
 -  `FFTW <http://sourceforge.net/p/jtsdk/wiki/fftw/>`__
 -  `NSIS <http://sourceforge.net/p/jtsdk/wiki/nsis/>`__
 -  `Cyg32 <https://sourceforge.net/p/jtsdk/wiki/cyg32/>`__
--  `Gnu Tools .. WIP <>`__
--  `Hamlib ..... WIP <>`__
--  `Hamlib3 .... WIP <>`__
--  `Mingw32 .... WIP <>`__
--  `MSYS ....... WIP <>`__
--  `NSIS ....... WIP <>`__
--  `QT5 ........ WIP <>`__
+
+..
+   -  `Gnu Tools .. WIP <>`__
+   -  `Hamlib ..... WIP <>`__
+   -  `Hamlib3 .... WIP <>`__
+   -  `Mingw32 .... WIP <>`__
+   -  `MSYS ....... WIP <>`__
+   -  `NSIS ....... WIP <>`__
+   -  `QT5 ........ WIP <>`__
 

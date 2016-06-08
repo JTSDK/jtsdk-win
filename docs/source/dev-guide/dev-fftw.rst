@@ -1,5 +1,5 @@
-JTSDK - fftw3f
---------------
+FFTW
+----
 
 FFTW ( single-precision ) is used in all 5 WSJT applications, both
 static libs and dll's. While **JTSDK** provides a pre-built Windows
@@ -29,10 +29,10 @@ To build FFTW from source:
 -  At the Prompt, simply type: build-fftw
 -  Edit the script as needed to test various configurations
 
-The source file is located in
-:math:`(path)\JTSDK\src\fftw-3.3.4.tar.gz.The build script is located at: `\ (path)-build-fftw.sh
+The source file is located in :code:`C\JTSDK\src\fftw-3.3.4.tar.gz.`
+The build script is located at: :code:`C:\JTSDK\scripts\fftw-build-fftw.sh`
 which is currently set to build static and disable shared. It creates
-it's own folder at install ( $(path)3f), and uses pkg-config. The
+it's own folder at install and uses pkg-config. The
 default tool-chain is QT5 mingw-64, which is winpthreads. WSJT and WSPR
 uses pthreads. If you want / need to build specifically for WSJT and
 WPSR, change the tool-chain paths in the build script:
@@ -62,5 +62,4 @@ src folders.
 
 The script is fairly well documented. Edit as you see fit for testing.
 
---------------
 

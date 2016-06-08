@@ -1,5 +1,5 @@
-##MSYS from MinGW-Builds
-------------------------
+MSYS from MinGW-Builds
+----------------------
 
 MSYS provides easy access to Bash, Autotools, M4, $(MAKE) scripts, VCS
 applications ( SVN, Git, Mercurial, CVS etc ) and many command-line GNU

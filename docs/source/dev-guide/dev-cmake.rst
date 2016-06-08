@@ -15,8 +15,6 @@ Package Information
 Installation
 ~~~~~~~~~~~~
 
--  Unzip to $(path)
+-  Unzip to :code:`C:\JTSDK\cmake`
 -  Nothing else is required.
-
---------------
 

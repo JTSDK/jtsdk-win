@@ -1,4 +1,4 @@
-#JTSDK
+JTSDK
 ------
 
 is a collection of several open source development frameworks (QT,
@@ -25,7 +25,6 @@ of each and how they interact with **JTSDK**.
 Primary Frameworks and Environments
 -----------------------------------
 
--  `QT5 <>`__
 -  `Python3 <http://sourceforge.net/p/jtsdk/wiki/python33/>`__
 -  `MSYS <http://sourceforge.net/p/jtsdk/wiki/msys/>`__
 -  `Cyg32 <http://sourceforge.net/p/jtsdk/wiki/cyg32/>`__
@@ -36,6 +35,5 @@ Support Packages
 -  `Cmake <http://sourceforge.net/p/jtsdk/wiki/cmake/>`__
 -  `Subversion <http://sourceforge.net/p/jtsdk/wiki/subversion/>`__
 -  `FFTW <http://sourceforge.net/p/jtsdk/wiki/fftw/>`__
--  `Gnu Tools <>`__
 -  `NSIS <http://sourceforge.net/p/jtsdk/wiki/nsis/>`__
 

@@ -28,8 +28,8 @@ Core Tool List
 ~~~~~~~~~~~~~~~
 
 Many tools are provided as part of the base Cygwin installation. See
-**$(path)32\* for all binary applications. The following are key
-elements of **\ cyg32\*\*:
+:code:`C:\JTSDK\cyg32` all binary applications. The following are key
+the elements:
 
 -  Python 2.7.8 ( used for Documentation builds )
 -  Subversion ( used for all JTSDK SVN activity )
@@ -75,5 +75,4 @@ Cygwin Licensing Terms
 Cygwin Licensing Terms can be found at:
 `Terms <http://cygwin.com/licensing.html>`__
 
---------------
 

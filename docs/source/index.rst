@@ -6,7 +6,6 @@ JTSDK for Windows
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Documentation
 
    overview
    installation
@@ -15,4 +14,7 @@ JTSDK for Windows
    contributing
    authors
    license
+
+..
+   dev-guide/index
 
