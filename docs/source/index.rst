@@ -15,5 +15,4 @@ JTSDK for Windows
    contributing
    authors
    license
-   wiki/index
 
