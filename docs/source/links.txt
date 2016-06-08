@@ -1,0 +1,21 @@
+.. ------------------------------------------------------------ Framework Links
+.. _Cygwin: https://cygwin.com/
+.. _MSYS: http://www.mingw.org/wiki/msys
+.. _Tcl/Tk: https://www.tcl.tk/
+.. _Qt: https://www.qt.io/
+.. _Windows CMD: http://windows.microsoft.com/en-us/windows-vista/open-a-command-prompt-window
+.. _GNU Coreutils: http://www.gnu.org/software/coreutils/coreutils.html
+.. _Python: https://www.python.org/
+.. ---------------------------------------------------------------- JTSDK Links
+.. _JTSDK: https://github.com/KI7MT/jtsdk-nix
+.. _Python: https://www.python.org/
+.. _Source Code: http://sourceforge.net/projects/wsjt/
+.. _WSJT Project: http://physics.princeton.edu/pulsar/k1jt/
+.. ----------------------------------------------------------------- WSJT Links
+.. _WSJT Project: http://physics.princeton.edu/pulsar/k1jt/
+.. _Project Website: http://physics.princeton.edu/pulsar/K1JT/
+.. _WSJT Devel List: wsjt-devel@lists.sourceforge.net
+.. _Yahoo Group: https://groups.yahoo.com/neo/groups/wsjtgroup/info
+.. WSJT-X: http://physics.princeton.edu/pulsar/k1jt/wsjtx.html
+.. WSJT: http://physics.princeton.edu/pulsar/k1jt/wsjt.html
+.. WSPT: http://physics.princeton.edu/pulsar/k1jt/wspr.html
