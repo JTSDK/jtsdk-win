@@ -15,4 +15,10 @@ JTSDK for Windows
    contributing
    authors
    license
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: JTSDK Development
    
+   wiki/*
