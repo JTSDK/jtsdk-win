@@ -1,0 +1,20 @@
+--- ./autogen.sh	2015-06-24 23:23:59 -0600
++++ /scripts/msys/patch/hamlib3/autogen-new.sh	2015-06-24 23:25:53 -0600
+@@ -51,7 +51,7 @@
+         exit 1
+ fi
+ 
+-cd $SRCDIR
++cd "$SRCDIR"
+ 
+ test $TEST_TYPE $FILE || {
+         echo "You must run this script in the top-level $PROJECT directory"
+@@ -70,7 +70,7 @@
+ # Tell autoreconf to install needed build system files
+ $AUTORECONF -i
+ 
+-cd $ORIGDIR
++cd "$ORIGDIR"
+ 
+ if test -z "$*"; then
+         echo "I am going to run ./configure with no arguments - if you wish "
