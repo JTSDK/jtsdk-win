@@ -7,9 +7,9 @@ MAP65.
 Package Information
 ~~~~~~~~~~~~~~~~~~~
 
--  Version - 3.0.2
--  Website - `Cmake.org <http://www.cmake.org/>`__
--  Installer -
+* Version - 3.0.2 x86 32-Bit
+* Main Site -  `Cmake.org <http://www.cmake.org/>`__
+* Installer -
    `cmake-3.0.2-win32-x86.zip <http://www.cmake.org/files/v3.0/cmake-3.0.2-win32-x86.zip>`__
 
 Installation
